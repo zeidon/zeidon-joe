@@ -18,10 +18,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
 import com.quinsoft.zeidon.Application;
@@ -31,6 +27,10 @@ import com.quinsoft.zeidon.OiSourceSelector;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
 
 /**
  * Determines where an OI is activated the oiSourceUrl.  E.g. if
@@ -55,19 +55,43 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
             throw new ZeidonException( "oiSourceUrl has not been specified in config" )
-                                .appendMessage( "Configuration source: %s", options.getConfigSource() )
-                                .appendMessage( "Application: %s", options.getApplication().getName() );
+                    .appendMessage( "Configuration source: %s", options.getConfigSource() )
+                    .appendMessage( "Application: %s", options.getApplication().getName() );
 
         if ( url.startsWith( "jdbc:" ) || url.startsWith( "testsql:" ) )
             return new ActivateOiFromDB();
 
         if ( url.startsWith( "http:" ) || url.startsWith( "https:" ) )
-            return new ActivateOiFromRestServer( url );
+            return getRestActivator( task, url );
 
         if ( url.startsWith( "file:" ) || url.startsWith( "resource:" ) )
             return new ActivateOiFromFileDb();
 
         throw new ZeidonException( "oiSourceUrl specifies unknown protocol: %s", url );
+    }
+
+    /**
+     * Dynamically retrieve the REST activator because it's in a different package.
+     * We do this so that all the http code can live in another package.  Some day
+     * we should make this more formal.
+     */
+    private Activator getRestActivator( Task task, String url )
+    {
+        String className = "com.quinsoft.zeidon.http.ActivateOiFromRestServer";
+        Class<?>[] type = { String.class };
+
+        try
+        {
+            ClassLoader loader = task.getObjectEngine().getClassLoader( className );
+            Class<?> clazz = loader.loadClass( className );
+            Constructor<?> cons = clazz.getConstructor( type );
+            Object[] args = { url };
+            return (Activator) cons.newInstance( args );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e );
+        }
     }
 
     /* (non-Javadoc)
@@ -79,8 +103,8 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         String url = options.getOiSourceUrl();
         if ( StringUtils.isBlank( url ) )
             throw new ZeidonException( "oiSourceUrl has not been specified in config" )
-                            .appendMessage( "Configuration source: %s", options.getConfigSource() )
-                            .appendMessage( "Application: %s", options.getApplication().getName() );
+                    .appendMessage( "Configuration source: %s", options.getConfigSource() )
+                    .appendMessage( "Application: %s", options.getApplication().getName() );
 
         if ( url.startsWith( "jdbc:" ) )
         {
@@ -95,11 +119,35 @@ public class DefaultOiSourceSelector implements OiSourceSelector
         }
 
         if ( url.startsWith( "http:" ) || url.startsWith( "https:" ) )
-            return new CommitToRestServer();
+            return getRestCommitter( task );
 
         if ( url.startsWith( "file:" ) || url.startsWith( "resource:" ) )
             return new CommitOiToFileDb();
 
         throw new ZeidonException( "oiSourceUrl specifies unknown protocol: %s", url );
+    }
+
+    /**
+     * Dynamically retrieve the REST committer because it's in a different package.
+     * We do this so that all the http code can live in another package.  Some day
+     * we should make this more formal.
+     */
+    private Committer getRestCommitter( Task task )
+    {
+        String className = "com.quinsoft.zeidon.standardoe.CommitToRestServer";
+        Class<?>[] type = { };
+
+        try
+        {
+            ClassLoader loader = task.getObjectEngine().getClassLoader( className );
+            Class<?> clazz = loader.loadClass( className );
+            Constructor<?> cons = clazz.getConstructor( type );
+            Object[] args = { };
+            return (Committer) cons.newInstance( args );
+        }
+        catch ( Exception e )
+        {
+            throw ZeidonException.wrapException( e );
+        }
     }
 }

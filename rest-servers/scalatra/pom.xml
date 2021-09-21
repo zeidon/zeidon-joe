@@ -1,118 +1,131 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <artifactId>zeidon</artifactId>
-    <groupId>com.quinsoft.zeidon</groupId>
-    <version>2.1.0-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
- </parent>
+    <parent>
+        <artifactId>zeidon</artifactId>
+        <groupId>com.quinsoft.zeidon</groupId>
+        <version>2.1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-  <packaging>jar</packaging>
-  <name>zeidon-scalatra-rest</name>
-  <artifactId>zeidon-scalatra-rest</artifactId>
+    <packaging>jar</packaging>
+    <name>zeidon-scalatra-rest</name>
+    <artifactId>zeidon-scalatra-rest</artifactId>
 
- <dependencies>
-    <dependency>
-      <groupId>com.quinsoft.zeidon</groupId>
-      <artifactId>zeidon-scala</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty.orbit</groupId>
-      <artifactId>javax.servlet</artifactId>
-      <version>3.0.0.v201112011016</version>
-      <scope>provided</scope>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>zeidon-scala</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
-    
-    <dependency>
-      <groupId>org.scalatra</groupId>
-      <artifactId>scalatra_2.12</artifactId>
-      <version>2.7.0</version>
-      <exclusions>
-	<exclusion>
-	  <groupId>org.slf4j</groupId>
-	  <artifactId>slf4j-api</artifactId>
-	</exclusion>
-	<exclusion>
-	  <groupId>joda-time</groupId>
-	  <artifactId>joda-time</artifactId>
-	</exclusion>
-	<exclusion>
-	  <groupId>org.joda</groupId>
-	  <artifactId>joda-convert</artifactId>
-	</exclusion>
-	<exclusion>
-	  <groupId>org.scala-lang</groupId>
-	  <artifactId>scala-library</artifactId>
-	</exclusion>
-	<exclusion>
-	  <groupId>org.apache.commons</groupId>
-	  <artifactId>commons-lang3</artifactId>
-	</exclusion>
-      </exclusions>
-    </dependency>
-    
-    <!-- For running mvn scala:console
+        <dependency>
+            <groupId>com.quinsoft.zeidon</groupId>
+            <artifactId>http</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.orbit</groupId>
+            <artifactId>javax.servlet</artifactId>
+            <version>3.0.0.v201112011016</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra_2.12</artifactId>
+            <version>2.7.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.joda</groupId>
+                    <artifactId>joda-convert</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- For running mvn scala:console
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>jline</artifactId>
       <version>2.10.4</version>
-    </dependency> 
+    </dependency>
     -->
-  </dependencies>
+    </dependencies>
 
-  <build>
-    <sourceDirectory>src/main/scala</sourceDirectory>
-    <testSourceDirectory>src/test/scala</testSourceDirectory>
-    <plugins>
-      <plugin>
-        <groupId>net.alchim31.maven</groupId>
-        <artifactId>scala-maven-plugin</artifactId>
-        <version>3.3.1</version>
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.3.1</version>
 
-       <executions>
-          <execution>
-            <id>scala-compile-first</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>add-source</goal>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>scala-test-compile</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>scala-javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>doc-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-javadoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>doc-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <useFile>false</useFile>
-          <disableXmlReport>true</disableXmlReport>
-          <!-- If you have classpath issue like NoDefClassError,... -->
-          <!-- useManifestOnlyJar>false</useManifestOnlyJar -->
-          <includes>
-            <include>**/*Test.*</include>
-            <include>**/*Suite.*</include>
-          </includes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <useFile>false</useFile>
+                    <disableXmlReport>true</disableXmlReport>
+                    <!-- If you have classpath issue like NoDefClassError,... -->
+                    <!-- useManifestOnlyJar>false</useManifestOnlyJar -->
+                    <includes>
+                        <include>**/*Test.*</include>
+                        <include>**/*Suite.*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,0 +1,213 @@
+z1000-Zeidon    RESTAPIAUTZEREMDO 11/21/21   17:15:41 1.0a2    
+eEntpER_Model 1
+aName      RestApiAuthentication
+aZKey      920213127
+aNextZKeyToAssign 920213146
+aLastSyncDate 20211121171541265
+aDesc      API authentication for REST servers
+
+eER_Entity 2
+aName      ClientAuthentication
+aZKey      920213128
+aPurpose   F
+aDesc      Configuration for authenticating a client request.
+aER_DiagramPosX 20
+aER_DiagramPosY 13
+awkSelectedAttributeForDragSort 5
+
+eER_Attribute 3
+aName      Id
+aZKey      920213130
+aNotNull   Y
+awkSequence 1
+
+eDomain    4
+aZKey      920213346
+aDesc      Generic DB-generated key
+aName      GeneratedKey
+aDataType  L
+aMaxStringLth 64
+aDomainType E
+aContextRestriction N
+
+eER_FactTypeForDelete 4
+aZKey      920213145
+
+eER_EntIdentifierForDelete 5
+aName       Id
+aZKey      920213144
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      ClientName
+aZKey      920213131
+aLth       32
+aNotNull   Y
+aDesc      This is a string value passed in to an API call that identifies the client name.
+awkSequence 2
+
+eDomain    4
+aZKey      920213334
+aDesc      Any Character String
+aName      Text
+aDataType  S
+aMaxStringLth 10000
+aDomainType E
+aContextRestriction N
+
+eER_Attribute 3
+aName      ClientDescription
+aZKey      920213132
+aLth       10000
+awkSequence 3
+
+eDomain    4
+
+eER_Attribute 3
+aName      SignatureAlgorithm
+aZKey      920213133
+aLth       100
+aNotNull   Y
+aDesc      Name of the key algoritithm.
+awkSequence 4
+
+eDomain    4
+
+eER_Attribute 3
+aName      ClientPublicKey
+aZKey      920213134
+aLth       10000
+aNotNull   Y
+aDesc      The client's public key.
+awkSequence 5
+
+eDomain    4
+
+eER_Attribute 3
+aName      ClientPrivateKey
+aZKey      920213146
+aLth       10000
+aDesc      Used to generate a signature on a client.
+awkSequence 6
+
+eDomain    4
+
+eER_Attribute 3
+aName      KeyType
+aZKey      920213135
+aLth       256
+aNotNull   Y
+awkSequence 7
+
+eDomain    4
+
+eER_RelLink 3
+aName      has
+aZKey      920213138
+aCardMin   0
+aCardMax   m
+
+eER_RelType_1 4
+aZKey      920213137
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 29
+aER_DiagramE1PosY 15
+aER_DiagramE2PosX 36
+aER_DiagramE2PosY 15
+
+eER_RelLink_Other 5
+aName      for
+aZKey      920213139
+aCardMin   1
+aCardMax   1
+
+eER_Entity_Other 6
+aName      Server
+aZKey      920213136
+aPurpose   A
+aDesc      Defines a server that belongs to a ClientAuthentication
+aER_DiagramPosX 37
+aER_DiagramPosY 13
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_Entity 2
+
+eER_Attribute 3
+aName      Id
+aZKey      920213140
+aNotNull   Y
+awkSequence 1
+
+eDomain    4
+
+eER_FactTypeForDelete 4
+aZKey      920213143
+
+eER_EntIdentifierForDelete 5
+aName      Id
+aZKey      920213142
+aSystemMaintained Y
+
+eER_Attribute 3
+aName      Address
+aZKey      920213141
+aLth       250
+aDesc      Address (usually IP Address) of the server.
+awkSequence 2
+
+eDomain    4
+
+eER_RelLink 3
+
+eER_RelType_1 4
+
+eER_RelLink_Other 5
+
+eER_Entity_Other 6
+
+eER_EntIdentifier 3
+
+eER_FactType 4
+
+eER_AttributeIdentifier 5
+
+eER_RelType 2
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+eER_RelLink_2 3
+
+eER_Entity_2 4
+
+i9         7
+i11        7
+i13        7
+i15        7
+i17        7
+i22        5
+i23        4
+i24        2
+i25        21
+i27        3
+i31        7
+i32        20
+i33        19
+i34        18
+i35        1
+i36        29
+i37        28
+i38        26
+i39        19
+i40        18
+i41        1
+i42        20
+i43        21

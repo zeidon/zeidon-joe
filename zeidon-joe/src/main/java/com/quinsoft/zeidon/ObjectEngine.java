@@ -18,10 +18,12 @@
  */
 package com.quinsoft.zeidon;
 
-import java.util.List;
-
 import com.quinsoft.zeidon.config.ZeidonPreferences;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 /**
@@ -85,6 +87,23 @@ public interface ObjectEngine
      * @throws UnknownApplicationException
      */
     Task createTask( String applicationName, String taskId ) throws UnknownApplicationException;
+
+    /**
+     * Create a nonpersistent Zeidon task and calls the callback function.  Drops the task afterwards.
+     *
+     * @param applicationName
+     * @throws UnknownApplicationException
+     * @return value from callback.
+     */
+    <R> R withTask( String applicationName, Function<Task, R> callback );
+
+    /**
+     * Create a nonpersistent Zeidon task and calls the callback function.  Drops the task afterwards.
+     *
+     * @param applicationName
+     * @throws UnknownApplicationException
+     */
+    void withTask( String applicationName, Consumer<Task> callback );
 
     /**
      * Creates a Zeidon task.  If persistent = true then the Object Engine will keep

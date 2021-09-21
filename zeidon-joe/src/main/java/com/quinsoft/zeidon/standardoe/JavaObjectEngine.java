@@ -16,18 +16,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.BrowserStarter;
@@ -46,6 +34,19 @@ import com.quinsoft.zeidon.config.ZeidonPreferencesFactory;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -63,7 +64,7 @@ import com.quinsoft.zeidon.utils.JoeUtils;
  */
 public class JavaObjectEngine implements ObjectEngine
 {
-    private static final String JOE_VERSION = "1.0";
+    private static final String JOE_VERSION = "2.1.0";
 
     private static ObjectEngine s_objectEngine = null;
 
@@ -316,6 +317,40 @@ public class JavaObjectEngine implements ObjectEngine
     public TaskImpl createTask( String applicationName, String taskId )
     {
         return createTask( applicationName, true, taskId );
+    }
+
+    @Override
+    public <R> R withTask( String applicationName, Function<Task, R> callback )
+    {
+        Task task = createTask( applicationName );
+        try
+        {
+            return callback.apply( task );
+        }
+        catch ( Exception e )
+        {
+            if ( task != null )
+                task.dropTask();
+
+            throw ZeidonException.wrapException( e );
+        }
+    }
+
+    @Override
+    public void withTask( String applicationName, Consumer<Task> callback )
+    {
+        Task task = createTask( applicationName );
+        try
+        {
+            callback.accept( task );
+        }
+        catch ( Exception e )
+        {
+            if ( task != null )
+                task.dropTask();
+
+            throw ZeidonException.wrapException( e );
+        }
     }
 
     @Override

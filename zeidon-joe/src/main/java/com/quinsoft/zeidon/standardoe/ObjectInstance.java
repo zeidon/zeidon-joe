@@ -29,10 +29,6 @@ import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
-/**
- * @author DG
- *
- */
 class ObjectInstance
 {
     private TaskImpl            task;

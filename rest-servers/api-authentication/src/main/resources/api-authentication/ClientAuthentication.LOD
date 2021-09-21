@@ -1,0 +1,303 @@
+z1000-Zeidon    CLIENTAUTTZZOLODO 11/21/21   17:16:23 1.0a2    
+eLOD       1
+aZKey      920213948
+aNextZKeyToAssign 920213959
+aName      ClientAuthentication
+
+eLOD_EntityParent 2
+aName      ClientAuthentication
+aIndentName ClientAuthentication
+aIndentLvl 0
+aZKey      920213949
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aWork      N
+aParentDeleteBehave D
+aDesc      Configuration for authenticating a client request.
+
+eLOD_EntityChild 3
+aName      Server
+aIndentName    Server
+aIndentLvl 3
+aZKey      920213956
+aCreate    Y
+aDelete    Y
+aUpdate    Y
+aInclude   N
+aInclSrc   Y
+aExclude   N
+aRecursive N
+aDerived   N
+aParentDeleteBehave D
+aRelLinkIndicator L
+aDesc      Defines a server that belongs to a ClientAuthentication
+
+eLOD_AttributeRec 4
+aZKey      920213957
+
+eER_AttributeRec 5
+aName      Id
+aZKey      920213140
+aNotNull   Y
+
+eDomainRec 6
+aZKey      920213346
+aName      GeneratedKey
+aDomainType E
+aDataType  L
+aMaxStringLth 64
+aDesc      Generic DB-generated key
+aContextRestriction N
+
+eLOD_AttributeRec 4
+aZKey      920213958
+
+eER_AttributeRec 5
+aName      Address
+aZKey      920213141
+aLth       250
+aDesc      Address (usually IP Address) of the server.
+
+eDomainRec 6
+aZKey      920213334
+aName      Text
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aDesc      Any Character String
+aContextRestriction N
+
+eER_EntityRec 4
+aName      Server
+aZKey      920213136
+aPurpose   A
+aDesc      Defines a server that belongs to a ClientAuthentication
+aER_DiagramPosX 37
+aER_DiagramPosY 13
+
+eER_RelLinkRec 4
+aName      has
+aZKey      920213138
+aCardMin   0
+aCardMax   m
+
+eER_RelTypeRec 5
+aZKey      920213137
+aFact      Added thru ER Dialog
+aER_DiagramBendPosX 0
+aER_DiagramBendPosY 0
+aER_DiagramE1PosX 29
+aER_DiagramE1PosY 15
+aER_DiagramE2PosX 36
+aER_DiagramE2PosY 15
+
+eLOD_AttributeRec 3
+aZKey      920213950
+
+eER_AttributeRec 4
+aName      Id
+aZKey      920213130
+aNotNull   Y
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      920213951
+
+eER_AttributeRec 4
+aName      ClientName
+aZKey      920213131
+aLth       32
+aNotNull   Y
+aDesc      This is a string value passed in to an API call that identifies the client name.
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      920213952
+
+eER_AttributeRec 4
+aName      ClientDescription
+aZKey      920213132
+aLth       10000
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      920213953
+
+eER_AttributeRec 4
+aName      SignatureAlgorithm
+aZKey      920213133
+aLth       100
+aNotNull   Y
+aDesc      Name of the key algoritithm.
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      920213954
+
+eER_AttributeRec 4
+aName      ClientPublicKey
+aZKey      920213134
+aLth       10000
+aNotNull   Y
+aDesc      The client's public key.
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      920213959
+aUpdate    Y
+
+eER_AttributeRec 4
+aName      ClientPrivateKey
+aZKey      920213146
+aLth       10000
+aDesc      Used to generate a signature on a client.
+
+eDomainRec 5
+
+eLOD_AttributeRec 3
+aZKey      920213955
+aUpdate    Y
+
+eER_AttributeRec 4
+aName      KeyType
+aZKey      920213135
+aLth       256
+aNotNull   Y
+
+eDomainRec 5
+
+eER_EntityRec 3
+aName      ClientAuthentication
+aZKey      920213128
+aPurpose   F
+aDesc      Configuration for authenticating a client request.
+aER_DiagramPosX 20
+aER_DiagramPosY 13
+
+eLOD_Entity 2
+awkSelectedAttributeForDragSort 5
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 3
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 4
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 5
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 6
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 7
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eLOD_Entity 2
+
+eLOD_Attribute 3
+awkSequence 1
+
+eER_Attribute 4
+
+eDomain    5
+
+eLOD_Attribute 3
+awkSequence 2
+
+eER_Attribute 4
+
+eDomain    5
+
+eER_Entity 3
+
+eER_RelLink 3
+
+eER_RelType 4
+
+i14        5
+i17        8
+i20        8
+i23        8
+i26        8
+i29        8
+i32        8
+i34        1
+i35        12
+i36        13
+i37        5
+i38        15
+i39        16
+i40        8
+i41        18
+i42        19
+i43        8
+i44        21
+i45        22
+i46        8
+i47        24
+i48        25
+i49        8
+i50        27
+i51        28
+i52        8
+i53        30
+i54        31
+i55        8
+i56        33
+i57        2
+i58        3
+i59        4
+i60        5
+i61        6
+i62        7
+i63        8
+i64        9
+i65        10
+i66        11

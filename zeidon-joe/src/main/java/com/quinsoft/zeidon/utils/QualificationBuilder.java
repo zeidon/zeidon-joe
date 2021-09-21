@@ -22,6 +22,8 @@ package com.quinsoft.zeidon.utils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.ActivateOptions;
 import com.quinsoft.zeidon.Activator;
@@ -101,6 +103,12 @@ public class QualificationBuilder
         activateOptions = new ActivateOptions( taskQual.getTask() );
         activateOptions.setQualificationObject( qualView );
         entitySpecCount = 0;
+    }
+
+    public QualificationBuilder( TaskQualification taskQual, LodDef lodDef )
+    {
+        this( taskQual );
+        setLodDef( lodDef );
     }
 
     /**
@@ -292,6 +300,13 @@ public class QualificationBuilder
         QualificationBuilderFromJson parser = new QualificationBuilderFromJson( this );
         parser.parseJson( json );
         return this;
+    }
+
+    static public View activateFromJson( TaskQualification taskQual, String lodName, String json )
+    {
+        QualificationBuilder builder = new QualificationBuilder( taskQual );
+        builder.setLodDef( lodName );
+        return builder.loadFromJsonString( json ).activate();
     }
 
     public QualificationBuilder singleRoot()
@@ -712,6 +727,24 @@ public class QualificationBuilder
         return addAttribQual( entityName, attribName, oper, attribValue );
     }
 
+    public QualificationBuilder addRootQualForKey( Object keyValue )
+    {
+        List<AttributeDef> keys = getLodDef().getRoot().getKeys();
+        if ( keys.size() != 1 )
+            throw new ZeidonException("addRootQualForKey is only valid for roots with one key." )
+                    .prependLodDef( getLodDef() );
+
+        AttributeDef key = keys.get( 0 );
+        validateEntity();
+        qualView.cursor( QUALATTRIB ).createEntity( CursorPosition.LAST )
+                                     .getAttribute( ENTITYNAME ).setValue( getLodDef().getName() )
+                                     .getAttribute( ATTRIBUTENAME ).setValue( key.getName() )
+                                     .getAttribute( OPER ).setValue( "=" )
+                                     .getAttribute( VALUE ).setValue( keyValue == null ? null : keyValue.toString() ) ;
+
+        return this;
+    }
+
     public QualificationBuilder addAttribQual( String entityName, String attribName, String oper, Object attribValue )
     {
         validateEntity();
@@ -761,7 +794,7 @@ public class QualificationBuilder
     {
         return fromEntityKeys( null, source, linkEntities );
     }
-    
+
     public QualificationBuilder fromEntityKeys( EntityDef targetEntityDef, EntityInstance source, boolean linkEntities )
     {
         EntityDef entityDef = source.getEntityDef();

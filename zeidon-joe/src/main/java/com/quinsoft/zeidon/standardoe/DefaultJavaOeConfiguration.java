@@ -63,7 +63,7 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     protected ZeidonLogger zeidonLogger;
     protected ZeidonPreferencesFactory zeidonPreferencesFactory;
     protected ObjectEngineEventListener oeListener;
-    protected ExecutorService activatePoolThread;
+    protected ExecutorService activateThreadPool;
     protected UuidGenerator uuidGenerator;
     protected ConcurrentMap<String, Task> taskCacheMap;
     protected String jmxAppName = "DefaultOE";
@@ -177,10 +177,10 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     @Override
     public ExecutorService getActivateThreadPool()
     {
-        if ( activatePoolThread == null )
-            activatePoolThread = Executors.newCachedThreadPool();
+        if ( activateThreadPool == null )
+            activateThreadPool = Executors.newCachedThreadPool();
 
-        return activatePoolThread;
+        return activateThreadPool;
     }
 
     public DefaultJavaOeConfiguration setHomeDirectory( HomeDirectory homeDirectory )
@@ -215,7 +215,7 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
 
     public DefaultJavaOeConfiguration setActivatePoolThread( ExecutorService activatePoolThread )
     {
-        this.activatePoolThread = activatePoolThread;
+        this.activateThreadPool = activatePoolThread;
         return this;
     }
 

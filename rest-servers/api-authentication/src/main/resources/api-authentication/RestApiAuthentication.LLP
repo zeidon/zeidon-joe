@@ -1,0 +1,345 @@
+z1000-Zeidon    RESTAPIAUTZCMLPLO 11/21/21   17:16:23 1.0a2    
+eLPLR      1
+aName      RestApiAuthentication
+aDesc      API authentication for REST servers
+aZKey      92726752
+aPgmSrcDir C:\zeidon\zapp\api-auth
+aExecDir   C:\zeidon\zapp\api-auth\bin
+aMetaSrcDir C:\zeidon\zapp\api-auth
+aTaskUseCount 2
+aLastBuildDate 20210921002711950
+aLPLR_Type 3
+aTempDesc  API authentication for REST servers
+awExecutableSubDirectory bin
+
+eW_MetaType 2
+aType      0
+
+eW_MetaType 2
+aType      1
+
+eW_MetaType 2
+aType      2
+
+eW_MetaType 2
+aType      3
+
+eW_MetaDef 3
+aCPLR_ZKey 920213333
+aStatus    1
+aUpdateInd 2
+aName      Blob
+
+eW_MetaDef 3
+aCPLR_ZKey 920213332
+aStatus    1
+aUpdateInd 2
+aName      AlphaNumeric
+
+eW_MetaDef 3
+aCPLR_ZKey 920213334
+aStatus    1
+aUpdateInd 2
+aName      Text
+
+eW_MetaDef 3
+aCPLR_ZKey 920213336
+aStatus    1
+aUpdateInd 2
+aName      Integer
+
+eW_MetaDef 3
+aCPLR_ZKey 920213335
+aStatus    1
+aUpdateInd 2
+aName      Date
+
+eW_MetaDef 3
+aCPLR_ZKey 920213337
+aStatus    1
+aUpdateInd 2
+aName      Year
+
+eW_MetaDef 3
+aCPLR_ZKey 920213344
+aStatus    1
+aUpdateInd 2
+aName      Boolean
+
+eW_MetaDef 3
+aCPLR_ZKey 920213346
+aStatus    1
+aUpdateInd 2
+aName      GeneratedKey
+
+eW_MetaDef 3
+aCPLR_ZKey 920213348
+aStatus    1
+aUpdateInd 2
+aName      Double
+
+eW_MetaDef 3
+aCPLR_ZKey 920213350
+aStatus    1
+aUpdateInd 2
+aName      DateTime
+
+eW_MetaDef 3
+aCPLR_ZKey 920213352
+aStatus    1
+aUpdateInd 2
+aName      Y/N
+
+eW_MetaType 2
+aType      4
+
+eW_MetaDef 3
+aCPLR_ZKey 920213127
+aStatus    1
+aUpdateInd 2
+aName      RestApiAuthentication
+aDesc      API authentication for REST servers
+aLastSyncDate 20211121171541290
+aLastUpdateDate 20211121171541290
+
+eW_MetaType 2
+aType      5
+
+eW_MetaType 2
+aType      6
+
+eW_MetaDef 3
+aCPLR_ZKey 9549
+aStatus    1
+aUpdateInd 2
+aName      RestApiAuthentication
+aDesc      API authentication for REST servers
+aLastSyncDate 20210921014148858
+aLastUpdateDate 20210921014148858
+
+eW_MetaType 2
+aType      7
+
+eW_MetaDef 3
+aCPLR_ZKey 920213948
+aStatus    1
+aUpdateInd 2
+aName      ClientAuthentication
+aLastSyncDate 20211121171623524
+aLastUpdateDate 20211121171623524
+
+eW_MetaType 2
+aType      8
+
+eW_MetaType 2
+aType      9
+
+eW_MetaDef 3
+aCPLR_ZKey 920213952
+aStatus    1
+aUpdateInd 2
+aName      ClientAuthentication
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20210921014148858
+aLastUpdateDate 20210921014148858
+
+eW_MetaType 2
+aType      10
+
+eW_MetaType 2
+aType      11
+
+eW_MetaType 2
+aType      12
+
+eW_MetaType 2
+aType      13
+
+eW_MetaDef 3
+aCPLR_ZKey 920213332
+aStatus    1
+aUpdateInd 2
+aName      Base
+aLastSyncDate 20210921014148858
+aLastUpdateDate 20210921014148858
+
+eW_MetaDef 3
+aCPLR_ZKey 920213328
+aStatus    1
+aUpdateInd 2
+aName      TZAPDMAA
+aLastSyncDate 20210921014148858
+aLastUpdateDate 20210921014148858
+
+eW_MetaType 2
+aType      14
+
+eW_MetaType 2
+aType      15
+
+eW_MetaType 2
+aType      16
+
+eW_MetaType 2
+aType      2000
+
+eW_MetaType 2
+aType      2001
+
+eW_MetaType 2
+aType      2002
+
+eW_MetaType 2
+aType      2003
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName Base
+
+eW_MetaType 2
+aType      2004
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2005
+
+eW_MetaType 2
+aType      2006
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2007
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2008
+
+eW_MetaType 2
+aType      2009
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2010
+
+eW_MetaType 2
+aType      2011
+
+eW_MetaType 2
+aType      2012
+
+eW_MetaType 2
+aType      2013
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2014
+
+eW_MetaType 2
+aType      2015
+
+eW_MetaType 2
+aType      2016
+
+eDomainJavaClass 2
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.StaticTableDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DynamicTableDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.BlobDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DateDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DateTimeDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DoubleDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.GeneratedKeyDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.EmailAddressDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.IntegerDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.PasswordDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.StringDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.SSNDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.TimeDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.RegularExpressionDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.Base64BlobDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.BooleanDomain
+
+i39        5
+i40        6
+i41        7
+i42        8
+i43        9
+i44        10
+i45        11
+i46        12
+i47        13
+i48        14
+i49        15
+i51        17
+i54        20
+i56        22
+i59        25
+i64        30
+i65        31

@@ -124,12 +124,14 @@
 
     <modules>
         <module>zeidon-joe</module>
+        <module>http</module>
         <module>scala</module>
         <module>object-browser</module>
         <module>jconsole-plugin</module>
         <module>zeidon-operations</module>
         <module>rest-servers/jaxrs</module>
         <module>rest-servers/scalatra</module>
+        <module>rest-servers/api-authentication</module>
         <module>zruby</module>
         <module>javascript</module>
         <module>jasper-reports</module>

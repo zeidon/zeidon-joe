@@ -27,7 +27,7 @@ class DynamicTask( task : com.quinsoft.zeidon.Task ) extends Task( task ) {
 }
 
 case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName: String ) {
-    val view: View = new View( task.asInstanceOf[com.quinsoft.zeidon.Task] ) basedOn lodName
+    val view: View = new View( task ) basedOn lodName
 
     def activateWith( addQual: (QualBuilder) => QualBuilder): View = {
         val qb = view.buildQual()
@@ -48,7 +48,7 @@ case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName
     }
 
     def activate( addQual: ( EntityQualBuilder ) => QualificationTerminator ): View = {
-        val builder = new QualBuilder( view, view.lodDef )
+        val builder = new QualBuilder( view )
         builder.jqual.forEntity( view.lodDef.getRoot )
 
         addQual( builder.entityQualBuilder )
@@ -58,7 +58,7 @@ case class DynamicTaskActivator( val task: com.quinsoft.zeidon.Task, val lodName
     def fromJson( json: String ) : View = {
         return task.deserializeOi.asJson.setLodDef( view.lodDef ).fromString( json ).unpickle
     }
-    
+
     def getLodDef : LodDef = view.lodDef
 }
 

@@ -58,7 +58,6 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
                 .whenNotNull( adminId, _.restrict { _.Cohort }.to { _.Cohort.ID > adminId } )
                 .whenNotNull( personId, _.restrict { _.Cohort }.to { _.Cohort.ID < personId } )
                 .activate()
-        println( "here" )
     }
 
     @Test
