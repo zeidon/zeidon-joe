@@ -201,6 +201,16 @@ public class TestZencas
         System.out.println("===== Finished testBlobs ========");
 	}
 
+	@Test
+	public void testRestrictWithParentJoin()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testRestrictWithParentJoin( testview );
+        System.out.println("===== Finished testBlobs ========");
+	}
+
 
 	@Test
 	public void CreateTemporalDerivedEntityWorkAttributeIssue()
@@ -4452,6 +4462,73 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 
 			return 0;
 		}
+
+		public int
+		testRestrictWithParentJoin( View     ViewToWindow )
+		{
+			zVIEW    mTSTs = new zVIEW( );
+			zVIEW    mTSTNoJoin = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			boolean bRC;
+
+			   TraceLineS( "BEFORE Activate TEST mTSTs", "" );
+			   //:ACTIVATE mTSTs MULTIPLE WHERE  mTSTs.DegreeTrack.ReportToHESA = "Y"
+			   //:    RESTRICTING mTSTs.DegreeTrack TO mTSTs.DegreeTrack.ExchangeFlag = "Y"
+			   o_fnLocalBuildmTSTs( ViewToWindow, vTempViewVar_0 );
+			   RESULT = ActivateObjectInstance( mTSTs, "mTSTs", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			   DropView( vTempViewVar_0 );
+			   //:NAME VIEW mTSTs "mTSTs"
+			   SetNameForView( mTSTs, "mTSTs", null, zLEVEL_TASK );
+			   //:TraceLineS("BEFORE Activate TEST mTSTs2", "")
+			   TraceLineS( "BEFORE Activate TEST mTSTs2", "" );
+			   //:ACTIVATE mTSTs2 MULTIPLE WHERE  mTSTs2.DegreeTrack.ReportToHESA = "Y"
+			   //:    RESTRICTING mTSTs2.DegreeTrack TO mTSTs2.DegreeTrack.ExchangeFlag = "Y"
+			   o_fnLocalBuildmTSTs( ViewToWindow, vTempViewVar_0 );
+			   RESULT = ActivateObjectInstance( mTSTNoJoin, "mTSTNoJoin", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			   DropView( vTempViewVar_0 );
+			   //:NAME VIEW mTSTs2 "mTSTs2"
+			   SetNameForView( mTSTNoJoin, "mTSTNoJoin", null, zLEVEL_TASK );
+
+
+		    // Single Root entity
+			   /*
+    	    cursor = mStudent.cursor( "Student" );
+		    bRC = cursor.hasAny();
+ 			Assert.assertEquals("hasAny() returns false for single root entity when it should be true. ", true, bRC);
+    	    cursor = mStudent.cursor( "Person" );
+		    bRC = cursor.hasAny();
+ 			Assert.assertEquals("hasAny() returns false for sub entity (Person) when it should be true. ", true, bRC);
+ 			*/
+			DropView( mTSTs );
+			DropView( mTSTNoJoin );
+
+			return 0;
+		}
+
+private int 
+o_fnLocalBuildmTSTs( View     vSubtask,
+                      zVIEW    vQualObject )
+{
+   int      RESULT = 0;
+
+   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "DegreeTrack" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ExceptionFlag" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Y" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "DegreeTrack" );
+   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "DegreeTrack" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ExceptionFlag" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Y" );
+   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+   return( 0 );
+} 
 
 		public int
 		testActivateDynamicDomainAdminDivError( View     ViewToWindow )
