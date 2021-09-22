@@ -198,6 +198,16 @@ public class TestZencas
         System.out.println("===== Finished testBlobs ========");
 	}
 
+	@Test
+	public void testRestrictWithParentJoin()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testRestrictWithParentJoin( testview );
+        System.out.println("===== Finished testRestrictWithParentJoin ========");
+	}
+
 
 	@Test
 	public void CreateTemporalDerivedEntityWorkAttributeIssue()
@@ -4540,6 +4550,71 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 
 			return 0;
 		}
+
+		public int
+		testRestrictWithParentJoin( View     ViewToWindow )
+		{
+			zVIEW    mTSTs = new zVIEW( );
+			zVIEW    mTSTNoJoin = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			boolean bRC;
+			
+			// I have two objects. One is using parent join, the other is not.
+			// The object "with join" is not doing RESTRICT correctly. We restrict on DegreeTrack but parent entity
+			// "StudentMajorDegreeTrack" is empty/missing.
+			// On sqlite db, need to run the following: update degreetrack set exceptionflag = 'Y' where id = 1264
+			
+		   // Activate object that has no parent join. Restrict DegreeTrack on DegreeTrack.ExchangeFlag = "Y".
+		   //:ACTIVATE mTSTs2 MULTIPLE WHERE  mTSTs2.DegreeTrack.ExchangeFlag = "Y"
+		   //:    RESTRICTING mTSTs2.DegreeTrack TO mTSTs2.DegreeTrack.ExchangeFlag = "Y"
+		   o_fnLocalBuildmTSTs( ViewToWindow, vTempViewVar_0 );
+		   RESULT = ActivateObjectInstance( mTSTNoJoin, "mTSTNoJoin", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+		   DropView( vTempViewVar_0 );
+		   SetNameForView( mTSTNoJoin, "mTSTNoJoin", null, zLEVEL_TASK );
+           int rc = mTSTNoJoin.cursor( "DegreeTrack" ).setFirst( "ID", 1264, "Person" ).toInt();
+ 		   Assert.assertEquals("Object without parent join but has RESTRICT. DegreeTrack should exist but does not.", true, rc >= 0);
+
+		   // Activate object that has parent join. Restrict DegreeTrack on DegreeTrack.ExchangeFlag = "Y".
+		   //:ACTIVATE mTSTs MULTIPLE WHERE  mTSTs.DegreeTrack.ExchangeFlag = "Y"
+		   //:    RESTRICTING mTSTs.DegreeTrack TO mTSTs.DegreeTrack.ExchangeFlag = "Y"
+		   o_fnLocalBuildmTSTs( ViewToWindow, vTempViewVar_0 );
+		   RESULT = ActivateObjectInstance( mTSTs, "mTSTs", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+		   DropView( vTempViewVar_0 );
+		   //:NAME VIEW mTSTs "mTSTs"
+		   SetNameForView( mTSTs, "mTSTs", null, zLEVEL_TASK );
+           rc = mTSTs.cursor( "DegreeTrack" ).setFirst( "ID", 1264, "Person" ).toInt();
+ 		   Assert.assertEquals("Object with Parent Join and RESTRICT. DegreeTrack should exist but does not.", true, rc >= 0);
+
+			DropView( mTSTs );
+			DropView( mTSTNoJoin );
+
+			return 0;
+		}
+
+		private int 
+		o_fnLocalBuildmTSTs( View     vSubtask,
+		                      zVIEW    vQualObject )
+		{
+		   int      RESULT = 0;
+		
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "DegreeTrack" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ExceptionFlag" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Y" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "DegreeTrack" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "DegreeTrack" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ExceptionFlag" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Y" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		} 
 
 		public int
 		testActivateDynamicDomainAdminDivError( View     ViewToWindow )
