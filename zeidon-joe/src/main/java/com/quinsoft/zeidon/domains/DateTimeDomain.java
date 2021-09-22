@@ -65,8 +65,11 @@ public class DateTimeDomain extends AbstractDomain
         if ( externalValue instanceof ZonedDateTime )
             return externalValue;
 
-        if ( externalValue instanceof Date )
-            return ZonedDateTime.ofInstant( ((Date) externalValue).toInstant(), ZoneId.systemDefault() );
+        if ( externalValue instanceof java.sql.Date )
+            return ( (java.sql.Date) externalValue).toLocalDate().atStartOfDay( ZoneId.systemDefault() ) ;
+
+        if ( externalValue instanceof java.util.Date )
+            return ZonedDateTime.ofInstant( ((java.util.Date) externalValue).toInstant(), ZoneId.systemDefault() );
 
         // VML operations use "" as synonymous with null.
         if ( externalValue instanceof String && StringUtils.isBlank( (String) externalValue ) )
