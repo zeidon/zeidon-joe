@@ -4576,7 +4576,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
            int rc = mTSTNoJoin.cursor( "DegreeTrack" ).setFirst( "ID", 1264, "Person" ).toInt();
  		   Assert.assertEquals("Object without parent join but has RESTRICT. DegreeTrack should exist but does not.", true, rc >= 0);
 
-		   // Activate object that has no parent join. Restrict DegreeTrack on DegreeTrack.ExchangeFlag = "Y".
+		   // Activate object that has parent join. Restrict DegreeTrack on DegreeTrack.ExchangeFlag = "Y".
 		   //:ACTIVATE mTSTs MULTIPLE WHERE  mTSTs.DegreeTrack.ExchangeFlag = "Y"
 		   //:    RESTRICTING mTSTs.DegreeTrack TO mTSTs.DegreeTrack.ExchangeFlag = "Y"
 		   o_fnLocalBuildmTSTs( ViewToWindow, vTempViewVar_0 );
