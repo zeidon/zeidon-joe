@@ -16,6 +16,33 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
+import com.quinsoft.zeidon.ActivateFlags;
+import com.quinsoft.zeidon.ActivateOptions;
+import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.Blob;
+import com.quinsoft.zeidon.CommitOptions;
+import com.quinsoft.zeidon.CreateEntityFlags;
+import com.quinsoft.zeidon.CursorPosition;
+import com.quinsoft.zeidon.DropViewCleanup;
+import com.quinsoft.zeidon.DuplicateOiOptions;
+import com.quinsoft.zeidon.EntityCursor;
+import com.quinsoft.zeidon.EntityInstance;
+import com.quinsoft.zeidon.EntityIterator;
+import com.quinsoft.zeidon.InvalidTaskException;
+import com.quinsoft.zeidon.Level;
+import com.quinsoft.zeidon.SelectSet;
+import com.quinsoft.zeidon.SerializeOi;
+import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.TaskQualification;
+import com.quinsoft.zeidon.View;
+import com.quinsoft.zeidon.WriteOiFlags;
+import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
+import com.quinsoft.zeidon.objectdefinition.LodDef;
+import com.quinsoft.zeidon.utils.StringInterpolator;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -33,33 +60,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.quinsoft.zeidon.ActivateFlags;
-import com.quinsoft.zeidon.ActivateOptions;
-import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.Blob;
-import com.quinsoft.zeidon.CommitOptions;
-import com.quinsoft.zeidon.CreateEntityFlags;
-import com.quinsoft.zeidon.CursorPosition;
-import com.quinsoft.zeidon.DropViewCleanup;
-import com.quinsoft.zeidon.DuplicateOiOptions;
-import com.quinsoft.zeidon.EntityCursor;
-import com.quinsoft.zeidon.EntityInstance;
-import com.quinsoft.zeidon.EntityIterator;
-import com.quinsoft.zeidon.Level;
-import com.quinsoft.zeidon.SelectSet;
-import com.quinsoft.zeidon.SerializeOi;
-import com.quinsoft.zeidon.Task;
-import com.quinsoft.zeidon.TaskQualification;
-import com.quinsoft.zeidon.View;
-import com.quinsoft.zeidon.WriteOiFlags;
-import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.objectdefinition.EntityDef;
-import com.quinsoft.zeidon.objectdefinition.LodDef;
-import com.quinsoft.zeidon.utils.StringInterpolator;
 
 /**
  *
@@ -174,7 +174,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
     {
         TaskImpl t = viewCursor.getTask();
         if ( ! t.isValid() )
-            throw new ZeidonException("A view is referencing an OI that belongs to a dropped task.");
+            throw new InvalidTaskException("A view is referencing an OI that belongs to a dropped task.");
 
         if ( task != null )
             return task;
