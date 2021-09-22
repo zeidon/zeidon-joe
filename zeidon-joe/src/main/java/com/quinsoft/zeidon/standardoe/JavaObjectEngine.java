@@ -255,7 +255,7 @@ public class JavaObjectEngine implements ObjectEngine
             ClassLoader classLoader = getClassLoader( browserClassName );
             Class<BrowserStarter> starterClass;
             starterClass = (Class<BrowserStarter>) classLoader.loadClass( browserClassName );
-            BrowserStarter starter = starterClass.newInstance();
+            BrowserStarter starter = starterClass.getDeclaredConstructor().newInstance();
             starter.startBrowser( this );
             return true;
         }
