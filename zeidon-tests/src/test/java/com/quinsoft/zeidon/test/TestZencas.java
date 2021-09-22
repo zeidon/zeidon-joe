@@ -211,6 +211,25 @@ public class TestZencas
         System.out.println("===== Finished testRestrictWithParentJoin ========");
 	}
 
+	@Test
+	public void testQualKeyList()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testQualKeyList( testview );
+        System.out.println("===== Finished testQualKeyList ========");
+	}
+
+	@Test
+	public void testSetMatching()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testSetMatching( testview );
+        System.out.println("===== Finished testSetMatching ========");
+	}
 
 	@Test
 	public void CreateTemporalDerivedEntityWorkAttributeIssue()
@@ -4527,6 +4546,60 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		} 
+		
+		public int
+		testQualKeyList( View ViewToWindow )
+		{
+			zVIEW    wXferO = new zVIEW( );
+			zVIEW    vQualObject = new zVIEW( );
+			zVIEW    lTrnscpt = new zVIEW( );
+			int RESULT = 0;
+
+		   // Was having trouble with they keylist and the sql statement that was created: had = ( ?, ? ), not in ( ?, ? ).
+		   // want to make sure this works. Shouldn't need an Assert. If the ActivateObjectInstance works
+		   // then we will assume all is well.
+		   RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		   RESULT = CreateEntity( wXferO, "ActivateID_List", zPOS_AFTER );
+		   SetAttributeFromInteger( wXferO, "ActivateID_List", "ID", 16406 );
+		   RESULT = CreateEntity( wXferO, "ActivateID_List", zPOS_AFTER );
+		   SetAttributeFromInteger( wXferO, "ActivateID_List", "ID", 14901 );
+				
+		   GenerateQualFromEntityList( vQualObject, wXferO, "ActivateID_List", "", 0 );
+		   ActivateObjectInstance( lTrnscpt, "lTrnscpt", ViewToWindow, vQualObject, zMULTIPLE );
+		   DropObjectInstance( lTrnscpt);
+		   
+		   return 0;
+		}
+		
+		public int
+		testSetMatching( View ViewToWindow )
+		{
+			zVIEW    mPerson = new zVIEW( );
+			zVIEW    mPerson2 = new zVIEW( );
+			zVIEW    vTempViewVar_0 = new zVIEW( );
+			int RESULT=0;
+			boolean bRC;
+
+		   // Was having trouble with they keylist and the sql statement that was created: had = ( ?, ? ), not in ( ?, ? ).
+		   // want to make sure this works. Shouldn't need an Assert. If the ActivateObjectInstance works
+		   // then we will assume all is well.
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 151289 );
+		   RESULT = ActivateObjectInstance( mPerson2, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   
+		   if (mPerson2.cursor("Demographics").checkExistenceOfEntity().isEmpty()) 
+		   {
+			   mPerson2.cursor("Demographics").createEntity();
+			   SetMatchingAttributesByName( mPerson2, "Demographics", mPerson, "Demographics", zSET_ALL );
+	 		   Assert.assertEquals("After setMatchingAttributesByName, Demographics.ID should still be NULL.", false, mPerson2.cursor("Demographics").getAttribute("ID").getInteger() == 16471);			  
+		   }
+		   DropObjectInstance(mPerson);
+		   DropObjectInstance(mPerson2);
+		   return 0;
+		}
+
 
 		public int
 		testActivateDynamicDomainAdminDivError( View     ViewToWindow )
