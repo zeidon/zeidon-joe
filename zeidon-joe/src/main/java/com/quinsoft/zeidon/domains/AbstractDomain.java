@@ -206,8 +206,11 @@ public abstract class AbstractDomain implements Domain
     	if ( internalValue instanceof ZonedDateTime )
             return (ZonedDateTime) internalValue;
 
-        if ( internalValue instanceof Date )
-            return ZonedDateTime.ofInstant( ((Date) internalValue).toInstant(), ZoneId.systemDefault() );
+        if ( internalValue instanceof java.sql.Date )
+            return ( (java.sql.Date) internalValue).toLocalDate().atStartOfDay( ZoneId.systemDefault() ) ;
+
+        if ( internalValue instanceof java.util.Date )
+            return ZonedDateTime.ofInstant( ((java.util.Date) internalValue).toInstant(), ZoneId.systemDefault() );
 
         throw new InvalidAttributeConversionException( attributeDef, "Cannot convert internal value of %s to Date", attributeDef.toString() );
     }

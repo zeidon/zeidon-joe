@@ -201,9 +201,15 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                 return dateTimeFormatter.parse( date );
             }
             else
-            if ( dbValue instanceof Date )
+            if ( dbValue instanceof java.sql.Date )
             {
-                return ZonedDateTime.ofInstant( ((Date) dbValue).toInstant(), ZoneId.systemDefault() );
+                return ( (java.sql.Date) dbValue).toLocalDate().atStartOfDay( ZoneId.systemDefault() ) ;
+            }
+            else
+            if ( dbValue instanceof java.util.Date )
+            {
+                return ZonedDateTime.ofInstant( ( (java.util.Date) dbValue).toInstant(),
+                                                ZoneId.systemDefault() );
             }
         }
 
