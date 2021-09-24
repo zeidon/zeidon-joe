@@ -1084,11 +1084,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null )
-        {
-            // Can't join entities that are being loaded via customized SQL.
-            if ( ! StringUtils.isBlank( qualEntity.openSql ) )
-                return false;
-        }
+            return false; // Can't join entities that have qualification (aka RESTRICT)
 
         return getEntityDefData( entityDef ).isJoinable( entityDef );
     }
