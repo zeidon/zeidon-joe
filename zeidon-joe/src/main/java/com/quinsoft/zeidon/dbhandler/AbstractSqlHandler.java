@@ -1051,8 +1051,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         EntityCache entityCache = task.getEntityCache( entityDef );
         return entityCache;
     }
+
     /**
-     * Returns true if entityDef can be loaded by joining with its parent.
+     * Returns true if entityDef can be loaded by joining with its parent.  This method first checks
+     * to see if the qualification rules out joining.  If not, then it checks to see if the EntityDef
+     * rules it out.
      *
      * @param entityDef
      * @return
@@ -1087,11 +1090,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null )
-        {
-            // Can't join entities that are being loaded via customized SQL.
-            if ( ! StringUtils.isBlank( qualEntity.openSql ) )
-                return false;
-        }
+            return false; // Can't join entities that have qualification (aka RESTRICT)
 
         return getEntityDefData( entityDef ).isJoinable( entityDef );
     }
