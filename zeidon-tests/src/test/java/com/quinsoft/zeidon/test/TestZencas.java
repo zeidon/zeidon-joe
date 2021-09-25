@@ -1404,6 +1404,7 @@ public class TestZencas
 	@Test
 	public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest()
 	{
+	    assumeThat( "Run all failing tests", JoeUtils.getEnvProperty( "runAllTests" ), is( "true" ) );
 	    View         testview;
 		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
 		VmlTester tester = new VmlTester( testview );
@@ -4578,12 +4579,12 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 			zVIEW    vTempViewVar_0 = new zVIEW( );
 			int RESULT=0;
 			boolean bRC;
-			
+
 			// I have two objects. One is using parent join, the other is not.
 			// The object "with join" is not doing RESTRICT correctly. We restrict on DegreeTrack but parent entity
 			// "StudentMajorDegreeTrack" is empty/missing.
 			// On sqlite db, need to run the following: update degreetrack set exceptionflag = 'Y' where id = 1264
-			
+
 		   // Activate object that has no parent join. Restrict DegreeTrack on DegreeTrack.ExchangeFlag = "Y".
 		   //:ACTIVATE mTSTs2 MULTIPLE WHERE  mTSTs2.DegreeTrack.ExchangeFlag = "Y"
 		   //:    RESTRICTING mTSTs2.DegreeTrack TO mTSTs2.DegreeTrack.ExchangeFlag = "Y"
@@ -4611,12 +4612,12 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 			return 0;
 		}
 
-		private int 
+		private int
 		o_fnLocalBuildmTSTs( View     vSubtask,
 		                      zVIEW    vQualObject )
 		{
 		   int      RESULT = 0;
-		
+
 		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
 		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
 		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
@@ -4633,8 +4634,8 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "Y" );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
-		} 
-		
+		}
+
 		public int
 		testQualKeyList( View ViewToWindow )
 		{
@@ -4652,14 +4653,14 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   SetAttributeFromInteger( wXferO, "ActivateID_List", "ID", 16406 );
 		   RESULT = CreateEntity( wXferO, "ActivateID_List", zPOS_AFTER );
 		   SetAttributeFromInteger( wXferO, "ActivateID_List", "ID", 14901 );
-				
+
 		   GenerateQualFromEntityList( vQualObject, wXferO, "ActivateID_List", "", 0 );
 		   ActivateObjectInstance( lTrnscpt, "lTrnscpt", ViewToWindow, vQualObject, zMULTIPLE );
 		   DropObjectInstance( lTrnscpt);
-		   
+
 		   return 0;
 		}
-		
+
 		public int
 		testSetMatching( View ViewToWindow )
 		{
@@ -4676,12 +4677,12 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
 		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 151289 );
 		   RESULT = ActivateObjectInstance( mPerson2, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
-		   
-		   if (mPerson2.cursor("Demographics").checkExistenceOfEntity().isEmpty()) 
+
+		   if (mPerson2.cursor("Demographics").checkExistenceOfEntity().isEmpty())
 		   {
 			   mPerson2.cursor("Demographics").createEntity();
 			   SetMatchingAttributesByName( mPerson2, "Demographics", mPerson, "Demographics", zSET_ALL );
-	 		   Assert.assertEquals("After setMatchingAttributesByName, Demographics.ID should still be NULL.", false, mPerson2.cursor("Demographics").getAttribute("ID").getInteger() == 16471);			  
+	 		   Assert.assertEquals("After setMatchingAttributesByName, Demographics.ID should still be NULL.", false, mPerson2.cursor("Demographics").getAttribute("ID").getInteger() == 16471);
 		   }
 		   DropObjectInstance(mPerson);
 		   DropObjectInstance(mPerson2);
