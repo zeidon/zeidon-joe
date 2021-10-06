@@ -1392,7 +1392,7 @@ public class TestZencas
 		tester.mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( testview );
         System.out.println("===== Finished mFAProfTemporalIssue3 ========");
 	}
-//mFAProfTemporalTest
+
 	@Test
 	public void mFAProfTemporalLinkIssue()
 	{
@@ -1402,6 +1402,17 @@ public class TestZencas
 		tester.mFAProfTemporalLinkIssue( testview );
         System.out.println("===== Finished mFAProfTemporalLinkIssue ========");
 	}
+	
+	@Test
+	public void mFAProfCreateTemporalCODLinkIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfCreateTemporalCODLinkIssue( testview );
+        System.out.println("===== Finished mFAProfCreateTemporalCODLinkIssue ========");
+	}
+	
 	@Test
 	public void testExclInclOrderEntities()
 	{
@@ -2199,6 +2210,37 @@ public class TestZencas
 
 		   return 0;
 		}
+		public int
+		mFAProfCreateTemporalCODLinkIssue( View ViewToWindow )
+		{
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+
+		   // KJS 10/06/21 
+		   // One the create temporal of "COD_Disbursement", we get the following error:
+		   // TemporalEntityException: Attempting to create a temporal subobject for an entity that has a child entity linked to another temporal entity.
+		   // If we take out either the create temporal of "FinAidAward" or "FinAidAwardDisbursement", it works without error.
+		   
+		   o_fnLocalBuildmFAProf2( ViewToWindow, vTempViewVar_0, 23496 ); //348  23496
+		   ActivateObjectInstance( mFAProf, "mFAProf", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+	       
+	       // If COD_Disbursement doesn't exist, create one and save for our test purposes.
+	       if ( !mFAProf.cursor("COD_Disbursement").checkExistenceOfEntity().isSet() )
+	       {
+	    	   mFAProf.cursor("COD_Disbursement").createEntity();
+	    	   mFAProf.cursor("COD_Disbursement").getAttribute("SequenceNumber").setValue("1");
+	    	   mFAProf.cursor("COD_Disbursement").getAttribute("COD_ResponseCode").setValue("A");
+	    	   mFAProf.commit();
+	       }
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement");
+		    CreateTemporalSubobjectVersion( mFAProf, "COD_Disbursement");
+	       
+		   return 0;
+		}
+
 
 		public int
 		CreateTemporalDerivedEntityWorkAttributeIssue( View ViewToWindow )
@@ -2212,7 +2254,7 @@ public class TestZencas
 		   zVIEW    vTempViewVar_0 = new zVIEW( );
 		   int RESULT=0;
 
-		   // KJS 09/16/19
+		   // KJS 10/16/19
 		   // Issue: After a CreateTemporalSubobjectVersion, derived entity work attributes are blank.
 		   // We create derived entity GradeEnrollment from entity Enrollment and set a work attribute (GradeEnrollment.wEnteredGrade).
 		   // After CreateTemporalSubobjectVersion on the root entity Class the work attribute in GradeEnrollment is blank.
@@ -7770,6 +7812,24 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Person" );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "0" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
+
+		private int
+		o_fnLocalBuildmFAProf2( View     vSubtask,
+		                       zVIEW    vQualObject,
+		                       int      lTempInteger_10 )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidProfile" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "FinAidProfile" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_10 );
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
