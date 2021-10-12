@@ -1171,6 +1171,17 @@ public class TestZencas
 		tester.testDateSort( testview );
         System.out.println("===== Finished testDateSort ========");
 	}
+	
+	
+	@Test
+	public void testUpdateForeignKeys()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mStudent" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testUpdateForeignKeys( testview );
+        System.out.println("===== Finished testUpdateForeignKeys ========");
+	}
 
 	@Test
 	public void testSpawning1()
@@ -8150,6 +8161,46 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "EXISTS" );
 	   return( 0 );
 }
+		
+		public int testUpdateForeignKeys( View     ViewToWindow  )
+		{
+			   zVIEW    mFAReq = new zVIEW( );
+			   int      RESULT = 0;
+			   zVIEW    mAdmDiv = new zVIEW( );
+			   zVIEW    mFATrk = new zVIEW( );
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+		
+			   // KJS 10/12/21
+			   // We have an entity FinAidTrackRequirement. The key for this is not a generated key, it is the two foreign keys:
+			   // FKIDFINAIDREQUIREM
+			   // FK_ID_FINAIDTRACK
+			   // When I try to exclude/include the related entity FinAidRequirement, I get an error on save
+			   // because FKIDFINAIDREQUIREM is part of the key.
+			   // Seems like this should be allowed (it is in C world).
+
+			    o_fnLocalBuildmAdmDiv( ViewToWindow, vTempViewVar_0, 1 );
+			    RESULT = ActivateObjectInstance( mAdmDiv, "mAdmDiv", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   		DropView( vTempViewVar_0 );
+			   
+			   //:ACTIVATE  mFATrk EMPTY 
+			   RESULT = ActivateEmptyObjectInstance( mFATrk, "mFATrk", ViewToWindow, zSINGLE );
+			   RESULT = CreateEntity( mFATrk, "FinAidTrack", zPOS_AFTER );
+			   SetAttributeFromString( mFATrk, "FinAidTrack", "Name", "TESTTRACK" );
+			   RESULT = CreateEntity( mFATrk, "FinAidTrackRequirement", zPOS_AFTER );
+			   SetAttributeFromInteger( mFATrk, "FinAidTrackRequirement", "SequenceNumber", 1 );
+			   //:ACTIVATE  mFAReq MULTIPLE
+			   RESULT = ActivateObjectInstance( mFAReq, "mFAReq", ViewToWindow, 0, zACTIVATE_ROOTONLY_MULTIPLE );
+			   RESULT = IncludeSubobjectFromSubobject( mFATrk, "FinAidRequirement", mFAReq, "FinAidRequirement", zPOS_AFTER );
+			   RESULT = IncludeSubobjectFromSubobject( mFATrk, "AdministrativeDivision", mAdmDiv, "AdministrativeDivision", zPOS_AFTER );
+			   RESULT = CommitObjectInstance( mFATrk );
+		
+			   RESULT = ExcludeEntity( mFATrk, "FinAidRequirement", zREPOS_AFTER );
+			   RESULT = SetCursorNextEntity( mFAReq, "FinAidRequirement", "" );
+			   RESULT = IncludeSubobjectFromSubobject( mFATrk, "FinAidRequirement", mFAReq, "FinAidRequirement", zPOS_AFTER );
+			   RESULT = CommitObjectInstance( mFATrk );
+			   return( 0 );
+		}
 
    }
+	
 }
