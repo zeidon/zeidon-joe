@@ -54,7 +54,7 @@ public class ObjectBrowser
         mainFrame.setTitle( "Zeidon Object Browser" );
         mainFrame.setName( "Object Browser" );
         mainFrame.getContentPane().add( new MainPanel( env ) );
-        
+
         URL iconUrl = Resources.getResource( "tzobrwad.png" );
         ImageIcon image = new ImageIcon( iconUrl );
         mainFrame.setIconImage( image.getImage() );
@@ -66,13 +66,12 @@ public class ObjectBrowser
 
         env.restoreEnvironment();
 
-        // Display the window.
-        mainFrame.setVisible( true );
-        
         // Use invokeLater otherwise toFront() won't always work.
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
+                // Display the window.
+                mainFrame.setVisible( true );
                 mainFrame.toFront();
             }
         });
