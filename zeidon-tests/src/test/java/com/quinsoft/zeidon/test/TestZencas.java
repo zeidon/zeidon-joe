@@ -1431,6 +1431,17 @@ public class TestZencas
 		tester.mFAProfTemporalLinkIssue( testview );
         System.out.println("===== Finished mFAProfTemporalLinkIssue ========");
 	}
+	
+	@Test
+	public void mFAProfCreateTemporalCODLinkIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfCreateTemporalCODLinkIssue( testview );
+        System.out.println("===== Finished mFAProfCreateTemporalCODLinkIssue ========");
+	}
+
 	@Test
 	public void testExclInclOrderEntities()
 	{
@@ -1441,6 +1452,15 @@ public class TestZencas
         System.out.println("===== Finished testExclInclOrderEntities ========");
 	}
 
+	@Test
+	public void testUpdateForeignKeys()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mStudent" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testUpdateForeignKeys( testview );
+        System.out.println("===== Finished testUpdateForeignKeys ========");
+	}
 
 	@Test
 	public void testUsingJacob()
@@ -2288,6 +2308,38 @@ public class TestZencas
 
 		   return 0;
 		}
+
+		public int
+		mFAProfCreateTemporalCODLinkIssue( View ViewToWindow )
+		{
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+
+		   // KJS 10/06/21 
+		   // One the create temporal of "COD_Disbursement", we get the following error:
+		   // TemporalEntityException: Attempting to create a temporal subobject for an entity that has a child entity linked to another temporal entity.
+		   // If we take out either the create temporal of "FinAidAward" or "FinAidAwardDisbursement", it works without error.
+		   
+		   o_fnLocalBuildmFAProf2( ViewToWindow, vTempViewVar_0, 23496 ); //348  23496
+		   ActivateObjectInstance( mFAProf, "mFAProf", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+	           SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+	       
+	       // If COD_Disbursement doesn't exist, create one and save for our test purposes.
+	       if ( !mFAProf.cursor("COD_Disbursement").checkExistenceOfEntity().isSet() )
+	       {
+	    	   mFAProf.cursor("COD_Disbursement").createEntity();
+	    	   mFAProf.cursor("COD_Disbursement").getAttribute("SequenceNumber").setValue("1");
+	    	   mFAProf.cursor("COD_Disbursement").getAttribute("COD_ResponseCode").setValue("A");
+	    	   mFAProf.commit();
+	       }
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+		    CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement");
+		    CreateTemporalSubobjectVersion( mFAProf, "COD_Disbursement");
+	       
+		   return 0;
+		}
+
 
 		public int
 		CreateTemporalDerivedEntityWorkAttributeIssue( View ViewToWindow )
@@ -7960,6 +8012,24 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		}
 
 		private int
+		o_fnLocalBuildmFAProf2( View     vSubtask,
+		                       zVIEW    vQualObject,
+		                       int      lTempInteger_10 )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "FinAidProfile" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "FinAidProfile" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "ID" );
+		   SetAttributeFromInteger( vQualObject, "QualAttrib", "Value", lTempInteger_10 );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
+		   return( 0 );
+		}
+
+		private int
 		o_fnLocalBuildlClsLst( View     vSubtask,
 		                              zVIEW    vQualObject,
 		                              int      lTempInteger_3 )
@@ -8499,6 +8569,44 @@ TEST_TemporalSaveIssuemSAProf( View     ViewToWindow )
 	   return( 0 );
 	}
 
+	public int testUpdateForeignKeys( View     ViewToWindow  )
+	{
+		   zVIEW    mFAReq = new zVIEW( );
+		   int      RESULT = 0;
+		   zVIEW    mAdmDiv = new zVIEW( );
+		   zVIEW    mFATrk = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+	
+		   // KJS 10/12/21
+		   // We have an entity FinAidTrackRequirement. The key for this is not a generated key, it is the two foreign keys:
+		   // FKIDFINAIDREQUIREM
+		   // FK_ID_FINAIDTRACK
+		   // When I try to exclude/include the related entity FinAidRequirement, I get an error on save
+		   // because FKIDFINAIDREQUIREM is part of the key.
+		   // Seems like this should be allowed (it is in C world).
+
+		    o_fnLocalBuildmAdmDiv( ViewToWindow, vTempViewVar_0, 1 );
+		    RESULT = ActivateObjectInstance( mAdmDiv, "mAdmDiv", ViewToWindow, vTempViewVar_0, zSINGLE );
+	   		DropView( vTempViewVar_0 );
+		   
+		   //:ACTIVATE  mFATrk EMPTY 
+		   RESULT = ActivateEmptyObjectInstance( mFATrk, "mFATrk", ViewToWindow, zSINGLE );
+		   RESULT = CreateEntity( mFATrk, "FinAidTrack", zPOS_AFTER );
+		   SetAttributeFromString( mFATrk, "FinAidTrack", "Name", "TESTTRACK" );
+		   RESULT = CreateEntity( mFATrk, "FinAidTrackRequirement", zPOS_AFTER );
+		   SetAttributeFromInteger( mFATrk, "FinAidTrackRequirement", "SequenceNumber", 1 );
+		   //:ACTIVATE  mFAReq MULTIPLE
+		   RESULT = ActivateObjectInstance( mFAReq, "mFAReq", ViewToWindow, 0, zACTIVATE_ROOTONLY_MULTIPLE );
+		   RESULT = IncludeSubobjectFromSubobject( mFATrk, "FinAidRequirement", mFAReq, "FinAidRequirement", zPOS_AFTER );
+		   RESULT = IncludeSubobjectFromSubobject( mFATrk, "AdministrativeDivision", mAdmDiv, "AdministrativeDivision", zPOS_AFTER );
+		   RESULT = CommitObjectInstance( mFATrk );
+	
+		   RESULT = ExcludeEntity( mFATrk, "FinAidRequirement", zREPOS_AFTER );
+		   RESULT = SetCursorNextEntity( mFAReq, "FinAidRequirement", "" );
+		   RESULT = IncludeSubobjectFromSubobject( mFATrk, "FinAidRequirement", mFAReq, "FinAidRequirement", zPOS_AFTER );
+		   RESULT = CommitObjectInstance( mFATrk );
+		   return( 0 );
+	}
 
    }
 }
