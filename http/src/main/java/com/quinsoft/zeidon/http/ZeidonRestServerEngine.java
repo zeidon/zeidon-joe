@@ -21,7 +21,6 @@ package com.quinsoft.zeidon.http;
 import com.google.common.collect.ImmutableMap;
 import com.quinsoft.zeidon.EntityCursor;
 import com.quinsoft.zeidon.ObjectEngine;
-import com.quinsoft.zeidon.SerializationMapping;
 import com.quinsoft.zeidon.StreamFormat;
 import com.quinsoft.zeidon.SubobjectValidationException;
 import com.quinsoft.zeidon.Task;
