@@ -244,7 +244,8 @@ class CommitToRestServer implements Committer
     {
         View view = viewList.get( 0 );  // We currently only support one view.
 
-        ZeidonHttpClientResponse response = ZeidonHttpClientFactory.getInstance( task.getObjectEngine() )
+        ZeidonHttpClientFactory clientFactory = task.getObjectEngine().getInjector().get( ZeidonHttpClientFactory.class );
+        ZeidonHttpClientResponse response = clientFactory
                 .getClient( view )
                 .setUrl( url )
                 .callPost();

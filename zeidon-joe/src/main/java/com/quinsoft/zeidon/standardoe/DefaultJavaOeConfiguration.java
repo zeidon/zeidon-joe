@@ -18,16 +18,6 @@
  */
 package com.quinsoft.zeidon.standardoe;
 
-import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedGenerator;
@@ -37,6 +27,7 @@ import com.quinsoft.zeidon.ObjectEngineEventListener;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskLogger;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.ZeidonInjector;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.config.DefaultPreferencesFactory;
 import com.quinsoft.zeidon.config.HomeDirectory;
@@ -49,7 +40,17 @@ import com.quinsoft.zeidon.config.ZeidonPreferencesFactory;
 import com.quinsoft.zeidon.config.ZeidonPropertyPreferences;
 import com.quinsoft.zeidon.domains.DomainClassLoader;
 import com.quinsoft.zeidon.jmx.JmxObjectEngineMonitor;
+import com.quinsoft.zeidon.standardoe.injection.SimpleZeidonInjector;
 import com.quinsoft.zeidon.utils.JoeUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Returns the default configuration options for the Java Object Engine.  This is designed to be
@@ -68,6 +69,7 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     protected ConcurrentMap<String, Task> taskCacheMap;
     protected String jmxAppName = "DefaultOE";
     protected String preferencesFilename;
+    protected ZeidonInjector zeidonInjector;
 
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.standardoe.JavaOeOptions#getHomeDirectory()
@@ -291,5 +293,14 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
     {
         this.preferencesFilename = preferencesFilename;
         return this;
+    }
+
+    @Override
+    public ZeidonInjector getInjector()
+    {
+        if ( zeidonInjector == null )
+            zeidonInjector = new SimpleZeidonInjector();
+
+        return zeidonInjector;
     }
 }

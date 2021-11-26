@@ -87,7 +87,7 @@ public class TestApiAuthentication
                 .setPreferencesFilename( "zeidon-rest-client-authentication.properties" ) );
         View clientAuthenticationConfig = proc.apply( oe );
         RestClientAuthentication decorator = new RestClientAuthentication( clientAuthenticationConfig );
-        ZeidonHttpClientFactory clientFactory = ZeidonHttpClientFactory.getInstance( oe );
+        ZeidonHttpClientFactory clientFactory = oe.getInjector().get( ZeidonHttpClientFactory.class );
         clientFactory.setAuthenticationDecorator( decorator );
         return oe;
     }

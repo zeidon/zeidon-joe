@@ -24,7 +24,6 @@ import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
-import com.quinsoft.zeidon.http.ZeidonHttpClientFactory;
 import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import com.quinsoft.zeidon.objectdefinition.LodDef;
 
@@ -75,7 +74,10 @@ public class ActivateOiFromRestServer implements Activator
         View qual = activateOptions.getQualificationObject();
         String url = String.format("%s/%s/%s", serverUrl, application.getName(), view.getLodDef().getName());
 
-        return ZeidonHttpClientFactory.getInstance( task.getObjectEngine() ).getClient( task )
+        ZeidonHttpClientFactory clientFactory = task.getObjectEngine()
+                .getInjector()
+                .get( ZeidonHttpClientFactory.class );
+        return clientFactory.getClient( task )
                 .setUrl( url )
                 .setQualParam( qual )
                 .callGet( view.getLodDef() )

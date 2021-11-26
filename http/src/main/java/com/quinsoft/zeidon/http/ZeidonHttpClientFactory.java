@@ -53,7 +53,7 @@ public class ZeidonHttpClientFactory
         return httpClientFactory;
     }
 
-    private ZeidonHttpClientFactory()
+    public ZeidonHttpClientFactory()
     {
     }
 

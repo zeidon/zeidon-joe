@@ -194,5 +194,7 @@ public interface ObjectEngine
     /**
      * Get the CacheMap for the ObjectEngine.
      */
-    public CacheMap getCacheMap();
+    CacheMap getCacheMap();
+
+    ZeidonInjector getInjector();
 }

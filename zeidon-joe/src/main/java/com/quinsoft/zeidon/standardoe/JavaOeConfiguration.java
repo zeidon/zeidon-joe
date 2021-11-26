@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 
 import com.quinsoft.zeidon.ObjectEngineEventListener;
 import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.ZeidonInjector;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.config.HomeDirectory;
 import com.quinsoft.zeidon.config.UuidGenerator;
@@ -45,7 +46,10 @@ public interface JavaOeConfiguration
     HomeDirectory             getHomeDirectory();
 
     DomainClassLoader         getDomainClassLoader();
+
     ObjectEngineEventListener getObjectEngineListener();
+
+    ZeidonInjector getInjector();
 
     /**
      * Returns the logger used while bootstrapping the Object Engine.

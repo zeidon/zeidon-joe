@@ -26,6 +26,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.UnknownApplicationException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.ZeidonInjector;
 import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.config.HomeDirectory;
 import com.quinsoft.zeidon.config.UuidGenerator;
@@ -114,6 +115,7 @@ public class JavaObjectEngine implements ObjectEngine
     private final DomainClassLoader domainClassLoader;
     private final ExecutorService threadPool;
     private final UuidGenerator uuidGenerator;
+    private final ZeidonInjector zeidonInjector;
 
     public final static synchronized ObjectEngine getInstance()
     {
@@ -175,11 +177,11 @@ public class JavaObjectEngine implements ObjectEngine
         String version = _package.getImplementationVersion();
         String builtDate = _package.getImplementationTitle();
         logger.info( "Zeidon JOE Version: %s  Build Date: %s", version, builtDate );
-        version = System.getProperty("java.version");
-        logger.info(  "User.dir = %s", System.getProperty("user.dir") );
+        version = System.getProperty( "java.version" );
+        logger.info( "User.dir = %s", System.getProperty( "user.dir" ) );
 
         // Print classpath for older versions (1.8 and prior).
-        if( version.startsWith( "1." ) )
+        if ( version.startsWith( "1." ) )
             logger.info( "classpath = %s", getClassPath( logger ) );
 
         // Generate a UUID as a task ID.
@@ -190,8 +192,12 @@ public class JavaObjectEngine implements ObjectEngine
         persistentTaskList = options.getPersistentTaskCacheMap();
 
         applicationList = new ApplicationList( zeidonHomeDir, logger );
-        systemTask = createTask( ObjectEngine.ZEIDON_SYSTEM_APP_NAME, true, ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
+        systemTask = createTask( ObjectEngine.ZEIDON_SYSTEM_APP_NAME, true,
+                                 ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
         oeListener.setObjectEngine( this );
+
+        zeidonInjector = options.getInjector();
+        zeidonInjector.initialize( this );
 
         // Check to see if we should start the browser.
         String startBrowser = JoeUtils.getEnvProperty( "zeidon.start.browser" );
@@ -205,6 +211,12 @@ public class JavaObjectEngine implements ObjectEngine
             startBrowser();
 
         assert logAssertMessage( systemTask ); // Write a message to the log if assertions are on.
+    }
+
+    @Override
+    public ZeidonInjector getInjector()
+    {
+        return zeidonInjector;
     }
 
     private boolean logAssertMessage( TaskImpl systemTask )
