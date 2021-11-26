@@ -21,7 +21,6 @@ package com.quinsoft.zeidon.standardoe;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CommitOptions;
 import com.quinsoft.zeidon.Committer;
-import com.quinsoft.zeidon.SerializeOi;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
@@ -43,11 +42,6 @@ import java.util.Set;
  */
 class CommitToRestServer implements Committer
 {
-    /**
-     * The WriteOptions for creating the JSON stream.
-     */
-    private final static SerializeOi JSON_WRITE_OPTIONS = new SerializeOi().withIncremental();
-
     private List<ViewImpl>  viewList;
     private Task           task;
     private CommitOptions  options;
@@ -91,7 +85,7 @@ class CommitToRestServer implements Committer
         this.task = task;
         this.viewList = new ArrayList<ViewImpl>();
         this.options = options;
-        this.application = options.getApplication();
+        this.application = this.options.getApplication();
 
         if ( list.size() > 1 )
             throw new ZeidonException( "Only 1 view is supported for commiting via REST" );
