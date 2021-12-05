@@ -625,11 +625,6 @@ class CommitToDbUsingGenkeyHandler extends AbstractCommitToDb
             }
             else
             {
-                // If the foreign key is a key to the target entity, then
-                // we cannot null the key because we would lose the
-                // capability of updating the entity (in this case it
-                // better be deleted!!!)
-                assert ! relAttributeDef.isKey();
                 assert ei.isExcluded(); // EI is hidden and we've ignored deleted EIs above.
 
                 // If the EI is excluded and the min cardinality is 1, we'll get an error
