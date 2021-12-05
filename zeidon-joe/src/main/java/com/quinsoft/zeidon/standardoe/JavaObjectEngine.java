@@ -152,8 +152,7 @@ public class JavaObjectEngine implements ObjectEngine
     @Override
     public String getVersion()
     {
-        // TODO: change this to use the version from Maven.
-        return JOE_VERSION;
+        return getClass().getPackage().getImplementationVersion();
     }
 
     /**
@@ -171,9 +170,8 @@ public class JavaObjectEngine implements ObjectEngine
         uuidGenerator = options.getUuidGenerator();
         oeListener = options.getObjectEngineListener();
 
-        Package _package = this.getClass().getPackage();
-        String version = _package.getImplementationVersion();
-        String builtDate = _package.getImplementationTitle();
+        String version = getVersion();
+        String builtDate = getClass().getPackage().getImplementationTitle();
         logger.info( "Zeidon JOE Version: %s  Build Date: %s", version, builtDate );
         version = System.getProperty("java.version");
         logger.info(  "User.dir = %s", System.getProperty("user.dir") );
