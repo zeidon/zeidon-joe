@@ -2,7 +2,7 @@
   "name": "zeidon",
   "private": true,
   "scripts": {
-    "build": "lerna bootstrap",
+    "build": "lerna bootstrap --no-ci",
     "list": "lerna list",
     "clean": "rm -rf dist && lerna run --parallel clean",
     "clean-all": "lerna run --parallel clean-all",
