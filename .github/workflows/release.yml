@@ -1,4 +1,4 @@
-name: Release
+name: Release to Maven Repo
 
 on:
   workflow_dispatch:
@@ -23,3 +23,7 @@ jobs:
           nexus_username: ${{ secrets.nexus_username }}
           nexus_password: ${{ secrets.nexus_password }}
           maven_profiles: deploy,!test-projects
+
+      - name: Print settings
+        if: always()
+        run: cat /home/runner/work/_actions/samuelmeuli/action-maven-publish/v1/settings.xml
