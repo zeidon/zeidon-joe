@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/zeidon/zeidon-joe.svg?branch=current-dev)](https://travis-ci.org/zeidon/zeidon-joe)
+![Build Status](https://github.com/zeidon/zeidon-joe/actions/workflows/ci.yml/badge.svg)
 
 # Zeidon Java Object Engine (JOE) and related projects.
 
@@ -67,6 +67,3 @@ There are a few tests for future functionality that currently fail.  These tests
 
 `mvn test -DrunAllTests=true`
 
-## Additional links
-
-* Travis CI: https://travis-ci.org/zeidon/zeidon-joe
