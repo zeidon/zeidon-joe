@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Java and Maven
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 8
 
@@ -23,7 +23,3 @@ jobs:
           nexus_username: ${{ secrets.nexus_username }}
           nexus_password: ${{ secrets.nexus_password }}
           maven_profiles: deploy,!test-projects
-
-      - name: Print settings
-        if: always()
-        run: cat /home/runner/work/_actions/samuelmeuli/action-maven-publish/v1/settings.xml

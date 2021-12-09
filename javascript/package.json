@@ -7,7 +7,7 @@
     "clean": "rm -rf dist && lerna run --parallel clean",
     "clean-all": "lerna run --parallel clean-all",
     "test": "lerna run test",
-    "release": "lerna publish"
+    "publish": "echo 'todo: add lerna publish'"
   },
   "devDependencies": {
     "@types/node": "^16.7.1",

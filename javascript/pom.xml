@@ -276,7 +276,7 @@
               <executable>npm</executable>
               <arguments>
                 <argument>run</argument>
-                <argument>put Lerna command here</argument>
+                <argument>publish</argument>
               </arguments>
             </configuration>
           </execution>
