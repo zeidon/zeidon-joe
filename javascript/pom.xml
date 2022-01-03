@@ -61,7 +61,11 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-util</artifactId>
+<<<<<<< HEAD
       <version>9.4.0.v20161208</version>
+=======
+      <version>9.4.41.v20210516</version>
+>>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -79,13 +83,21 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlet</artifactId>
+<<<<<<< HEAD
       <version>9.4.0.v20161208</version>
+=======
+      <version>9.4.41.v20210516</version>
+>>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
+<<<<<<< HEAD
       <version>9.4.0.v20161208</version>
+=======
+      <version>9.4.41.v20210516</version>
+>>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -276,7 +288,11 @@
               <executable>npm</executable>
               <arguments>
                 <argument>run</argument>
+<<<<<<< HEAD
                 <argument>put Lerna command here</argument>
+=======
+                <argument>publish</argument>
+>>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
               </arguments>
             </configuration>
           </execution>

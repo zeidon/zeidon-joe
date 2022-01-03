@@ -2432,17 +2432,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( ! attributeDef.isPersistent() )
                 continue;
 
+            if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
+                continue;
+
             if ( attributeDef.isKey() )
             {
-                if ( entityInstance.getAttribute( attributeDef ).isUpdated() )
-                    throw new ZeidonException( "Trying to update key %s", attributeDef.toString() );
-
                 if ( entityInstance.getAttribute( attributeDef ).isNull() )
                     throw new ZeidonException( "Key %s is null for update.", attributeDef.toString() );
             }
-
-            if ( ! entityInstance.getAttribute( attributeDef ).isUpdated() )
-                continue;
 
             if ( entityInstance.isDbhUpdateForeignKeysOnly() && !attributeDef.isForeignKey() )
                 continue;

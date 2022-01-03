@@ -10,6 +10,7 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.objectdefinition.KeyValidator
 import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
+import com.quinsoft.zeidon.ZeidonException
 
 class TestNorthwind extends AssertionsForJUnit {
 
@@ -65,8 +66,20 @@ class TestNorthwind extends AssertionsForJUnit {
     }
 
     @Test
+    def testCommitWithTamperedKeys() {
+        // Verifies that a serialized OI that attempts to update a key will trigger an error.
+        var order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering4.json").unpickle
+        try {
+            order.commit()
+            fail()
+        } catch {
+            case e: ZeidonException => assertTrue( e.getMessage.startsWith( "Attribute is defined as read-only and/or hidden and is not linked to updatable entity.") );
+        }
+    }
+
+    @Test
     def testKeyValidator() {
-        var order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-key-tampering.json").unpickle
+        var order = task.deserializeOi().fromFile("testdata/northwind/data/order-with-no-key-tampering.json").unpickle
         var validator = new KeyValidator( order )
         validator.validate()
 

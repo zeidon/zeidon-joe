@@ -2,12 +2,20 @@
   "name": "zeidon",
   "private": true,
   "scripts": {
+<<<<<<< HEAD
     "build": "lerna bootstrap",
+=======
+    "build": "lerna bootstrap --no-ci",
+>>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
     "list": "lerna list",
     "clean": "rm -rf dist && lerna run --parallel clean",
     "clean-all": "lerna run --parallel clean-all",
     "test": "lerna run test",
+<<<<<<< HEAD
     "release": "lerna publish"
+=======
+    "publish": "echo 'todo: add lerna publish'"
+>>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
   },
   "devDependencies": {
     "@types/node": "^16.7.1",
