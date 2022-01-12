@@ -170,6 +170,16 @@ public class TestZencas
     }
 
 	@Test
+	public void testActivatefPersTstLimit()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testActivatefPersTstLimit( testview );
+        System.out.println("===== Finished testBlobs ========");
+	}
+    
+	@Test
 	public void testRecursion()
 	{
         View tst = new QualificationBuilder( zencas )
@@ -3912,7 +3922,6 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 			return 0;
 		}
 
-
 		public int
 		testzGetNextEntityAttributeName( View ViewToWindow )
 		{
@@ -7423,6 +7432,7 @@ o_fnLocalBuildmTstOR( View     vSubtask,
 		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "=" );
 		   return( 0 );
 		}
+		
 		private int
 		o_fnLocalBuildmSAProf( View     vSubtask,
 		                       zVIEW    vQualObject,
@@ -8201,6 +8211,65 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 			   return( 0 );
 		}
 
+
+	    @Test
+	    public void testActivatefPersTstLimit( View     ViewToWindow) 
+	    {
+	    	/* At NMM we had a problem where we were activating lPersonResultsSearch where the root limit is set to 200
+	    	 * and the joins from the root "Person" are all "activate by joining with parent" and the relationships are all (0,m).
+	    	 * The JOE would take the 200 limit (where there were Person duplicates) and then take out the duplicate Person(s) so
+	    	 * we were left with a entity count < 200.
+	    	 */
+	    	/*
+
+			View fPersTst = new QualificationBuilder( zencas )
+	                            .setLodDef( "fPersTst" )
+	                            .addAttribQual( "Person", "FirstName", "LIKE", "a%" )
+	                            .limitCountTo( 150 )
+	                            .activate();
+	        fPersTst.cursor( "Person" ).setFirst();
+	        //Assert.assertEquals( fPersTst.cursor( "Person" ).getEntityCount(), 0 );
+	        */
+	        View fPersTst2 = new QualificationBuilder( zencas )        		
+	                .setLodDef( "fPersTst2" )
+	                .addAttribQual( "Person", "FirstName", "LIKE", "a%" )
+	                .limitCountTo( 150 )
+	                .activate();
+			fPersTst2.cursor( "Person" ).setFirst();
+			Assert.assertEquals( fPersTst2.cursor( "Person" ).getEntityCount(), 150 );
+
+			   zVIEW    vfPersTst = new zVIEW( );
+			   zVIEW    vfPersTst2 = new zVIEW( );
+			   zVIEW    vTempViewVar_0 = new zVIEW( );
+			   int RESULT = 0;
+
+
+			   o_fnLocalBuildfPersTst( ViewToWindow, vTempViewVar_0, "" );
+			   //If I add the limit to the qualifier (like above) it works.
+			   //vTempViewVar_0.cursor( "EntitySpec" ).getAttribute( "ActivateLimit" ).setValue( 150 );
+			   RESULT = ActivateObjectInstance( vfPersTst2, "fPersTst2", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			   DropView( vTempViewVar_0 );
+			Assert.assertEquals( vfPersTst2.cursor( "Person" ).getEntityCount(), 150 );
+			
+	    }
+		
+		private int
+		o_fnLocalBuildfPersTst( View     vSubtask,
+		                       zVIEW    vQualObject,
+		                       String    sFirst )
+		{
+		   int      RESULT = 0;
+
+		   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", vSubtask, zMULTIPLE );
+		   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "Person" );
+		   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "Person" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "FirstName" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Value", "a%" );
+		   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", "LIKE" );
+		   return( 0 );
+		}
    }
 	
 }

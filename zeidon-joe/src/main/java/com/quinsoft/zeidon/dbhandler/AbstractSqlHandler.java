@@ -1072,7 +1072,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             QualEntity parentQualEntity = qualMap.get( entityDef.getParent() );
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
                 return false;
-
+            
+            // KJS 01/12/22 - We need to also check the activateLimit for the parent because otherwise we
+            // do the join with child and in the end the root limit is incorrect (like instead of 200 it's 105 because it takes the
+            // limit including the duplicate parent).
+            if ( entityDef.getParent().getActivateLimit() != null )
+                return false;
+           	
             // If the parent of entityDef is the root and we're activating with pagination
             // then we can't join because the join will throw off the row count.
             if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() && pagingOptions != null )
