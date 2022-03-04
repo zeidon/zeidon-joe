@@ -5100,6 +5100,7 @@ public abstract class VmlOperation
 	   }
 	   catch( Exception e )
 	   {
+		   task.log().info(e.getMessage());
 	      return -1;   
 	   }
       return 0;
@@ -5118,6 +5119,7 @@ public abstract class VmlOperation
 	   }
 	   catch( Exception e )
 	   {
+		   task.log().info(e.getMessage());
 	      return -1;   
 	   }
       return 0;
