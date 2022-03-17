@@ -67,4 +67,8 @@ There are a few tests for future functionality that currently fail.  These tests
 
 `mvn test -DrunAllTests=true`
 
+To skip the JavaScript project when building:
+
+`mvn install -pl -javascript`
+
 ## Additional links
