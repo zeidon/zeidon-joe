@@ -28,7 +28,7 @@ import org.slf4j.ext.LoggerWrapper;
 
 /**
  * A wrapper around slf4j Logger that supports the following:
- * 
+ *
  * - Messages use String.format() functionality.
  * - Multiple TaskLogger instances can be created for one logger instance.  This
  *   allows each task to have its own logging level.
@@ -45,23 +45,23 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
             return new Formatter();
         }
     };
-   
+
     private       Level   level;
     private final Level   parentLoggerLevel;
     private final String  prefix;
-    
+
     /**
      * If true then we've already logged a warning about setting the logger level.
      */
     private       boolean setWarning = false;
-    
+
     /**
      * @param name
      */
     public TaskLogger(String prefix)
     {
         super( LoggerFactory.getLogger( Task.class ), Task.class.getName() );
-        
+
         this.prefix = prefix;
         parentLoggerLevel = intializeLevel();
         level = parentLoggerLevel;
@@ -71,19 +71,19 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         if ( super.isTraceEnabled() )
             return Level.TRACE;
-        
+
         if ( super.isDebugEnabled() )
             return Level.DEBUG;
-        
+
         if ( super.isInfoEnabled() )
             return Level.INFO;
-        
+
         if ( super.isWarnEnabled() )
             return Level.WARN;
-        
+
         return Level.ERROR;
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#getLoggerLevel()
      */
@@ -92,7 +92,7 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         return level;
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#setLevel(org.apache.log4j.Level)
      */
@@ -103,15 +103,15 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
         {
             super.warn( "Attempting to set logger level to a higher granularity than specified in logger config.  "
                     + "To fix, set log level in logger config to TRACE and set InitialLogLevel in zeidon.ini.  "
-                    + "Logger level = {}, new logger level = {}, logger class = {}", parentLoggerLevel.toString(), 
+                    + "Logger level = {}, new logger level = {}, logger class = {}", parentLoggerLevel.toString(),
                     newLevel.toString(), this.logger.getClass().getSimpleName() );
             setWarning = true;
         }
-            
-        
+
+
         this.level = newLevel;
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#setLevel(java.lang.String)
      */
@@ -120,7 +120,7 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         setLevel( Level.valueOf( level.toUpperCase() ) );
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#isEnabledFor(org.apache.log4j.Priority)
      */
@@ -129,7 +129,7 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         return checkLevel.compareTo( this.level ) <= 0;
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#isInfoEnabled()
      */
@@ -156,7 +156,7 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         return isEnabledFor( Level.TRACE );
     }
-    
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#isWarnEnabled()
      */
@@ -165,14 +165,17 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         return isEnabledFor( Level.WARN );
     }
-    
-   
+
+
     /* (non-Javadoc)
      * @see com.quinsoft.zeidon.ZeidonLogger#info(java.lang.String, java.lang.Object)
      */
     @Override
     public void info(String format, Object... args)
     {
+        if ( isInfoEnabled() == false )
+            return;
+
         super.info( sprintf( format, args ) );
     }
 
@@ -182,6 +185,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info(String format, Throwable t, Object... args)
     {
+        if ( isInfoEnabled() == false )
+            return;
+
         super.info( sprintf( format, args ), t );
     }
 
@@ -191,6 +197,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug(String msg)
     {
+        if ( isDebugEnabled() == false )
+            return;
+
         super.debug( sprintf( msg ) );
     }
 
@@ -200,6 +209,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info(String msg)
     {
+        if ( isInfoEnabled() == false )
+            return;
+
         super.info( sprintf( msg ) );
     }
 
@@ -209,6 +221,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn(String msg)
     {
+        if ( isWarnEnabled() == false )
+            return;
+
         super.warn( sprintf( msg ) );
     }
 
@@ -218,6 +233,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace(String msg)
     {
+        if ( isTraceEnabled() == false )
+            return;
+
         super.trace( sprintf( msg ) );
     }
 
@@ -227,6 +245,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error(String msg)
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         super.error( sprintf( msg ) );
     }
 
@@ -236,6 +257,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug(String format, Object... args)
     {
+        if ( isDebugEnabled() == false )
+            return;
+
         super.debug( sprintf( format, args ) );
     }
 
@@ -245,6 +269,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug(String format, Throwable t, Object... args)
     {
+        if ( isDebugEnabled() == false )
+            return;
+
         super.debug( sprintf( format, args ), t );
     }
 
@@ -254,6 +281,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error(String format, Object... args)
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         super.error( sprintf( format, args ) );
     }
 
@@ -263,6 +293,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error(String format, Throwable t, Object... args)
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         super.error( sprintf( format, args ), t );
     }
 
@@ -272,6 +305,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn(String format, Object... args)
     {
+        if ( isWarnEnabled() == false )
+            return;
+
         super.warn( sprintf( format, args ) );
     }
 
@@ -281,6 +317,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn(String format, Throwable t, Object... args)
     {
+        if ( isWarnEnabled() == false )
+            return;
+
         super.warn( sprintf( format, args ), t );
     }
 
@@ -290,6 +329,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace(String format, Object... args)
     {
+        if ( isTraceEnabled() == false )
+            return;
+
         super.trace( sprintf( format, args ) );
     }
 
@@ -299,6 +341,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace(String format, Throwable t, Object... args)
     {
+        if ( isTraceEnabled() == false )
+            return;
+
         super.trace( sprintf( format, args ), t );
     }
 
@@ -313,19 +358,19 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
             case DEBUG:
                 debug( sprintf( format, args ) );
                 break;
-                
+
             case ERROR:
                 error( sprintf( format, args ) );
                 break;
-                
+
             case INFO:
                 info( sprintf( format, args ) );
                 break;
-                
+
             case TRACE:
                 trace( sprintf( format, args ) );
                 break;
-                
+
             case WARN:
                 warn( sprintf( format, args ) );
                 break;
@@ -338,6 +383,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace( String format, Object arg )
     {
+        if ( isTraceEnabled() == false )
+            return;
+
         super.trace( sprintf( format, arg ) );
     }
 
@@ -347,6 +395,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace( String format, Object arg1, Object arg2 )
     {
+        if ( isTraceEnabled() == false )
+            return;
+
         super.trace( sprintf( format, arg1, arg2 ) );
     }
 
@@ -356,6 +407,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void trace( String msg, Throwable t )
     {
+        if ( isTraceEnabled() == false )
+            return;
+
         super.trace( msg, t );
     }
 
@@ -365,6 +419,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug( String format, Object arg )
     {
+        if ( isDebugEnabled() == false )
+            return;
+
         super.debug( sprintf( format, arg ) );
     }
 
@@ -374,6 +431,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug( String format, Object arg1, Object arg2 )
     {
+        if ( isDebugEnabled() == false )
+            return;
+
         super.debug( sprintf( format, arg1, arg2 ) );
     }
 
@@ -383,6 +443,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void debug( String msg, Throwable t )
     {
+        if ( isDebugEnabled() == false )
+            return;
+
         super.debug( msg, t );
     }
 
@@ -392,6 +455,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info( String format, Object arg )
     {
+        if ( isInfoEnabled() == false )
+            return;
+
         super.info( sprintf( format, arg ) );
     }
 
@@ -401,6 +467,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info( String format, Object arg1, Object arg2 )
     {
+        if ( isInfoEnabled() == false )
+            return;
+
         super.info( sprintf( format, arg1, arg2 ) );
     }
 
@@ -410,6 +479,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void info( String msg, Throwable t )
     {
+        if ( isInfoEnabled() == false )
+            return;
+
         super.info( msg, t );
     }
 
@@ -419,6 +491,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn( String format, Object arg )
     {
+        if ( isWarnEnabled() == false )
+            return;
+
         super.warn( sprintf( format, arg ) );
     }
 
@@ -428,6 +503,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn( String format, Object arg1, Object arg2 )
     {
+        if ( isWarnEnabled() == false )
+            return;
+
         super.warn( sprintf( format, arg1, arg2 ) );
     }
 
@@ -437,6 +515,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void warn( String msg, Throwable t )
     {
+        if ( isWarnEnabled() == false )
+            return;
+
         super.warn( msg, t );
     }
 
@@ -446,6 +527,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error( String format, Object arg )
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         super.error( sprintf( format, arg ) );
     }
 
@@ -455,6 +539,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error( String format, Object arg1, Object arg2 )
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         super.error( sprintf( format, arg1, arg2 ) );
     }
 
@@ -464,6 +551,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error( String msg, Throwable t )
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         super.error( msg, t );
     }
 
@@ -471,7 +561,7 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     {
         if ( args == null || args.length == 0 )
             return prefix + format;
-        
+
         Formatter f = formatterCache.get();
         f.format( format, args );
 
@@ -492,6 +582,9 @@ public class TaskLogger extends LoggerWrapper implements ZeidonLogger
     @Override
     public void error(Throwable t)
     {
+        if ( isErrorEnabled() == false )
+            return;
+
         error( "", t );
     }
 }
