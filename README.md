@@ -66,9 +66,5 @@ Some tests require a proprietary Sqlite DB to run.  If you have the DBs, set `ZE
 There are a few tests for future functionality that currently fail.  These tests are ignored by default.  To run all the tests, including the ones that fail, use:
 
 `mvn test -DrunAllTests=true`
-<<<<<<< HEAD
 
 ## Additional links
-=======
->>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
-

@@ -199,13 +199,8 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-<<<<<<< HEAD
-            <version>2.13.2</version>
-            <scope>compile</scope>
-=======
             <version>2.16.0</version>
             <scope>test</scope>
->>>>>>> ad8fc523e50c54cbf52ee9d6f5db2591c5d2205b
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
