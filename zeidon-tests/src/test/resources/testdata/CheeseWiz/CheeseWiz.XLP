@@ -1,0 +1,1179 @@
+z1000-Zeidon    CHEESEWIZTZCMLPLO 08/27/21   00:25:45 1.0a2    
+eLPLR      1
+aName      CheeseWiz
+aDesc      CheeseWiz app
+aZKey      92727735
+aPgmSrcDir C:\zeidon\zapp\cheese
+aExecDir   C:\zeidon\zapp\cheese\bin
+aMetaSrcDir C:\zeidon\zapp\cheese
+aTaskUseCount 0
+aLastBuildDate 20180207212330225
+aLPLR_Type 3
+aTempDesc  CheeseWiz app
+aJavaPackageName org\deeg\cheese
+awExecutableSubDirectory bin
+
+eW_MetaType 2
+aType      0
+
+eW_MetaType 2
+aType      1
+
+eW_MetaType 2
+aType      2
+
+eW_MetaType 2
+aType      3
+
+eW_MetaDef 3
+aCPLR_ZKey 207145245
+aStatus    1
+aUpdateInd 2
+aName      AlphaNumeric
+aLastUpdateDate 20180208021935337
+
+eW_MetaDef 3
+aCPLR_ZKey 207145246
+aStatus    1
+aUpdateInd 2
+aName      Text
+aLastUpdateDate 20180208021935337
+
+eW_MetaDef 3
+aCPLR_ZKey 207145248
+aStatus    1
+aUpdateInd 2
+aName      Integer
+aLastUpdateDate 20180208021935337
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145268
+aStatus    1
+aName      UUID
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145270
+aStatus    1
+aName      Password
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145268
+aStatus    1
+aName      UUID
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232630
+aStatus    1
+aName      SearchRating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232635
+aStatus    1
+aName      SearchMyCheese
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232630
+aStatus    1
+aName      SearchRating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232635
+aStatus    1
+aName      SearchMyCheese
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232630
+aStatus    1
+aName      SearchRating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232635
+aStatus    1
+aName      SearchMyCheese
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232630
+aStatus    1
+aName      SearchRating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145270
+aStatus    1
+aName      Password
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145268
+aStatus    1
+aName      UUID
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145270
+aStatus    1
+aName      Password
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145268
+aStatus    1
+aName      UUID
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aGroupName Base
+
+eW_MetaType 2
+aType      4
+
+eW_MetaDef 3
+aCPLR_ZKey 207145310
+aStatus    1
+aUpdateInd 2
+aName      CheeseWiz
+aDesc      CheeseWiz app
+aLastSyncDate 20200406225003341
+aLastUpdateDate 20200406225003341
+
+eW_MetaType 2
+aType      5
+
+eW_MetaType 2
+aType      6
+
+eW_MetaDef 3
+aCPLR_ZKey 20982
+aStatus    1
+aUpdateInd 2
+aName      CheeseWiz
+aDesc      CheeseWiz app
+aLastSyncDate 20200406225021088
+aLastUpdateDate 20200406225021088
+
+eW_MetaType 2
+aType      7
+
+eW_MetaDef 3
+aCPLR_ZKey 207215560
+aStatus    1
+aUpdateInd 2
+aName      Cheese
+aLastSyncDate 20200228230912602
+aLastUpdateDate 20200228230912602
+
+eW_MetaDef 3
+aCPLR_ZKey 218182546
+aStatus    1
+aUpdateInd 2
+aName      CheeseHistory
+aDesc      Provides a way to load history of Cheese records.
+aLastSyncDate 20180218182905221
+aLastUpdateDate 20180218182905221
+
+eW_MetaDef 3
+aCPLR_ZKey 708121138
+aStatus    1
+aUpdateInd 2
+aName      CheeseSearch
+aDesc      Used for searching for a cheese
+aLastSyncDate 20200628120346114
+aLastUpdateDate 20200628120346114
+
+eW_MetaDef 3
+aCPLR_ZKey 827205251
+aStatus    1
+aUpdateInd 2
+aName      Crawler
+aDesc      Used to keep track of crawler links.
+aLastSyncDate 20191127232636549
+aLastUpdateDate 20191127232636549
+
+eW_MetaDef 3
+aCPLR_ZKey 725231925
+aStatus    1
+aUpdateInd 2
+aName      MyCheese
+aDesc      LOD for manipulating MyCheese
+aLastSyncDate 20200425203938431
+aLastUpdateDate 20200425203938431
+
+eW_MetaDef 3
+aCPLR_ZKey 228230342
+aStatus    1
+aUpdateInd 2
+aName      MyList
+aLastSyncDate 20200302225813296
+aLastUpdateDate 20200302225813296
+
+eW_MetaDef 3
+aCPLR_ZKey 407235442
+aStatus    1
+aUpdateInd 2
+aName      Producer
+aLastSyncDate 20200223134744910
+aLastUpdateDate 20200223134744910
+
+eW_MetaDef 3
+aCPLR_ZKey 213192340
+aStatus    1
+aUpdateInd 2
+aName      ProducerMaintenance
+aDesc      Used to maintain producers/cheese via delete.  Regular producer doesn't have delete authority.
+aLastSyncDate 20200215221239997
+aLastUpdateDate 20200215221239997
+
+eW_MetaDef 3
+aCPLR_ZKey 421235146
+aStatus    1
+aUpdateInd 2
+aName      Purchases
+aLastSyncDate 20200425203958110
+aLastUpdateDate 20200425203958110
+
+eW_MetaDef 3
+aCPLR_ZKey 804145720
+aStatus    1
+aUpdateInd 2
+aName      Rating
+aLastSyncDate 20200226224704734
+aLastUpdateDate 20200226224704734
+
+eW_MetaDef 3
+aCPLR_ZKey 311121656
+aStatus    1
+aUpdateInd 2
+aName      SearchData
+aDesc      LOD used for searching
+aLastSyncDate 20191124214743928
+aLastUpdateDate 20191124214743928
+
+eW_MetaDef 3
+aCPLR_ZKey 215001619
+aStatus    1
+aUpdateInd 2
+aName      User
+aLastSyncDate 20200125122801599
+aLastUpdateDate 20200125122801599
+
+eW_MetaDef 3
+aCPLR_ZKey 218192118
+aStatus    1
+aUpdateInd 2
+aName      UserCheeseHistory
+aDesc      A way to view the history of changes to cheese by a user.
+aLastSyncDate 20180218192332062
+aLastUpdateDate 20180218192332062
+
+eW_MetaDef 3
+aCPLR_ZKey 916161815
+aStatus    1
+aUpdateInd 2
+aName      UserPassword
+aDesc      Used to edit/check user passwords.  This should be the only LOD with the password attribute specified.
+aLastSyncDate 20191231132301402
+aLastUpdateDate 20191231132301402
+
+eW_MetaType 2
+aType      8
+
+eW_MetaType 2
+aType      9
+
+eW_MetaDef 3
+aCPLR_ZKey 207215653
+aStatus    1
+aUpdateInd 2
+aName      Cheese
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180207215652955
+aLastUpdateDate 20180207215652955
+
+eW_MetaDef 3
+aCPLR_ZKey 218182807
+aStatus    1
+aUpdateInd 2
+aName      CheeseHistory
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180218182806465
+aLastUpdateDate 20180218182806465
+
+eW_MetaDef 3
+aCPLR_ZKey 708121440
+aStatus    1
+aUpdateInd 2
+aName      CheeseSearch
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180708121439484
+aLastUpdateDate 20180708121439484
+
+eW_MetaDef 3
+aCPLR_ZKey 827205341
+aStatus    1
+aUpdateInd 2
+aName      Crawler
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180827205340760
+aLastUpdateDate 20180827205340760
+
+eW_MetaDef 3
+aCPLR_ZKey 725231956
+aStatus    1
+aUpdateInd 2
+aName      MyCheese
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180725231955860
+aLastUpdateDate 20180725231955860
+
+eW_MetaDef 3
+aCPLR_ZKey 228230419
+aStatus    1
+aUpdateInd 2
+aName      MyList
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20200228230418015
+aLastUpdateDate 20200228230418015
+
+eW_MetaDef 3
+aCPLR_ZKey 407235506
+aStatus    1
+aUpdateInd 2
+aName      Producer
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180407235505262
+aLastUpdateDate 20180407235505262
+
+eW_MetaDef 3
+aCPLR_ZKey 213192438
+aStatus    1
+aUpdateInd 2
+aName      ProducerMaintenance
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20200213192437777
+aLastUpdateDate 20200213192437777
+
+eW_MetaDef 3
+aCPLR_ZKey 421235610
+aStatus    1
+aUpdateInd 2
+aName      Purchases
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20200421235609193
+aLastUpdateDate 20200421235609193
+
+eW_MetaDef 3
+aCPLR_ZKey 804145823
+aStatus    1
+aUpdateInd 2
+aName      Rating
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180804145822725
+aLastUpdateDate 20180804145822725
+
+eW_MetaDef 3
+aCPLR_ZKey 311121703
+aStatus    1
+aUpdateInd 2
+aName      SearchData
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180311121702669
+aLastUpdateDate 20180311121702669
+
+eW_MetaDef 3
+aCPLR_ZKey 215001634
+aStatus    1
+aUpdateInd 2
+aName      User
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180215001633049
+aLastUpdateDate 20180215001633049
+
+eW_MetaDef 3
+aCPLR_ZKey 218192227
+aStatus    1
+aUpdateInd 2
+aName      UserCheeseHistory
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20180218192226201
+aLastUpdateDate 20180218192226201
+
+eW_MetaDef 3
+aCPLR_ZKey 916161831
+aStatus    1
+aUpdateInd 2
+aName      UserPassword
+aDesc      VOR automatically built from LOD Dialog
+aLastSyncDate 20190916161830504
+aLastUpdateDate 20190916161830504
+
+eW_MetaType 2
+aType      10
+
+eW_MetaType 2
+aType      11
+
+eW_MetaType 2
+aType      12
+
+eW_MetaType 2
+aType      13
+
+eW_MetaDef 3
+aCPLR_ZKey 207145239
+aStatus    1
+aUpdateInd 2
+aName      Base
+aLastSyncDate 20200102225134559
+aLastUpdateDate 20200102225134559
+
+eW_MetaDef 3
+aCPLR_ZKey 326232613
+aStatus    1
+aUpdateInd 2
+aName      CheeseWiz
+aDesc      Domains for CheeseWiz
+aLastSyncDate 20191124214549134
+aLastUpdateDate 20191124214549134
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aUpdateInd 2
+aName      TZAPDMAA
+aLastSyncDate 20180208021935337
+aLastUpdateDate 20180208021935337
+
+eW_MetaType 2
+aType      14
+
+eW_MetaType 2
+aType      15
+
+eW_MetaType 2
+aType      16
+
+eW_MetaType 2
+aType      2000
+
+eW_MetaType 2
+aType      2001
+
+eW_MetaType 2
+aType      2002
+
+eW_MetaType 2
+aType      2003
+
+eW_MetaDef 3
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 207145240
+aStatus    1
+aName      Blob
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145251
+aStatus    1
+aName      Boolean
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145242
+aStatus    1
+aName      Date
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145257
+aStatus    1
+aName      DateTime
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145255
+aStatus    1
+aName      Double
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 207145253
+aStatus    1
+aName      GeneratedKey
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 326232614
+aStatus    1
+aName      Milk
+aLastUpdateDate 20191124214549134
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 207145270
+aStatus    1
+aName      Password
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaDef 3
+aCPLR_ZKey 326232622
+aStatus    1
+aName      Pasteurization
+aLastUpdateDate 20191124214549134
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232627
+aStatus    1
+aName      Rating
+aLastUpdateDate 20191124214549134
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232635
+aStatus    1
+aName      SearchMyCheese
+aLastUpdateDate 20191124214549134
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aCPLR_ZKey 326232630
+aStatus    1
+aName      SearchRating
+aLastUpdateDate 20191124214549134
+aGroupName CheeseWiz
+
+eW_MetaDef 3
+aGroupName TZAPDMAA
+
+eW_MetaDef 3
+aCPLR_ZKey 207145268
+aStatus    1
+aName      UUID
+aLastUpdateDate 20200102225134559
+aGroupName Base
+
+eW_MetaType 2
+aType      2004
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2005
+
+eW_MetaType 2
+aType      2006
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2007
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2008
+
+eW_MetaType 2
+aType      2009
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2010
+
+eW_MetaType 2
+aType      2011
+
+eW_MetaType 2
+aType      2012
+
+eW_MetaType 2
+aType      2013
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaDef 3
+
+eW_MetaType 2
+aType      2014
+
+eW_MetaType 2
+aType      2015
+
+eW_MetaType 2
+aType      2016
+
+eDomainJavaClass 2
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.StaticTableDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.Argon2PasswordDomain
+
+eDomainJavaClass 2
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DynamicTableDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.BlobDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DateDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DateTimeDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.DoubleDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.GeneratedKeyDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.EmailAddressDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.IntegerDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.PasswordDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.StringDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.UuidDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.SSNDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.TimeDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.RegularExpressionDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.Base64BlobDomain
+
+eDomainJavaClass 2
+aJavaClassName com.quinsoft.zeidon.domains.BooleanDomain
+
+i140       5
+i147       7
+i154       6
+i157       91
+i160       94
+i162       98
+i163       104
+i164       100
+i165       101
+i166       96
+i167       105
+i168       102
+i169       103
+i170       107
+i171       109
+i172       99
+i173       106
+i174       108
+i175       97
+i178       112
+i179       120
+i180       117
+i181       119
+i182       125
+i183       115
+i184       121
+i185       116
+i186       114
+i187       118
+i188       122
+i189       124
+i190       113
+i191       123
+i196       130
+i197       131
+i198       132

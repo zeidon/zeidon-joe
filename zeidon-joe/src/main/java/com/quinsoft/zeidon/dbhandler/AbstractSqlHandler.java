@@ -18,19 +18,6 @@
  */
 package com.quinsoft.zeidon.dbhandler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.CharSetUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
@@ -64,6 +51,18 @@ import com.quinsoft.zeidon.objectdefinition.RelRecord;
 import com.quinsoft.zeidon.objectdefinition.RelRecord.RelationshipType;
 import com.quinsoft.zeidon.standardoe.NoOpPessimisticLockingHandler;
 import com.quinsoft.zeidon.standardoe.OiRelinker;
+import org.apache.commons.lang3.CharSetUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author DG
@@ -132,12 +131,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     private Boolean quoteNames = false;
 
     /**
-     * This is the list of instances that have been loaded.  It is limited to instances
-     * that have children that can be loaded in one SELECT.
-     *
-     * The sub-map is keyed by the key value of the entity instance.
+     * Keeps track of what entities will be activated in a single select and the
+     * instances/keys of their parents.  We'll default it for no single selects.
      */
-    protected Map<EntityDef, Map<Object, EntityInstance>> loadedInstances;
+    protected SingleSelectLoadedInstances singleSelectInstances;
 
     /**
      * This hash set keeps track of view entities that have been loaded.  It's used to
@@ -145,10 +142,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     protected Set<EntityDef> loadedViewEntities;
 
-    /**
-     * If a entityDef is in this set it can be loaded in a single select.
-     */
-    private Set<EntityDef> loadInOneSelect;
     private HashMap<EntityCache, View> entityCacheViewMap;
 
     /**
@@ -442,7 +435,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             // table.  If the command type is also INSERT then the attribute is
             // not to be included in this list.
             if ( attributeDef.isAutoSeq() &&
-                 relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY &&
+                 relRecord != null && relRecord.getRelationshipType().isManyToMany() &&
                  stmt.commandType == SqlCommand.INSERT )
             {
                 continue;
@@ -473,7 +466,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             {
                 String tableName;
                 if ( attributeDef.isAutoSeq() &&
-                     relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
+                     relRecord != null && relRecord.getRelationshipType().isManyToMany() )
                 {
                     // This is the autoseq attribute.  The autoseq is stored in the correspondance
                     // table for m-to-m relationships.
@@ -502,9 +495,6 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             String tableName = stmt.getTableName( relRecord );
             colName.append( tableName ).append( "." );
             colName.append( relField.getFieldName() );
-            if ( stmt.columns.size() > 0 )
-                stmt.appendCmd( ", " );
-
             stmt.addColumn( colName, dataRecord, relField.getSrcDataField() );
         }
     }
@@ -635,7 +625,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     while ( qualAttrib.attributeDef.isKey() &&
                             qualAttrib.entityDef != qualEntity.entityDef &&
                             relRecord != null &&
-                            relRecord.getRelationshipType() == RelRecord.CHILD_IS_SOURCE )
+                            relRecord.getRelationshipType().childIsSource() )
                     {
                         assert relRecord.getRelFields().size() == 1;
 
@@ -901,19 +891,11 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
     {
         // If an entity can be loaded in one SELECT we need to keep a map of its parent
         // EIs so we can set cursors appropriately.
-        loadedInstances = new HashMap<EntityDef, Map<Object,EntityInstance>>();
-        loadInOneSelect = new HashSet<>();
-
+        singleSelectInstances = new SingleSelectLoadedInstances();
         for ( EntityDef entityDef : view.getLodDef().getEntityDefs() )
         {
             if ( entityCanBeLoadedWithSingleSelect( entityDef ) )
-            {
-                loadInOneSelect.add( entityDef );
-
-                EntityDef parent = entityDef.getParent();
-                if ( parent != null && ! loadedInstances.containsKey( parent ) )
-                    loadedInstances.put( parent, new HashMap<Object, EntityInstance>() );
-            }
+                singleSelectInstances.addEntityDef( entityDef);
         }
     }
 
@@ -928,7 +910,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( entityDef.getParent() == null )
             return false;
 
-        return loadInOneSelect.contains( entityDef );
+        return singleSelectInstances.isLoadInSingleSelect( entityDef );
     }
 
     protected boolean activatingWithJoins()
@@ -1044,6 +1026,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // TODO: It would be nice to handle m-to-m relationships.  That is more complex
         // because it requires the correspondence table being loaded.
         RelRecord relRecord = dataRecord.getRelRecord();
+        if ( relRecord == null || relRecord.getRelationshipType() == null )
+            return null;
+
         if ( ! relRecord.getRelationshipType().isManyToOne() )
             return null;
 
@@ -1140,7 +1125,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         if ( qualEntity != null && qualEntity.usesChildQualification )
             control |= COL_FULL_QUAL;
         else
-        if ( relRecord != null && relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
+        if ( relRecord != null && relRecord.getRelationshipType().isManyToMany() )
             control |= COL_FULL_QUAL;  // Fully qualify to avoid conflicts with correspondence table.
 
         if ( joinedChildren.size() > 0 )
@@ -1266,37 +1251,51 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private boolean entityCanBeLoadedWithSingleSelect( EntityDef entityDef )
     {
-        // Root entity is handled differently from other entities but we'll pretend it's
-        // loadable to make things easier.
         if ( entityDef.getParent() == null )
-            return true;
+            return false;
+
+        DataRecord dataRecord = entityDef.getDataRecord();
+        // Work entity, childRecord is null
+        if ( dataRecord == null )
+            return false;
+
+        if ( !dataRecord.isActivateWithSingleSelect() )
+            return false;
+
+        if ( activateOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_SINGLE_SELECT ) )
+            return false;
 
         // If we're activating as part of a lazy load then we shouldn't be loading all
         // instances because the lazy load indicates we want partial loading.
         if ( activateOptions.isPerformingLazyLoad() )
             return false;
 
-        if ( activateOptions.getActivateFlags().contains( ActivateFlags.fIGNORE_LOAD_OPTIMIZATION ) )
-            return false;
-
-        // If the parent can't be loaded in a single select then neither
-        // can this one.  If the parent isn't in loadInOneSelect then it
-        // can't be loaded.
-        if ( ! loadInOneSelect.contains( entityDef.getParent() ) )
-            return false;
-
-        // If this entity is qualified we can't do it.
-        // TODO: logically we should be able to load entities even if they are qualified;
-        // it will just take a lot of work to get right.
+        // If this entity is qualified we can't do it because qualification could result in duplicate
+        // rows in the results and it's really hard to determine which rows can be ignored.
         if ( qualMap.containsKey( entityDef ) )
             return false;
 
-        DataRecord childRecord = entityDef.getDataRecord();
-        // Work entity, childRecord is null
-        if ( childRecord == null )
-            return false;
+        // An entity can only be loaded in a single select if its parent can be loaded as well.
+        // If an entity is joined with its parent we'll check the parent.
+        // We can't calculate this when loading the XOD because a parent might have qualification
+        // in this activate.
+        for ( EntityDef parent = entityDef.getParent(); parent != null; parent = parent.getParent() )
+        {
+            // Direct children of the root are always loadable via single select.
+            if ( parent.getParent() == null )
+                break;
 
-        return childRecord.isActivateWithSingleSelect();
+            if ( singleSelectInstances.isLoadInSingleSelect( parent ) )
+                break;
+
+            if ( isJoinable( parent ) )
+                continue;
+
+            // If we get here parent isn't single-select or joinable.
+            return false;
+        }
+
+        return true;
     }
 
     /* (non-Javadoc)
@@ -1364,7 +1363,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // on the current parent.  Get it and save it.
         EntityDef parent = entityDef.getParent();
         EntityInstance parentEi = null;
-        if ( parent != null && loadInOneSelect.contains( entityDef ) )
+        if ( selectAllInstances( entityDef ) )
             parentEi = view.cursor( parent ).getEntityInstance();
 
         executeLoad( view, entityDef, stmt );
@@ -1924,7 +1923,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         // Add main table.
-        stmt.from.append( " LEFT JOIN\n" );
+        stmt.from.append( " JOIN\n" );
 
         // If the table name for entityDef is not already part of the SELECT
         // statement then add it to the FROM clause.
@@ -1964,7 +1963,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         DataRecord dataRecord = entityDef.getDataRecord();
         RelRecord  relRecord  = dataRecord.getRelRecord();
 
-        if ( relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
+        if ( relRecord.getRelationshipType().isManyToMany() )
             return addMmLeftJoinKeys( stmt, view, entityDef );
 
         stmt.from.append( " LEFT JOIN\n" );
@@ -2026,10 +2025,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
      */
     private boolean addForeignKeys( SqlStatement stmt, View view, EntityDef entityDef, EntityDef rootEntityDef )
     {
-        boolean rootEntity = ( rootEntityDef == entityDef );
+        boolean rootEntityOfThisSelect = ( rootEntityDef == entityDef );
 
         // If this is not the root entity, lets make sure the parent entity was added.
-        if ( ! rootEntity )
+        if ( !rootEntityOfThisSelect )
         {
             assert entityDef.getParent() != null;
 
@@ -2039,34 +2038,35 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         DataRecord dataRecord = entityDef.getDataRecord();
-        RelRecord  relRecord  = dataRecord.getRelRecord();
+        RelRecord relRecord = dataRecord.getRelRecord();
 
         // If we are dealing with a m-to-m relationship lets first add the correspondence
         // table to the query.
         if ( relRecord != null && relRecord.getRelationshipType().isManyToMany() )
         {
             boolean added = stmt.addTableToFrom( relRecord.getRecordName(), relRecord, true );
-            if ( ! added )
-                return true;  // The table was already added so we don't need to add it again.
+            if ( !added )
+                return true; // The table was already added so we don't need to add it again.
 
+            stmt.useOuterJoin = true; // Indicate that the next table being joined to the MM should use outer.
             stmt.fromConjunctionNeeded = false;
 
             // Look for the rel fields that have a parent entity as the source and add them
             // to the join statement.
             for ( RelField relField : relRecord.getRelFields() )
             {
-                DataField     srcDataField  = relField.getSrcDataField();
+                DataField srcDataField = relField.getSrcDataField();
                 AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
-                EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
+                EntityDef srcEntityDef = srcAttributeDef.getEntityDef();
                 if ( srcEntityDef == entityDef )
-                    continue;  // Source is not a parent.
+                    continue; // Source is not a parent.
 
                 // If entityDef is the root then we need to add the qualification to the WHERE
                 // clause because the root table is not being joined with any parent tables.
-                if ( rootEntity )
+                if ( rootEntityOfThisSelect )
                 {
                     if ( stmt.conjunctionNeeded )
-                        stmt.where.append(" AND ");
+                        stmt.where.append( " AND " );
 
                     stmt.appendWhere( stmt.getTableName( relRecord ), ".", relField.getFieldName() );
 
@@ -2080,12 +2080,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // want to create an IN clause with all the parent keys.
                     if ( selectAllInstances( entityDef ) )
                     {
-                        if ( ! addAllParentFks( stmt, entityDef, srcDataField ) )
+                        if ( !addAllParentFksForSingleSelect( stmt, entityDef, srcDataField ) )
                             return false; // No non-null attrs found so don't bother loading.
                     }
                     else
                     {
-                        if ( ! getAttributeValueEquality( stmt, stmt.where, srcDataField, view.cursor( srcEntityDef ) ) )
+                        if ( !getAttributeValueEquality( stmt, stmt.where, srcDataField,
+                                                         view.cursor( srcEntityDef ) ) )
                             return false; // Attribute is null--don't bother loading it.
                     }
 
@@ -2094,12 +2095,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 else
                 {
                     if ( stmt.fromConjunctionNeeded )
-                        stmt.from.append(" AND ");
+                        stmt.from.append( " AND " );
                     else
-                        stmt.from.append(" ON ");
+                        stmt.from.append( " ON " );
 
                     stmt.appendFrom( stmt.getTableName( relRecord ), ".", relField.getFieldName() );
-                    stmt.appendFrom( " = ", stmt.getTableName( srcEntityDef.getDataRecord() ), ".", srcDataField.getName() );
+                    stmt.appendFrom( " = ", stmt.getTableName( srcEntityDef.getDataRecord() ), ".",
+                                     srcDataField.getName() );
                     stmt.fromConjunctionNeeded = true;
                 }
             }
@@ -2107,9 +2109,10 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         // If the table name for entityDef is not already part of the SELECT
         // statement then add it to the FROM clause.
-        boolean added = stmt.addTableToFrom( entityDef.getDataRecord().getRecordName(), entityDef.getDataRecord(), true );
-        if ( ! added )
-            return true;  // The table was already added so we don't need to add it again.
+        boolean added = stmt.addTableToFrom( entityDef.getDataRecord().getRecordName(),
+                                             entityDef.getDataRecord(), true );
+        if ( !added )
+            return true; // The table was already added so we don't need to add it again.
 
         // The FROM conjunction needs to be reset each time we come in to addForeignKeys because each JOIN is separate.
         stmt.fromConjunctionNeeded = false;
@@ -2117,13 +2120,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         // Add the rel fields.
         for ( RelField relField : relRecord.getRelFields() )
         {
-            DataField     srcDataField  = relField.getSrcDataField();
+            DataField srcDataField = relField.getSrcDataField();
             AttributeDef srcAttributeDef = srcDataField.getAttributeDef();
-            EntityDef    srcEntityDef = srcAttributeDef.getEntityDef();
-            DataRecord    srcDataRecord = srcEntityDef.getDataRecord();
-            DataField     relDataField  = relField.getRelDataField();
+            EntityDef srcEntityDef = srcAttributeDef.getEntityDef();
+            DataRecord srcDataRecord = srcEntityDef.getDataRecord();
+            DataField relDataField = relField.getRelDataField();
 
-            if ( relRecord.getRelationshipType() == RelRecord.MANY_TO_MANY )
+            if ( relRecord.getRelationshipType().isManyToMany() )
             {
                 // The keys for the correspondence table has already been added, so we'll
                 // skip keys where the source is not the entityDef.
@@ -2131,29 +2134,27 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     continue;
 
                 if ( stmt.fromConjunctionNeeded )
-                    stmt.from.append(" AND ");
+                    stmt.from.append( " AND " );
                 else
-                    stmt.from.append(" ON ");
+                    stmt.from.append( " ON " );
 
                 stmt.appendFrom( stmt.getTableName( dataRecord ), ".", srcDataField.getName() );
                 stmt.appendFrom( " = " );
                 stmt.appendFrom( stmt.getTableName( relRecord ), ".", relField.getFieldName() );
                 stmt.fromConjunctionNeeded = true;
             } // if relationship = many-to-many
-            else
-            if ( relRecord.getRelationshipType() == RelRecord.ONE_TO_MANY )
+            else if ( relRecord.getRelationshipType().isOneToMany() )
             {
                 AttributeDef relAttributeDef = relDataField.getAttributeDef();
-                EntityDef    relEntityDef = relAttributeDef.getEntityDef();
-                DataRecord    relDataRecord = relEntityDef.getDataRecord();
+                EntityDef relEntityDef = relAttributeDef.getEntityDef();
+                DataRecord relDataRecord = relEntityDef.getDataRecord();
 
-                if ( rootEntity )
+                if ( rootEntityOfThisSelect )
                 {
                     if ( stmt.conjunctionNeeded )
                         stmt.appendWhere( " AND " );
 
-                    stmt.appendWhere( stmt.getTableName( relDataRecord ),
-                                      ".", relDataField.getName() );
+                    stmt.appendWhere( stmt.getTableName( relDataRecord ), ".", relDataField.getName() );
 
                     // If we get here then we are building the foreign keys for the
                     // entity that we are loading.  In this case the key values from
@@ -2166,15 +2167,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     if ( selectAllInstances( entityDef ) )
                     {
                         assert dataRecord.getRelRecord().getRelFields().size() == 1;
-                        assert dataRecord.getRelRecord().getRelationshipType().isOneToMany();
 
-                        if ( ! addAllParentFks( stmt, entityDef, srcDataField ) )
+                        if ( !addAllParentFksForSingleSelect( stmt, entityDef, srcDataField ) )
                             return false; // No non-null attrs found so don't bother loading.
                     }
                     else
                     {
                         // Add a single FK value.
-                        if ( ! getAttributeValueEquality( stmt, stmt.where, srcDataField, view.cursor( srcEntityDef ) ) )
+                        if ( !getAttributeValueEquality( stmt, stmt.where, srcDataField,
+                                                         view.cursor( srcEntityDef ) ) )
                             return false; // Attribute is null--don't bother loading it.
                     }
 
@@ -2183,9 +2184,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 else
                 {
                     if ( stmt.fromConjunctionNeeded )
-                 	   stmt.from.append(" AND ");
+                        stmt.from.append( " AND " );
                     else
-                 	   stmt.from.append(" ON ");
+                        stmt.from.append( " ON " );
 
                     stmt.appendFrom( stmt.getTableName( relDataRecord ), ".", relDataField.getName() );
 
@@ -2194,45 +2195,56 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                     // that we are loading.  This means that the foreign key values
                     // must come from a parent table that is part of the current
                     // select.
-                    stmt.appendFrom( " = ",
-                                      stmt.getTableName( srcDataRecord ),
-                                      ".", srcDataField.getName() );
+                    stmt.appendFrom( " = ", stmt.getTableName( srcDataRecord ), ".", srcDataField.getName() );
                     stmt.fromConjunctionNeeded = true;
                 }
             } // if relationship = ONE_TO_MANY
             else
             {
-                assert relRecord.getRelationshipType() == RelRecord.MANY_TO_ONE;
+                assert relRecord.getRelationshipType().isManyToOne();
 
                 AttributeDef relAttributeDef = relDataField.getAttributeDef();
-                EntityDef    relEntityDef = relAttributeDef.getEntityDef();
-                DataRecord    relDataRecord = relEntityDef.getDataRecord();
+                EntityDef relEntityDef = relAttributeDef.getEntityDef();
+                DataRecord relDataRecord = relEntityDef.getDataRecord();
 
-
-                if ( rootEntity )
+                if ( rootEntityOfThisSelect )
                 {
                     if ( stmt.conjunctionNeeded )
                         stmt.appendWhere( " AND " );
 
-                    stmt.appendWhere( stmt.getTableName( srcDataRecord ), ".", srcDataField.getName());
+                    stmt.appendWhere( stmt.getTableName( srcDataRecord ), ".", srcDataField.getName() );
 
-                    if ( ! getAttributeValueEquality( stmt, stmt.where, relDataField, view.cursor( relEntityDef ) ) )
-                        return false; // Attribute is null--don't bother loading it.
+                    // If all entity instances of the EntityDef we are loading are to
+                    // be loaded at once, then instead of qualifying on a single key we
+                    // want to create an IN clause with all the parent keys.
+                    if ( selectAllInstances( entityDef ) )
+                    {
+                        assert dataRecord.getRelRecord().getRelFields().size() == 1;
+
+                        if ( !addAllParentFksForSingleSelect( stmt, entityDef,
+                                                              dataRecord.getSingleActivateParentKey() ) )
+                            return false; // No non-null attrs found so don't bother loading.
+                    }
+                    else
+                    {
+                        if ( !getAttributeValueEquality( stmt, stmt.where, relDataField,
+                                                         view.cursor( relEntityDef ) ) )
+                            return false; // Attribute is null--don't bother loading it.
+                    }
+
                     stmt.conjunctionNeeded = true;
                 }
                 else
                 {
                     if ( stmt.fromConjunctionNeeded )
-                 	   stmt.from.append(" AND ");
+                        stmt.from.append( " AND " );
                     else
-                 	   stmt.from.append(" ON ");
-                    stmt.appendFrom( stmt.getTableName( srcDataRecord ), ".", srcDataField.getName());
+                        stmt.from.append( " ON " );
+                    stmt.appendFrom( stmt.getTableName( srcDataRecord ), ".", srcDataField.getName() );
 
                     // TODO: We may be able to use an attribute value instead of a column.
                     // See logic in kzhsqlga.c.
-                    stmt.appendFrom( " = ",
-                                      stmt.getTableName( relDataRecord ),
-                                      ".", relDataField.getName() );
+                    stmt.appendFrom( " = ", stmt.getTableName( relDataRecord ), ".", relDataField.getName() );
                     stmt.fromConjunctionNeeded = true;
                 }
             } // if relationship = MANY_TO_ONE
@@ -2241,33 +2253,50 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         return true;
     }
 
-    private boolean addAllParentFks( SqlStatement stmt, EntityDef entityDef, DataField srcDataField )
+    protected boolean addAllParentFksForSingleSelectWithArray( SqlStatement stmt, DataField keyDataField, Set<Object> keys )
     {
-        boolean foundNonNullValues = false;
-        EntityDef parent = entityDef.getParent();
-        assert loadedInstances.containsKey( parent );
+        stmt.appendWhere( " = ANY ( " );
+        BoundAttributeData data = new BoundAttributeData( keyDataField, keys );
+        stmt.addBoundAttribute( stmt.where, data );
+        stmt.appendWhere( " ) " );
+        return true;
+    }
 
+    protected void startInForCollection( SqlStatement stmt )
+    {
         stmt.appendWhere( " IN ( " );
-        for ( EntityInstance ei : loadedInstances.get( parent ).values() )
+    }
+
+    protected boolean addAllParentFksForSingleSelectSeparately( SqlStatement stmt, DataField keyDataField, Set<Object> keys )
+    {
+        startInForCollection( stmt ); // Allows Postgres to use " = ANY (" instead of " IN ("
+
+        AttributeDef keyAttribute = keyDataField.getAttributeDef();
+        boolean addedValues = false;
+        for ( Object key : keys )
         {
-            // Edge case: when loading entities with a limit we may end up dropping
-            // some EI's.  Skip any entities that are flagged as hidden.
-            if ( ei.isHidden() )
-                continue;
-
-            if ( ei.getAttribute( srcDataField.getAttributeDef() ).isNull() )
-                continue;
-
-            if ( foundNonNullValues )
+            if ( addedValues )
                 stmt.appendWhere( ", " );
+            else
+                addedValues = true;
 
-            foundNonNullValues = true;
-            getAttributeValue( stmt, stmt.where, srcDataField, ei, true );
+            Object value = convertEmptyStringValue( key, keyAttribute );
+            getSqlValue( stmt, keyAttribute.getDomain(), keyAttribute, stmt.where, value );
         }
 
         stmt.appendWhere( " ) " );
+        return addedValues;
+    }
 
-        return foundNonNullValues;
+    protected boolean addAllParentFksForSingleSelect( SqlStatement stmt, EntityDef entityDef, DataField srcDataField )
+    {
+        Set<Object> keys = singleSelectInstances.getParentInstanceKeys( srcDataField );
+        if ( keys.size() == 0 )
+            return false;
+
+        getTask().log().debug( "Single select keys for %s: %s", entityDef.getName(), keys.toString() );
+        boolean addedValues = addAllParentFksForSingleSelectWithArray( stmt, srcDataField, keys );
+        return addedValues;
     }
 
     /* (non-Javadoc)
@@ -2306,7 +2335,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         // The only thing that needs to be done is to delete the correspondence
         // table if the relationship is many-to-many.
-        if ( relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY )
+        if ( ! relRecord.getRelationshipType().isManyToMany() )
             return 0;
 
         SqlStatement stmt = initializeCommand( SqlCommand.DELETE, view );
@@ -2353,7 +2382,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         // Nothing needs to be done unless the relationship is many-to-many because
         // FK's are handled by the updates.
-        if ( relRecord.getRelationshipType() != RelRecord.MANY_TO_MANY )
+        if ( ! relRecord.getRelationshipType().isManyToMany() )
             return 0;
 
         SqlStatement stmt = initializeCommand( SqlCommand.INSERT, view );
@@ -2632,6 +2661,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         SqlStatement parent;    // If current SqlStatement is a sub-select, this points to parent select.
         private String assembledCommand;
+        private boolean useOuterJoin = false; // If true, then next JOIN should use outer join instead of LEFT JOIN.
 
         SqlStatement( SqlCommand commandType, View view, EntityDef selectRoot )
         {
@@ -2910,7 +2940,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             {
             	if ( activatingWithJoins() )
             	{
-          	        from.append( " LEFT JOIN\n");
+                    if ( useOuterJoin )
+                    {
+                        from.append( " JOIN\n" );
+                        useOuterJoin = false; // We only use this flag for one join.
+                    }
+                    else
+                        from.append( " LEFT JOIN\n" );
             	}
             	else
                     from.append( ",");

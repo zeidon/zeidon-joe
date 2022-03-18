@@ -23,6 +23,7 @@ package com.quinsoft.zeidon.standardoe;
 
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CacheMap;
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.TaskQualification;
 import com.quinsoft.zeidon.UnknownLodDefException;
@@ -64,6 +65,7 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     private final Map<String, LodDef> lodDefList = new HashMap<String, LodDef>();
     private final String              zeidonRootDir;
     private final ViewNameList        viewNameList = new ViewNameList();
+    private final ObjectEngine        objectEngine;
     private       DomainList          domainList;
     private       CacheMap cacheMap;
 
@@ -72,9 +74,10 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
      *
      * @param zeidonRootDir
      */
-    ApplicationImpl( String zeidonRootDir )
+    ApplicationImpl( String zeidonRootDir, ObjectEngine objectEngine )
     {
         this.zeidonRootDir = zeidonRootDir;
+        this.objectEngine = objectEngine;
     }
 
     @Override
@@ -268,5 +271,11 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
             cacheMap = new CacheMapImpl();
 
         return cacheMap;
+    }
+
+    @Override
+    public ObjectEngine getObjectEngine()
+    {
+        return objectEngine;
     }
 }

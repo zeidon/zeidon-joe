@@ -64,8 +64,6 @@ import java.util.function.Function;
  */
 public class JavaObjectEngine implements ObjectEngine
 {
-    private static final String JOE_VERSION = "2.1.0";
-
     private static ObjectEngine s_objectEngine = null;
 
     private final ApplicationList   applicationList;
@@ -187,7 +185,7 @@ public class JavaObjectEngine implements ObjectEngine
         taskList = new MapMaker().concurrencyLevel( 10 ).weakValues().makeMap();
         persistentTaskList = options.getPersistentTaskCacheMap();
 
-        applicationList = new ApplicationList( zeidonHomeDir, logger );
+        applicationList = new ApplicationList( this, zeidonHomeDir, logger );
         systemTask = createTask( ObjectEngine.ZEIDON_SYSTEM_APP_NAME, true, ObjectEngine.ZEIDON_SYSTEM_APP_NAME );
         oeListener.setObjectEngine( this );
 
@@ -203,6 +201,11 @@ public class JavaObjectEngine implements ObjectEngine
             startBrowser();
 
         assert logAssertMessage( systemTask ); // Write a message to the log if assertions are on.
+    }
+
+    public JavaObjectEngine( String preferencesFilename )
+    {
+        this( new DefaultJavaOeConfiguration().setPreferencesFilename( preferencesFilename ) );
     }
 
     private boolean logAssertMessage( TaskImpl systemTask )
@@ -450,6 +453,13 @@ public class JavaObjectEngine implements ObjectEngine
     @Override
     public ZeidonPreferences getZeidonPreferences( Application app )
     {
+        return zeidonPreferencesFactory.getPreferences( app );
+    }
+
+    @Override
+    public ZeidonPreferences getZeidonPreferences( String applicationName )
+    {
+        ApplicationImpl app = getApplication( applicationName );
         return zeidonPreferencesFactory.getPreferences( app );
     }
 

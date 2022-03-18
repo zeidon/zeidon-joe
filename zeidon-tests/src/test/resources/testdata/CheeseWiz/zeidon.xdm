@@ -1,0 +1,329 @@
+z1000-Zeidon    ZEIDON   TZDMXGPO 01/02/20   22:51:34 1.0a2    
+eDomainGroup 1
+aName      CheeseWiz
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.RegularExpressionDomain
+aZKey      207145245
+aName      AlphaNumeric
+aDesc      Characters 'a-z', 'A-Z', '0-9'
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+aDecimalFormat 1234
+
+eContext   3
+aZKey      207145245
+aName      ALPHANUMERIC
+aJavaEditString [\w]*
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.Base64BlobDomain
+aZKey      207145240
+aName      Blob
+aDesc      A do nothing domain for blobs
+aDomainType E
+aDataType  B
+aContextRestriction N
+
+eContext   3
+aZKey      207145241
+aName      BLOB
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.BooleanDomain
+aZKey      207145251
+aName      Boolean
+aDomainType E
+aDataType  L
+aContextRestriction N
+
+eContext   3
+aZKey      207145252
+aName      Boolean
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateDomain
+aZKey      207145242
+aName      Date
+aDesc      Date without time
+aDomainType E
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      207145243
+aName      Date
+aJavaEditString yyyy-MM-dd
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DateTimeDomain
+aZKey      207145257
+aName      DateTime
+aDesc      Date/time field
+aDomainType E
+aDataType  T
+aContextRestriction N
+
+eContext   3
+aZKey      207145258
+aName      DateTime
+aJavaEditString yyyy-MM-dd
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
+aZKey      207145255
+aName      Double
+aDomainType E
+aDataType  M
+aContextRestriction N
+
+eContext   3
+aZKey      207145256
+aName      Double
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.GeneratedKeyDomain
+aZKey      207145253
+aName      GeneratedKey
+aDesc      Generic DB-generated key
+aDomainType E
+aDataType  L
+aMaxStringLth 64
+aContextRestriction N
+
+eContext   3
+aZKey      207145254
+aName      GeneratedKey
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      207145248
+aName      Integer
+aDesc      Integer numbers from -lots to +lots
+aDomainType E
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmInteger
+aDecimalFormat 0
+
+eContext   3
+aZKey      207145249
+aName      Hex
+
+eContext   3
+aZKey      207145250
+aName      INTEGER
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      326232614
+aName      Milk
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      326232615
+aName      Milk
+aIsDefault Y
+
+eTableEntry 4
+aZKey      326232616
+aExternalValue Cow
+aInternalValue C
+
+eTableEntry 4
+aZKey      326232617
+aExternalValue Sheep
+aInternalValue S
+
+eTableEntry 4
+aZKey      326232618
+aExternalValue Goat
+aInternalValue G
+
+eTableEntry 4
+aZKey      326232619
+aExternalValue Unknown
+aInternalValue U
+
+eTableEntry 4
+aZKey      326232620
+aExternalValue Varies
+aInternalValue V
+
+eTableEntry 4
+aZKey      326232621
+aExternalValue Multiple
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.Argon2PasswordDomain
+aZKey      207145270
+aName      Password
+aDesc      Passwords that are saved as a hash in the DB
+aDomainType E
+aDataType  S
+aMaxStringLth 100
+aContextRestriction N
+aConstraintRule iterations: 10, memory: 65536, parallelism: 1
+
+eContext   3
+aZKey      207145271
+aName      Password
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      326232622
+aName      Pasteurization
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      326232623
+aName      Pasteurization
+aIsDefault Y
+
+eTableEntry 4
+aZKey      326232624
+aExternalValue Pasteurized
+aInternalValue P
+
+eTableEntry 4
+aZKey      326232625
+aExternalValue Unpasteurized
+aInternalValue U
+
+eTableEntry 4
+aZKey      326232626
+aExternalValue Varies
+aInternalValue V
+
+eTableEntry 4
+aZKey      326232629
+aExternalValue Unknown
+aInternalValue X
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
+aZKey      326232627
+aName      Rating
+aDesc      Integer rating of cheese 1 to 5
+aDomainType E
+aDataType  L
+aContextRestriction N
+aConstraintRule (1 <= x <= 5)
+
+eContext   3
+aZKey      326232628
+aName      Rating
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      326232635
+aName      SearchMyCheese
+aDesc      Search option(s) for MyCheese
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      326232636
+aName      SearchMyCheese
+aIsDefault Y
+
+eTableEntry 4
+aZKey      326232637
+aExternalValue All
+aInternalValue A
+
+eTableEntry 4
+aZKey      326232638
+aExternalValue MyCheese
+aInternalValue M
+
+eTableEntry 4
+aZKey      326232639
+aExternalValue Favorites
+aInternalValue F
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      326232630
+aName      SearchRating
+aDesc      When searching, the is the option for Ratings
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      326232631
+aName      SearchRating
+aIsDefault Y
+
+eTableEntry 4
+aZKey      326232632
+aExternalValue All
+aInternalValue A
+
+eTableEntry 4
+aZKey      326232633
+aExternalValue Rated
+aInternalValue R
+
+eTableEntry 4
+aZKey      326232634
+aExternalValue Rated by Me
+aInternalValue M
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      207145246
+aName      Text
+aDesc      Any Character String
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmText
+
+eContext   3
+aZKey      207145247
+aName      Text
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.UuidDomain
+aZKey      207145268
+aName      UUID
+aDesc      Standard UUID value.
+aDomainType E
+aDataType  S
+aMaxStringLth 64
+aContextRestriction N
+
+eContext   3
+aZKey      207145269
+aName      UUID
+aIsDefault Y
+

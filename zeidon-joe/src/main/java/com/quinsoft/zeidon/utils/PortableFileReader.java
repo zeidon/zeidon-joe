@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-
+import com.quinsoft.zeidon.ObjectEngine;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.ZeidonLogger;
@@ -132,7 +132,7 @@ public class PortableFileReader
     private final InputStream inputStream;
     private final PortableFileEntityHandler entityHandler;
     private final ZeidonLogger logger;
-
+    private final ObjectEngine objectEngine;
     /**
      * Instantiate a reader to parse an OI from a stream.  Note that the inputStream is *NOT* closed.
      *
@@ -140,11 +140,12 @@ public class PortableFileReader
      * @param inputStream
      * @param entityHandler
      */
-    public PortableFileReader( ZeidonLogger logger, InputStream inputStream, PortableFileEntityHandler entityHandler )
+    public PortableFileReader( ObjectEngine objectEngine, ZeidonLogger logger, InputStream inputStream, PortableFileEntityHandler entityHandler )
     {
         this.entityHandler = entityHandler;
         this.inputStream = inputStream;
         this.logger = logger;
+        this.objectEngine = objectEngine;
     }
 
     public BufferedBinaryStreamReader getStreamReader()
@@ -447,6 +448,11 @@ public class PortableFileReader
         return incremental;
     }
 
+    public ObjectEngine geObjectEngine()
+    {
+        return objectEngine;
+    }
+
     public ZeidonLogger getLogger()
     {
         return logger;
@@ -471,7 +477,7 @@ public class PortableFileReader
             if ( is == null )
                 throw new ZeidonException( "Couldn't find file %s", filename );
 
-            ReadPortableFile( is, logger, entityHandler );
+            ReadPortableFile( task.getObjectEngine(), is, logger, entityHandler );
         }
         catch ( Exception e )
         {
@@ -480,11 +486,11 @@ public class PortableFileReader
         }
     }
 
-    public static void ReadPortableFile( InputStream inputStream, ZeidonLogger logger, PortableFileEntityHandler entityHandler )
+    public static void ReadPortableFile( ObjectEngine objectEngine, InputStream inputStream, ZeidonLogger logger, PortableFileEntityHandler entityHandler )
     {
         try
         {
-            PortableFileReader reader = new PortableFileReader( logger, inputStream, entityHandler );
+            PortableFileReader reader = new PortableFileReader( objectEngine, logger, inputStream, entityHandler );
             reader.readEntities();
         }
         finally

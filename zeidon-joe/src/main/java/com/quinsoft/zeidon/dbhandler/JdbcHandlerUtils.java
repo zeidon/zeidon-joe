@@ -18,14 +18,13 @@
  */
 package com.quinsoft.zeidon.dbhandler;
 
-import java.lang.reflect.Constructor;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.quinsoft.zeidon.AbstractOptionsConfiguration;
 import com.quinsoft.zeidon.GenKeyHandler;
 import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.ZeidonException;
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.reflect.Constructor;
 
 /**
  * Some helper functions for loading and setting up JdbcHandlers.
@@ -89,6 +88,9 @@ public class JdbcHandlerUtils
             String conn = options.getOiSourceUrl();
             if ( conn.startsWith( "jdbc:mysql:" ) )
                 handlerName = MysqlJdbcHandler.class.getCanonicalName();
+            else
+            if ( conn.startsWith( "jdbc:postgresql:" ) )
+                handlerName = PostgresqlJdbcHandler.class.getCanonicalName();
             else
             if ( conn.startsWith( "jdbc:sqlite:" ) )
                 handlerName = SqliteJdbcHandler.class.getCanonicalName();

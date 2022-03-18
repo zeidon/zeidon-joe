@@ -190,6 +190,14 @@ public interface ObjectEngine
      * @return
      */
     ZeidonPreferences getZeidonPreferences( Application app );
+    /**
+     * Get the ZeidonPreferences for an application.
+     *
+     * @param app
+     * @return
+     */
+    ZeidonPreferences getZeidonPreferences( String applicationName );
+
 
     /**
      * Get the CacheMap for the ObjectEngine.

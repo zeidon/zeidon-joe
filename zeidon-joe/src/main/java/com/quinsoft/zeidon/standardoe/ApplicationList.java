@@ -38,10 +38,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author DG
@@ -58,7 +56,7 @@ class ApplicationList
     /**
      * Loads the list of applications from %ZEIDON%/zeidon.app
      */
-    ApplicationList( HomeDirectory home, ZeidonLogger logger )
+    ApplicationList( ObjectEngine objectEngine, HomeDirectory home, ZeidonLogger logger )
     {
         logger.info( "Loading application list" );
 
@@ -78,7 +76,7 @@ class ApplicationList
                 logger.info( "Loading applications from resource %s", url.getFile() );
                 InputStream stream = url.openStream();
                 ApplicationHandler appHandler = new ApplicationHandler( apps );
-                PortableFileReader.ReadPortableFile( stream, logger, appHandler );
+                PortableFileReader.ReadPortableFile( objectEngine, stream, logger, appHandler );
             }
         }
         catch( Exception e )
@@ -98,7 +96,7 @@ class ApplicationList
                 {
                     logger.info( "Loading apps using ZEIDON_HOME %s/zeidon.app", home.getHomeDirectory() );
                     ApplicationHandler appHandler = new ApplicationHandler( apps );
-                    PortableFileReader.ReadPortableFile( inputStream, logger, appHandler );
+                    PortableFileReader.ReadPortableFile( objectEngine, inputStream, logger, appHandler );
                 }
             }
             catch ( Exception e )
@@ -143,9 +141,9 @@ class ApplicationList
         public PortableFileAttributeHandler createEntity(PortableFileReader reader, int level, long flags)
         {
             if ( reader.getAttributeName().equals( "ZEIDON" ))
-                return new SystemApplication( home.getHomeDirectory() );
+                return new SystemApplication( home.getHomeDirectory(), reader.geObjectEngine() );
 
-            return new ApplicationImpl( home.getHomeDirectory() );
+            return new ApplicationImpl( home.getHomeDirectory(), reader.geObjectEngine() );
         }
 
         @Override

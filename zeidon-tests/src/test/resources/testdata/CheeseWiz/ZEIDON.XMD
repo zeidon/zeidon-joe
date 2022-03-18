@@ -1,0 +1,620 @@
+z1000-Zeidon    ZEIDON   TZEREMXO 04/06/20   23:05:32 1.0a2    
+eMODEL     1
+aNumEnts   12
+aNumRels   20
+
+eENTITY    2
+aZKEY      207145486
+aNumAtts   6
+
+eATTRIB    3
+aZKEY      207145487
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145488
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145489
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145490
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      7012
+aNAME      fk_id_producer
+aAPDM_TOK  207145253
+aLTH       4
+
+eATTRIB    3
+aZKEY      7013
+aNAME      fk_id_cheese
+aAPDM_TOK  207145268
+aLTH       16
+
+eENTITY    2
+aZKEY      207145321
+aNumAtts   15
+
+eATTRIB    3
+aZKEY      207145322
+aNAME      Id
+aAPDM_TOK  207145268
+
+eATTRIB    3
+aZKEY      207145366
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       200
+
+eATTRIB    3
+aZKEY      207145409
+aNAME      Url
+aAPDM_TOK  207145246
+aLTH       1000
+
+eATTRIB    3
+aZKEY      207145419
+aNAME      Description
+aAPDM_TOK  207145246
+aLTH       5000
+
+eATTRIB    3
+aZKEY      207145420
+aNAME      Milk
+aAPDM_TOK  326232614
+
+eATTRIB    3
+aZKEY      207145421
+aNAME      Pasteurization
+aAPDM_TOK  326232622
+
+eATTRIB    3
+aZKEY      207145422
+aNAME      CountryOfOrigin
+aAPDM_TOK  207145246
+aLTH       500
+
+eATTRIB    3
+aZKEY      207145485
+aNAME      Age
+aAPDM_TOK  207145246
+aLTH       50
+
+eATTRIB    3
+aZKEY      207145480
+aNAME      AverageRating
+aAPDM_TOK  207145255
+
+eATTRIB    3
+aZKEY      207145462
+aNAME      Thumbnail
+aAPDM_TOK  207145240
+
+eATTRIB    3
+aZKEY      207145323
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145324
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      6990
+aNAME      fk_id_producer
+aAPDM_TOK  207145253
+aLTH       4
+
+eATTRIB    3
+aZKEY      7004
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eATTRIB    3
+aZKEY      7011
+aNAME      history_for_cheese_id
+aAPDM_TOK  207145268
+aLTH       4
+
+eENTITY    2
+aZKEY      207145463
+aNumAtts   5
+
+eATTRIB    3
+aZKEY      207145464
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145465
+aNAME      Url
+aAPDM_TOK  207145246
+aLTH       1000
+
+eATTRIB    3
+aZKEY      207145466
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145467
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      6998
+aNAME      fk_id_cheese
+aAPDM_TOK  207145268
+aLTH       16
+
+eENTITY    2
+aZKEY      207145425
+aNumAtts   8
+
+eATTRIB    3
+aZKEY      207145426
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145458
+aNAME      Favorite
+aAPDM_TOK  207145251
+
+eATTRIB    3
+aZKEY      207145459
+aNAME      WantToTry
+aAPDM_TOK  207145251
+
+eATTRIB    3
+aZKEY      207145427
+aNAME      Notes
+aAPDM_TOK  207145246
+aLTH       5000
+
+eATTRIB    3
+aZKEY      207145428
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145429
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      6995
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eATTRIB    3
+aZKEY      6999
+aNAME      fk_id_cheese
+aAPDM_TOK  207145268
+aLTH       64
+
+eENTITY    2
+aZKEY      207145505
+aNumAtts   7
+
+eATTRIB    3
+aZKEY      207145506
+aNAME      Id
+aAPDM_TOK  207145268
+
+eATTRIB    3
+aZKEY      207145507
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145524
+aNAME      Description
+aAPDM_TOK  207145246
+
+eATTRIB    3
+aZKEY      207145525
+aNAME      Public
+aAPDM_TOK  207145251
+
+eATTRIB    3
+aZKEY      207145508
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145509
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      7005
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eENTITY    2
+aZKEY      207145389
+aNumAtts   9
+
+eATTRIB    3
+aZKEY      207145390
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145391
+aNAME      Description
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145408
+aNAME      Image
+aAPDM_TOK  207145240
+aLTH       1000000
+
+eATTRIB    3
+aZKEY      207145423
+aNAME      Thumbnail
+aAPDM_TOK  207145240
+
+eATTRIB    3
+aZKEY      207145392
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145393
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      6994
+aNAME      fk_id_cheese
+aAPDM_TOK  207145268
+aLTH       16
+
+eATTRIB    3
+aZKEY      7000
+aNAME      fk_id_purchase
+aAPDM_TOK  207145253
+aLTH       4
+
+eATTRIB    3
+aZKEY      7003
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eENTITY    2
+aZKEY      207145339
+aNumAtts   7
+
+eATTRIB    3
+aZKEY      207145340
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145385
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145460
+aNAME      Description
+aAPDM_TOK  207145246
+aLTH       10000
+
+eATTRIB    3
+aZKEY      207145461
+aNAME      Url
+aAPDM_TOK  207145246
+aLTH       1000
+
+eATTRIB    3
+aZKEY      207145341
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145342
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      7002
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eENTITY    2
+aZKEY      207145348
+aNumAtts   11
+
+eATTRIB    3
+aZKEY      207145349
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145536
+aNAME      Price
+aAPDM_TOK  207145255
+
+eATTRIB    3
+aZKEY      207145532
+aNAME      Notes
+aAPDM_TOK  207145246
+aLTH       1000
+
+eATTRIB    3
+aZKEY      207145533
+aNAME      PurchaseDate
+aAPDM_TOK  207145242
+
+eATTRIB    3
+aZKEY      207145534
+aNAME      CheeseDate
+aAPDM_TOK  207145242
+
+eATTRIB    3
+aZKEY      207145535
+aNAME      Inventory
+aAPDM_TOK  207145251
+
+eATTRIB    3
+aZKEY      207145350
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145351
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      6991
+aNAME      fk_id_my_cheese
+aAPDM_TOK  207145253
+aLTH       4
+
+eATTRIB    3
+aZKEY      6992
+aNAME      fk_id_cheese
+aAPDM_TOK  207145268
+aLTH       16
+
+eATTRIB    3
+aZKEY      6993
+aNAME      fk_id_supplier
+aAPDM_TOK  207145253
+aLTH       4
+
+eENTITY    2
+aZKEY      207145441
+aNumAtts   8
+
+eATTRIB    3
+aZKEY      207145442
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145448
+aNAME      Rating
+aAPDM_TOK  326232627
+
+eATTRIB    3
+aZKEY      207145479
+aNAME      Summary
+aAPDM_TOK  207145246
+aLTH       50
+
+eATTRIB    3
+aZKEY      207145443
+aNAME      Notes
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145444
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145445
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      6996
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eATTRIB    3
+aZKEY      6997
+aNAME      fk_id_cheese
+aAPDM_TOK  207145268
+aLTH       64
+
+eENTITY    2
+aZKEY      207145333
+aNumAtts   5
+
+eATTRIB    3
+aZKEY      207145334
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145387
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145335
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145336
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      7001
+aNAME      fk_id_z_user
+aAPDM_TOK  207145268
+aLTH       16
+
+eENTITY    2
+aZKEY      207145311
+aNumAtts   4
+
+eATTRIB    3
+aZKEY      207145312
+aNAME      Id
+aAPDM_TOK  207145253
+
+eATTRIB    3
+aZKEY      207145388
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145313
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145314
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eENTITY    2
+aZKEY      207145327
+aNumAtts   8
+
+eATTRIB    3
+aZKEY      207145328
+aNAME      Id
+aAPDM_TOK  207145268
+
+eATTRIB    3
+aZKEY      207145484
+aNAME      UserName
+aAPDM_TOK  207145246
+aLTH       50
+
+eATTRIB    3
+aZKEY      207145386
+aNAME      Name
+aAPDM_TOK  207145246
+aLTH       250
+
+eATTRIB    3
+aZKEY      207145481
+aNAME      Email
+aAPDM_TOK  207145246
+aLTH       200
+
+eATTRIB    3
+aZKEY      207145482
+aNAME      Password
+aAPDM_TOK  207145270
+aLTH       100
+
+eATTRIB    3
+aZKEY      207145483
+aNAME      LastLogin
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145329
+aNAME      DbCreatedTimestamp
+aAPDM_TOK  207145257
+
+eATTRIB    3
+aZKEY      207145330
+aNAME      DbUpdatedTimestamp
+aAPDM_TOK  207145257
+
+eREL       2
+aZKEY      207145345
+
+eREL       2
+aZKEY      207145529
+
+eREL       2
+aZKEY      207145354
+
+eREL       2
+aZKEY      207145357
+
+eREL       2
+aZKEY      207145416
+
+eREL       2
+aZKEY      207145435
+
+eREL       2
+aZKEY      207145452
+
+eREL       2
+aZKEY      207145455
+
+eREL       2
+aZKEY      207145476
+
+eREL       2
+aZKEY      207145438
+
+eREL       2
+aZKEY      207145399
+
+eREL       2
+aZKEY      207145376
+
+eREL       2
+aZKEY      207145382
+
+eREL       2
+aZKEY      207145405
+
+eREL       2
+aZKEY      207145370
+
+eREL       2
+aZKEY      207145518
+
+eREL       2
+aZKEY      207145521
+
+eREL       2
+aZKEY      207145363
+
+eREL       2
+aZKEY      207145499
+
+eREL       2
+aZKEY      207145502
+

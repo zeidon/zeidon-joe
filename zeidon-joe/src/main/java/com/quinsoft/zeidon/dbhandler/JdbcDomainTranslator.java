@@ -19,21 +19,20 @@
 
 package com.quinsoft.zeidon.dbhandler;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.dbhandler.AbstractSqlHandler.SqlStatement;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Collection;
+
 /**
  * This interface is used by the JdbcHandler to convert attribute values to values that
  * can be stored in a JDBC database.
- *
- * @author DG
- *
  */
 public interface JdbcDomainTranslator
 {

@@ -1,20 +1,20 @@
 /**
-    This file is part of the Zeidon Java Object Engine (Zeidon JOE).
-
-    Zeidon JOE is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Zeidon JOE is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public License
-    along with Zeidon JOE.  If not, see <http://www.gnu.org/licenses/>.
-
-    Copyright 2009-2015 QuinSoft
+ * This file is part of the Zeidon Java Object Engine (Zeidon JOE).
+ *
+ * Zeidon JOE is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * Zeidon JOE is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Zeidon JOE. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Copyright 2009-2015 QuinSoft
  */
 /**
  *
@@ -30,20 +30,25 @@ import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 
-/**
- * @author DG
- *
- */
 public class DataRecord implements PortableFileAttributeHandler
 {
-    private String recordName;
-    private String type;
-    private final List<DataField> dataFields = new ArrayList<DataField>();
-    private RelRecord relRecord;
-    private final EntityDef entityDef;
+    private String                             recordName;
+    private String                             type;
+    private final List<DataField>              dataFields   = new ArrayList<DataField>();
+    private RelRecord                          relRecord;
+    private final EntityDef                    entityDef;
     private final Map<AttributeDef, DataField> attributeMap = new HashMap<AttributeDef, DataField>();
-    private boolean joinable;
-    private boolean activateWithSingleSelect;
+    private boolean                            joinable;
+
+    protected Boolean                          activateWithSingleSelect;
+
+    /**
+     * If not null then this DataRecord will be activated with a single select.
+     * This key specifies the dataField in the sql statement that represents the
+     * key of the parent entity instance.
+     */
+    protected DataField                        singleActivateChildKey;
+    protected DataField                        singleActivateParentKey;
 
     public DataRecord( EntityDef entityDef )
     {
@@ -51,23 +56,30 @@ public class DataRecord implements PortableFileAttributeHandler
     }
 
     @Override
-    public void setAttribute(PortableFileReader reader)
+    public void setAttribute( PortableFileReader reader )
     {
         String attributeName = reader.getAttributeName();
         switch ( attributeName )
         {
-            case "RECNAME":     recordName = reader.getAttributeValue(); break;
-            case "TYPE":        type = reader.getAttributeValue(); break;
-            case "JOIN":        joinable = reader.valueStartsWith( "Y" ); break;
+            case "RECNAME":
+                recordName = reader.getAttributeValue();
+                break;
+            case "TYPE":
+                type = reader.getAttributeValue();
+                break;
+            case "JOIN":
+                joinable = reader.valueStartsWith( "Y" );
+                break;
             case "ACTIVATEONE":
                 activateWithSingleSelect = reader.valueStartsWith( "Y" );
                 if ( activateWithSingleSelect )
                 {
-                    // Make sure all parents have activateWithSingleSelect turned on.
+                    // Make sure all parents have activateWithSingleSelect
+                    // turned on.
                     for ( EntityDef def = entityDef; def.getParent() != null; def = def.getParent() )
                     {
                         DataRecord dataRecord = def.getDataRecord();
-                        if ( ! dataRecord.isActivateWithSingleSelect() && ! dataRecord.isJoinable() )
+                        if ( !dataRecord.isActivateWithSingleSelect() && !dataRecord.isJoinable() )
                         {
                             reader.getLogger().error( "Child DataRecord = %s\nParent DataRecord = %s",
                                                       this.toString(), dataRecord.toString() );
@@ -101,7 +113,7 @@ public class DataRecord implements PortableFileAttributeHandler
 
     public DataField getDataField( AttributeDef attributeDef )
     {
-        // We allow attributeDef to be null.  Just return null.
+        // We allow attributeDef to be null. Just return null.
         if ( attributeDef == null )
             return null;
 
@@ -122,13 +134,13 @@ public class DataRecord implements PortableFileAttributeHandler
         return relRecord;
     }
 
-    void setRelRecord(RelRecord relRecord)
+    void setRelRecord( RelRecord relRecord )
     {
         this.relRecord = relRecord;
     }
 
     // Loops through all the rel fields and sets the src and tgt datafields.
-    void setFields(EntityDef currentEntityDef)
+    void setFields( EntityDef currentEntityDef )
     {
         for ( DataField dataField : dataFields )
             attributeMap.put( dataField.getAttributeDef(), dataField );
@@ -143,9 +155,7 @@ public class DataRecord implements PortableFileAttributeHandler
             if ( dataRecord != null )
             {
                 for ( DataField dataField : dataRecord.dataFields )
-                {
                     map.put( dataField.getToken(), dataField );
-                }
             }
         }
 
@@ -159,24 +169,22 @@ public class DataRecord implements PortableFileAttributeHandler
 
             if ( relRecord.getRelationshipType().isManyToMany() )
             {
-                if ( relField.getSrcDataField() != null )
-                {
-                    {
-                        if ( relField.getSrcDataField().getAttributeDef().getEntityDef() != getEntityDef() )
-                            relRecord.setParentRelField( relField );
-                    }
-                }
+                if ( relField.getSrcDataField().getAttributeDef().getEntityDef() != getEntityDef() )
+                    relRecord.setParentRelField( relField );
                 else
-                if ( relField.getRelDataField() != null )
-                {
-                    {
-                        if ( relField.getRelDataField().getAttributeDef().getEntityDef() == getEntityDef() )
-                            relRecord.setChildRelField( relField );
-                    }
-                }
+                    relRecord.setChildRelField( relField );
             }
-
         }
+    }
+
+    public DataField getSingleActivateParentKey()
+    {
+        return singleActivateParentKey;
+    }
+
+    public DataField getSingleActivateChildKey()
+    {
+        return singleActivateChildKey;
     }
 
     public boolean isJoinable()

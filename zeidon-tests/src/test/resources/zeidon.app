@@ -16,6 +16,16 @@ aAPP_SOURCE ./testdata/ZENCAs
 aAPP_PACKAGE com.quinsoft.zencas
 
 eAPPLICATION 2
+aAPP_NAME  CheeseWiz
+aAPP_DLL   ./testdata/CheeseWiz
+aAPP_ADOBIN ./testdata/CheeseWiz
+aAPP_LOCAL ./testdata/CheeseWiz
+aAPP_SHARED ./testdata/CheeseWiz
+aAPP_QLPLR ./testdata/CheeseWiz
+aAPP_SOURCE ./testdata/CheeseWiz
+aAPP_PACKAGE org.deeg.cheesewiz
+
+eAPPLICATION 2
 aAPP_NAME  SWAU
 aAPP_DLL   ./testdata/SWAU
 aAPP_ADOBIN ./testdata/SWAU

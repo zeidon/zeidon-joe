@@ -40,18 +40,6 @@ public class TestEpammsRecursive
 	View         mFASrc;
 	ObjectEngine oe;
 
-   /**
-    * Called at the beginning of the test to reset the DB.
-    */
-   @BeforeClass
-   public static void resetDB( ) throws IOException
-   {
-      // Copy the "base" sqlite file to a test one so we can commit changes as part of the tests.
-      File srcFile  = new File("./src/test/resources/testdata/ePamms/sqlite/base.db");
-      File destFile = new File("./src/test/resources/testdata/ePamms/sqlite/test.db");
-      FileUtils.copyFile( srcFile, destFile );
-   }
-
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -383,7 +371,7 @@ public class TestEpammsRecursive
       cr = ec.setNext();
       Assert.assertTrue( "Second LLD_Block should be found!", cr == CursorResult.SET );
       Assert.assertEquals( "Second LLD_Block should have key 2781", new Integer( 2781 ), ec.getAttribute( "ID" ).getInteger() );
-      
+
       ecp = mSPLDef.getCursor( "LLD_SubBlock" );
       cr = ec.setLast();
       Assert.assertTrue( "SubBlock should now be found!", cr == CursorResult.SET );

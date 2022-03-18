@@ -3,17 +3,6 @@
  */
 package com.quinsoft.zeidon.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.util.EnumSet;
-
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.quinsoft.zeidon.ActivateFlags;
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.AttributeInstance;
@@ -40,6 +29,21 @@ import com.quinsoft.zencas.scalasamples.SampleActivates;
 import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
 import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
 import com.quinsoft.zencas.scalasamples.SampleViewManipulations;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.EnumSet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * @author DG
@@ -119,6 +123,86 @@ public class ViewTest
     private void runJsonTest( String json )
     {
         runJsonTest( json, true );
+    }
+
+//    @Test
+    public void activateUsingSingleSelect() throws FileNotFoundException, IOException
+    {
+        QualificationBuilder qb;
+        View view;
+
+        JavaObjectEngine oeWithSingleSelect = new JavaObjectEngine( "zeidon.ini" );
+        oeWithSingleSelect.getZeidonPreferences( "ZENCAs" ).set( "ZENCAS", "ActivateWithSingleSelect", "Y" );
+
+
+        Task cheese = oeWithSingleSelect.createTask( "CheeseWiz" );
+        qb = new QualificationBuilder( cheese );
+        qb.setLodDef( "Cheese" );
+        qb.loadFromJsonString( "{ \"$usingSql\": { \"sql\": \"select id from cheese where cheese.history_for_cheese_id IS NULL\", \"attributes\": \"Id\" } }" );
+        view = qb.activate();
+        view.serializeOi().toFile( "/tmp/cheesesearch.json" );
+
+        // activateAndCompareWithSingleSelect( cheese, "CheeseSearch", "{ \"Url\": { \"ilike\": \"http%\" } }" );
+
+        // Task zencas = oeWithSingleSelect.createTask( "ZENCAs" );
+        // qb = new QualificationBuilder( zencas );
+        // qb.setLodDef( "mClass" );
+        // qb.loadFromJsonString( "{ \"ID\": { \"<\": 1000 } }" );
+        // view = qb.activate();
+    }
+
+    @Test
+    public void allUsingSingleSelect() throws FileNotFoundException, IOException
+    {
+        // Create a new OE so we can explicitly set ActivateWithSingleSelect.
+        JavaObjectEngine oeWithSingleSelect = new JavaObjectEngine( "zeidon.ini" );
+        oeWithSingleSelect.getZeidonPreferences( "ZENCAs" ).set( "ZENCAS", "ActivateWithSingleSelect", "Y" );
+
+        Task zencasTask = oeWithSingleSelect.createTask( "ZENCAs" );
+        activateAndCompareWithSingleSelect( zencasTask, "DomainT", "{ \"Name\": \"FinancialHold\" }" );
+        activateAndCompareWithSingleSelect( zencasTask, "mClass", "{ \"ID\": { \"<\": 1000 } }" );
+        activateAndCompareWithSingleSelect( zencasTask, "mClass", "{ \"ID\": { \"<\": 1000 } }" );
+        activateAndCompareWithSingleSelect( zencasTask, "mClass",
+                                            "{ \"ID\": { \"<\": 1000 }, \"Course\": { \"Number\": \"BI241\" } }" );
+        activateAndCompareWithSingleSelect( zencasTask, "mUser",
+                                            "{ \"ID\": 4, \"restrict\": { \"Employee\": { \"Status\": \"Active\" } } }" );
+    }
+
+    private void activateAndCompareWithSingleSelect( Task task,
+                                                     String lodName,
+                                                     String jsonQual )
+            throws FileNotFoundException, IOException
+    {
+        QualificationBuilder qb;
+
+        qb = new QualificationBuilder( task );
+        qb.setLodDef( lodName);
+        qb.loadFromJsonString( jsonQual );
+        qb.setFlag( ActivateFlags.fIGNORE_SINGLE_SELECT );
+        View viewWithout = qb.activate();
+        String file2 = viewWithout.serializeOi().toTempDir( lodName + "2.json" );
+
+        qb = new QualificationBuilder( task );
+        qb.setLodDef( lodName);
+        qb.loadFromJsonString( jsonQual );
+        View viewWithSingleSelect = qb.activate();
+        String file1 = viewWithSingleSelect.serializeOi().toTempDir( lodName + "1.json" );
+
+        File f1 = new File( file1 );
+        File f2 = new File( file2 );
+        try ( InputStream inputStream1 = new FileInputStream( f1 );
+              InputStream inputStream2 = new FileInputStream( f2 ) )
+        {
+            if ( IOUtils.contentEquals(inputStream1, inputStream2) )
+            {
+                // f1.delete();
+                // f2.delete();
+            }
+            else
+            {
+                assertTrue("Activing " + lodName + " with Single Select has differences.  See " + file1, false);
+            }
+        }
     }
 
     @Test

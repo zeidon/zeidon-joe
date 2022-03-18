@@ -21,19 +21,6 @@
  */
 package com.quinsoft.zeidon.objectdefinition;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.MapMaker;
 import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.EntityConstraintType;
@@ -48,6 +35,18 @@ import com.quinsoft.zeidon.utils.CacheMapImpl;
 import com.quinsoft.zeidon.utils.EventStackTrace;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author DG
@@ -385,13 +384,9 @@ public class EntityDef implements PortableFileAttributeHandler
      */
     void validateEntityDef( )
     {
-        DataRecord childRecord = getDataRecord();
-        if ( childRecord != null )
-        {
-            // Make sure SINGLE SELECT is configured properly.
-            if ( childRecord.isActivateWithSingleSelect() )
-                validateSingleSelect( childRecord );
-        }
+        DataRecord dataRecord = getDataRecord();
+        if ( dataRecord != null )
+            validateOrSetSingleSelect( dataRecord );
 
         checkForReadOnlySubjectRoot();
 
@@ -409,7 +404,7 @@ public class EntityDef implements PortableFileAttributeHandler
             return;
 
         // If we can't include or exclude there's no point.
-        if ( ! ( include || exclude ) )
+        if ( !( include || exclude ) )
             return;
 
         // Now verify that all children are display only.
@@ -418,7 +413,7 @@ public class EntityDef implements PortableFileAttributeHandler
             if ( child.getDataRecord() == null )
                 continue;
 
-            if ( ! child.isDisplayOnly() )
+            if ( !child.isDisplayOnly() )
                 return;
         }
 
@@ -426,35 +421,116 @@ public class EntityDef implements PortableFileAttributeHandler
         readOnlySubobjectRoot = true;
     }
 
-    private void validateSingleSelect( DataRecord childRecord )
+    /**
+     * Checks to see if the childRecord is a valid case for joining in a single select.
+     * @return null if is valid,
+     *         otherwise a string representing the reason it isn't.
+     */
+    private String isValidForSingleSelect( DataRecord childRecord )
     {
+        if ( getParent() == null )
+            return null;
+
         if ( childRecord.isJoinable() )
-            throw new ZeidonException( "EntityDef shouldn't be JOIN and ACTIVATONE" );
+            return "EntityDef can't be both JOIN and ACTIVATONE";
+
+        if ( this.isDerived() )
+            return "Derived entities cannot be loaded with Single Select";
+
+        if ( this.isAutoloadFromParent() )
+            return "AutoLoad from parent is incompatible with Single Select";
 
         RelRecord relRecord = childRecord.getRelRecord();
-        RelationshipType relType = relRecord.getRelationshipType();
+        if ( relRecord == null )
+            return "Entity has no relationship with parent for ACTIVATEONE";
 
-        // We don't support m-to-1 relationships because it is too hard
-        // to figure out where the children go.  In most cases this doesn't
-        // matter because m-to-1 children should be joined with the parent.
-        if ( relType.isManyToOne() )
-            throw new ZeidonException( "m-to-1 relationships not supported in a single select." );
+        RelationshipType relType = relRecord.getRelationshipType();
 
         // We can only handle it if there is a single key between child
         // and parent.
-        if ( relType.isOneToMany() && relRecord.getRelFields().size() > 1 )
-            throw new ZeidonException( "Only single keys supported in a single select." );
-
-        if ( relType.isManyToMany() && relRecord.getRelFields().size() > 2 )
-            throw new ZeidonException( "Only single keys supported in a single select." );
+        if ( relType.isManyToMany() )
+        {
+            if ( relRecord.getRelFields().size() > 2 )
+                return "Only single keys supported in a single select.";
+        }
+        else
+        {
+            if ( relRecord.getRelFields().size() > 1 )
+                return "Only single keys supported in a single select.";
+        }
 
         // Can't load children of recursive entities.
         for ( EntityDef ve = this; ve != null; ve = ve.getParent() )
         {
             if ( ve.isRecursive() )
-                throw new ZeidonException( "Recursive entities not supported in a single select." );
+                return "Recursive entities not supported in a single select.";
+
+            if ( ve == this ) // Skip the following checks for this EntityDef
+                continue;
+
+            DataRecord dr = ve.getDataRecord();
+            if ( dr != null )
+            {
+                // An entity can only be loaded in a single select if its parent can be as well.
+                // If it is joined, check with the next parent.
+                // Note: the root is considered a valid parent for all single selects.
+                if ( dr.isJoinable() )
+                    continue;
+
+                if ( dr.activateWithSingleSelect )
+                    break;
+            }
         }
 
+        return null;
+    }
+
+    private void validateOrSetSingleSelect( DataRecord dataRecord )
+    {
+        if ( getParent() == null )
+        {
+            // The root is always considered valid for single select.
+            dataRecord.activateWithSingleSelect = true;
+            return;
+        }
+
+        if ( dataRecord.activateWithSingleSelect == null )
+        {
+            // If value is null then it wasn't explicitly set in the XOD.  We'll assume
+            // that the flag should be true if the entity is valid for single select.
+            dataRecord.activateWithSingleSelect = lodDef.singleSelectDefault && isValidForSingleSelect( dataRecord ) == null;
+        }
+        else
+        if ( dataRecord.activateWithSingleSelect )
+        {
+            String reason = isValidForSingleSelect( dataRecord );
+            if ( reason != null )
+                throw new ZeidonException( reason );
+        }
+
+        if ( dataRecord.activateWithSingleSelect )
+        {
+            RelRecord relRecord = dataRecord.getRelRecord();
+            switch ( relRecord.getRelationshipType() )
+            {
+                case MANY_TO_MANY:
+                    dataRecord.singleActivateParentKey = relRecord.getParentRelField().getSrcDataField();
+                    dataRecord.singleActivateChildKey  = relRecord.getParentRelField().getSrcDataField();
+                    break;
+                case ONE_TO_MANY:
+                    assert relRecord.getRelFields().size() == 1;
+                    dataRecord.singleActivateChildKey = relRecord.getRelFields().get( 0 ).getRelDataField();
+                    dataRecord.singleActivateParentKey = relRecord.getRelFields().get( 0 ).getSrcDataField();
+                    break;
+                case MANY_TO_ONE:
+                    assert relRecord.getRelFields().size() == 1;
+                    dataRecord.singleActivateChildKey = relRecord.getRelFields().get( 0 ).getSrcDataField();
+                    dataRecord.singleActivateParentKey = relRecord.getRelFields().get( 0 ).getRelDataField();
+                    break;
+                default:
+                    throw new ZeidonException( "Unsupported reltype: " ); // Should never happen.
+            }
+        }
     }
 
     private void setVersioningRel()

@@ -29,9 +29,9 @@ import com.quinsoft.zeidon.ZeidonException;
 class SystemApplication extends ApplicationImpl
 {
 
-    SystemApplication( String zeidonRootDir )
+    SystemApplication( String zeidonRootDir, ObjectEngine objectEngine )
     {
-        super( zeidonRootDir );
+        super( zeidonRootDir, objectEngine );
     }
 
     /* (non-Javadoc)

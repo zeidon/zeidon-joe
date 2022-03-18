@@ -16,20 +16,6 @@
  */
 package com.quinsoft.zeidon.objectdefinition;
 
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.quinsoft.zeidon.Application;
 import com.quinsoft.zeidon.CacheMap;
 import com.quinsoft.zeidon.ObjectConstraintException;
@@ -41,6 +27,7 @@ import com.quinsoft.zeidon.UnknownEntityDefException;
 import com.quinsoft.zeidon.UnknownLodDefException;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
+import com.quinsoft.zeidon.config.ZeidonPreferences;
 import com.quinsoft.zeidon.dbhandler.DbHandler;
 import com.quinsoft.zeidon.domains.Domain;
 import com.quinsoft.zeidon.utils.CacheMapImpl;
@@ -48,6 +35,19 @@ import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.PortableFileReader;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileAttributeHandler;
 import com.quinsoft.zeidon.utils.PortableFileReader.PortableFileEntityHandler.NullEntityHandler;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author DG
@@ -70,7 +70,7 @@ public class LodDef implements PortableFileAttributeHandler
     private int          height = 0;
     private LockingLevel lockingLevel = LockingLevel.NONE;
     private SourceFileType sourceFileType = SourceFileType.VML;
-    private String         sourceFileName;
+    private String        sourceFileName;
     private boolean      hasLazyLoadEntities;
     private boolean      hasDuplicateInstances;
 
@@ -81,6 +81,11 @@ public class LodDef implements PortableFileAttributeHandler
     private String       libraryName;
 
     private CacheMap cacheMap;
+
+    /**
+     * If true, then by default we'll load entities with a single select.
+     */
+    boolean singleSelectDefault;
 
     static private final Class<?>[] constructorArgTypes  = new Class<?>[] { View.class };
 
@@ -100,7 +105,13 @@ public class LodDef implements PortableFileAttributeHandler
         filename = app.getObjectDir() + "/" + xod;
         InputStream inputStream = JoeUtils.getInputStream( task, filename, getClass().getClassLoader() );
         if ( inputStream == null )
-            throw new UnknownLodDefException(name, filename, app );
+            throw new UnknownLodDefException( name, filename, app );
+
+        ZeidonPreferences prefs = app
+                .getObjectEngine()
+                .getZeidonPreferences( app );
+        String singleSelectConfig = prefs.get( app.getName(), "ActivateWithSingleSelect", "N" );
+        singleSelectDefault = "YyTt1".contains( singleSelectConfig.substring( 0, 1 ) );
 
         loadLodDef( task, inputStream );
     }
@@ -162,7 +173,7 @@ public class LodDef implements PortableFileAttributeHandler
     {
         try
         {
-            PortableFileReader.ReadPortableFile( file, task.log(), new LodDefHandler( this ) );
+            PortableFileReader.ReadPortableFile( task.getObjectEngine(), file, task.log(), new LodDefHandler( this ) );
             task.log().info( "LodDef %s loaded from: %s", this, filename );
         }
         catch ( Exception e )
@@ -624,7 +635,7 @@ public class LodDef implements PortableFileAttributeHandler
         @Override
         public void endFile()
         {
-            addEntityDef( currentEntityDef );  // Add the last LodDef.
+            addEntityDef( currentEntityDef );  // Add the last EntityDef.
 
             // Set the sibling pointers for all the view entities.
             entityList.get( 0 ).setSiblingsForChildren();

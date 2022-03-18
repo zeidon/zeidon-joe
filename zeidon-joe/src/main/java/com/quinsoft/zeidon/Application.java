@@ -101,4 +101,6 @@ public interface Application
      * @return
      */
     boolean nullStringEqualsEmptyString();
+
+    ObjectEngine getObjectEngine();
 }

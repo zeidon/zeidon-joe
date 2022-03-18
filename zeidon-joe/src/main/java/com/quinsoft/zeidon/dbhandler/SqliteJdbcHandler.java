@@ -18,16 +18,18 @@
  */
 package com.quinsoft.zeidon.dbhandler;
 
-import java.util.Properties;
-
+import com.quinsoft.zeidon.AbstractOptionsConfiguration;
+import com.quinsoft.zeidon.Application;
+import com.quinsoft.zeidon.Task;
+import com.quinsoft.zeidon.objectdefinition.DataField;
+import com.quinsoft.zeidon.objectdefinition.EntityDef;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
 
-import com.quinsoft.zeidon.AbstractOptionsConfiguration;
-import com.quinsoft.zeidon.Application;
-import com.quinsoft.zeidon.Task;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * JDBC handler for mysql that uses "lock table" to lock the genkey table.
@@ -64,12 +66,12 @@ public class SqliteJdbcHandler extends JdbcHandler
                                               Application application)
     {
         String openModes = getConfigValue( "OpenModes" );
-        if ( ! StringUtils.isBlank( openModes ) )
+        if ( !StringUtils.isBlank( openModes ) )
         {
             SQLiteConfig config = new SQLiteConfig();
             String[] modes = openModes.split( "," );
             for ( String mode : modes )
-                config.setOpenMode(SQLiteOpenMode.valueOf( mode.trim().toUpperCase() ) );
+                config.setOpenMode( SQLiteOpenMode.valueOf( mode.trim().toUpperCase() ) );
 
             Properties props = config.toProperties();
             task.log().info( "Sqlite: setting open modes = %s", props );
@@ -78,4 +80,17 @@ public class SqliteJdbcHandler extends JdbcHandler
                 dataSource.addConnectionProperty( prop.toString(), props.getProperty( prop.toString() ) );
         }
     }
+
+    @Override
+    protected boolean addAllParentFksForSingleSelect( SqlStatement stmt, EntityDef entityDef, DataField srcDataField )
+    {
+        boolean addedValues = false;
+
+        Set<Object> keys = singleSelectInstances.getParentInstanceKeys( srcDataField );
+        getTask().log().debug( "Single select keys for %s: %s", entityDef.getName(), keys.toString() );
+        // Sqlite doesn't support using an array to specify keys.
+        addedValues = addAllParentFksForSingleSelectSeparately( stmt, srcDataField, keys );
+        return addedValues;
+    }
+
 }

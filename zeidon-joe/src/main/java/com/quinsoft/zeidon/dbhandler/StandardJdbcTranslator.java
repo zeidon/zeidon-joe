@@ -19,16 +19,6 @@
 
 package com.quinsoft.zeidon.dbhandler;
 
-import java.sql.Clob;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.quinsoft.zeidon.Blob;
 import com.quinsoft.zeidon.GeneratedKey;
 import com.quinsoft.zeidon.Task;
@@ -45,12 +35,20 @@ import com.quinsoft.zeidon.domains.DomainDateTimeFormatter;
 import com.quinsoft.zeidon.domains.GeneratedKeyDomain;
 import com.quinsoft.zeidon.objectdefinition.AttributeDef;
 import com.quinsoft.zeidon.objectdefinition.DataField;
+import org.apache.commons.lang3.StringUtils;
+
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * The standard JDBC domain translator.
- *
- * @author DG
- *
  */
 public class StandardJdbcTranslator implements JdbcDomainTranslator
 {
@@ -272,6 +270,9 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
     @Override
     public String bindAttributeValue( PreparedStatement ps, BoundAttributeData data, int idx )
     {
+        if ( data.value instanceof Collection )
+            return bindCollectionValue( ps, data, idx );
+
         final AttributeDef attributeDef = data.dataField.getAttributeDef();
         Domain domain = attributeDef.getDomain();
         Object value = data.value;
@@ -285,17 +286,15 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
                     return "<null>";
                 }
                 Blob blob = (Blob) value;
-                ps.setObject( idx, blob.getBytes()  );  // If blob is varbinary
+                ps.setObject( idx, blob.getBytes() ); // If blob is varbinary
             }
-            else
-            if ( value instanceof ZonedDateTime )
+            else if ( value instanceof ZonedDateTime )
             {
                 ZonedDateTime d = (ZonedDateTime) value;
-                java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(d.toLocalDateTime());
+                java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf( d.toLocalDateTime() );
                 ps.setTimestamp( idx, timestamp );
             }
-            else
-            if ( value instanceof GeneratedKey )
+            else if ( value instanceof GeneratedKey )
             {
                 GeneratedKey k = (GeneratedKey) value;
                 ps.setObject( idx, k.getNativeValue() );
@@ -312,8 +311,39 @@ public class StandardJdbcTranslator implements JdbcDomainTranslator
         }
         catch ( Exception e )
         {
-            String className = value == null ? "<null>" : value.getClass().getCanonicalName();
-            throw ZeidonException.wrapException( e ).appendMessage( "Col index: %d\nValue %s\nClass: %s", idx, value, className );
+            String className = value == null ? "<null>"
+                    : value.getClass().getCanonicalName();
+            throw ZeidonException.wrapException( e ).appendMessage( "Col index: %d\nValue %s\nClass: %s", idx,
+                                                                    value, className );
+        }
+    }
+
+    protected String getArrayType( DataField dataField, Collection<?> collection )
+    {
+        Object value = collection.iterator().next();
+
+        if ( value instanceof Integer )
+            return "int";
+
+        if ( value instanceof UUID )
+            return "UUID";
+
+        return "text";
+    }
+
+    protected String bindCollectionValue( PreparedStatement ps, BoundAttributeData data, int idx )
+    {
+        Collection<?> collection = (Collection<?>) data.value;
+        try
+        {
+            Object[] array = collection.toArray( new Object[ collection.size() ] );
+            String arrayType = getArrayType( data.dataField, collection );
+            ps.setArray( idx, ps.getConnection().createArrayOf( arrayType, array ) );
+            return collection.toString();
+        }
+        catch ( SQLException e )
+        {
+            throw ZeidonException.wrapException( e );
         }
     }
 }

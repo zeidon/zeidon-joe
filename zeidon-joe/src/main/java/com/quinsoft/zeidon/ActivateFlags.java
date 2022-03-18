@@ -52,7 +52,7 @@ public enum ActivateFlags
     /**
      * If set, then we won't load all EntityDef instances in one SELECT statement.
      */
-    fIGNORE_LOAD_OPTIMIZATION;
+    fIGNORE_SINGLE_SELECT;
 
     public static final EnumSet<ActivateFlags> ROOT_ONLY = EnumSet.of( fROOT_ONLY );
     public static final EnumSet<ActivateFlags> ROOT_ONLY_MULTIPLE = EnumSet.of( fROOT_ONLY, fMULTIPLE );

@@ -81,7 +81,7 @@ class ActivateOiFromPorStream implements PortableFileEntityHandler, StreamReader
 
     ViewImpl read()
     {
-        PortableFileReader reader = new PortableFileReader( task.log(), inputStream, this );
+        PortableFileReader reader = new PortableFileReader( task.getObjectEngine(), task.log(), inputStream, this );
         if ( streamReader != null )
             reader.setStreamReader( streamReader );
 
