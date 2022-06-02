@@ -5153,7 +5153,8 @@ public abstract class VmlOperation
 
    protected int CommitOI_ToFile( View view, String fileName, int control )
    {
-      view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
+	  view.serializeOi().withIncremental().toFile( fileName );
+      //view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 
