@@ -241,7 +241,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.4.41.v20210516</version>
+            <version>10.0.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -272,7 +272,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.4.0.v20161208</version>
+            <version>10.0.10</version>
         </dependency>
         <!-- for argon2 password domain.  Used by CheeseWiz. -->
         <dependency>
