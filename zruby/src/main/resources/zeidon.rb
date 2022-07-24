@@ -161,6 +161,14 @@ module Zeidon
       task.activate_empty( lod_name )
     end
 
+    def from_json( json )
+      task.deserializeOi
+        .setLodDef( @lod_name )
+        .fromString( json )
+        .asJson()
+        .activateFirst()
+    end
+
   end
 
   class Java::ComQuinsoftZeidonStandardoe::ViewImpl
