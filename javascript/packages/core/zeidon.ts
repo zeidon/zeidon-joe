@@ -326,14 +326,8 @@ class LinkedEntitiesInfo {
     }
 
     public isLinked( search: EntityInstance ): EntityInstance {
-        this._linkedEntities.filter( wr => wr.deref() ); // Remove all the objects collected by the GC.
-        this._linkedEntities.forEach( wr => {
-            let ei = wr.deref();
-            if ( ei === search )
-                return ei;
-        });
-
-        return undefined;
+        this._linkedEntities = this._linkedEntities.filter( wr => wr.deref() ); // Remove all the objects collected by the GC.
+        return this._linkedEntities.find( wr => wr.deref() === search )?.deref();
     }
 
     public addLinkedEntity( newLinkedEntity: EntityInstance, options: CreateOptions ) {

@@ -20,3 +20,9 @@ All the sub-projects can be compiled/built using Maven:
 `mvn test`
 
 This will compile the Scala generator and then use npm to build/test all of the TypeScript packages.
+
+## Testing
+
+Use `npm run test` to execute the tests.  This will start up a jetty server to handle activate/commits.  Tests can alwo be run from VS Code.
+
+Run `mvn install` to rebuild code changes.  (Something should be possible via npm?)
