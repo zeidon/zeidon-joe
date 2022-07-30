@@ -265,7 +265,7 @@
             </configuration>
           </execution>
 
-          <!-- deploy  -->
+          <!-- deploy  Temporarily removed
           <execution>
             <id>npm publish</id>
             <goals>
@@ -280,6 +280,7 @@
               </arguments>
             </configuration>
           </execution>
+          -->
         </executions>
       </plugin>
     </plugins>
