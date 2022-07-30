@@ -26,9 +26,12 @@ jobs:
       if: github.ref == 'refs/heads/current-dev'
       run: mvn install
 
-    - name: Deploy snapshot
+    - name: Release Maven package
       if: github.ref == 'refs/heads/current-dev'
-      run: mvn -P !test-projects -DskipTests=true --batch-mode deploy
-      env:
-        MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+      uses: samuelmeuli/action-maven-publish@v1
+      with:
+        gpg_private_key: ${{ secrets.gpg_private_key }}
+        gpg_passphrase: ${{ secrets.gpg_passphrase }}
+        nexus_username: ${{ secrets.nexus_username }}
+        nexus_password: ${{ secrets.nexus_password }}
+        maven_profiles: deploy,!test-projects
