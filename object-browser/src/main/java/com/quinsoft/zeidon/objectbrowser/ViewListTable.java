@@ -49,6 +49,7 @@ public class ViewListTable extends JTable
 
     private final BrowserEnvironment env;
     private final DefaultTableModel  model;
+    private boolean performingRefresh;
 
     /**
      * @param viewSelected
@@ -110,7 +111,7 @@ public class ViewListTable extends JTable
     @Override
     public void valueChanged( ListSelectionEvent e )
     {
-        if ( ! e.getValueIsAdjusting() )
+        if ( ! performingRefresh && ! e.getValueIsAdjusting() )
         {
             int idx = getSelectedRow();
             if ( idx >= 0 && idx < env.getCurrentViewList().size() )
@@ -137,6 +138,8 @@ public class ViewListTable extends JTable
 
     void refresh( BrowserTask task )
     {
+        performingRefresh = true;
+
         Long selectedView = -1L;
         int idx = getSelectedRow();
         if ( idx >= 0 )
@@ -170,6 +173,8 @@ public class ViewListTable extends JTable
 
         if ( idx >= 0 )
             setRowSelectionInterval( idx, idx );
+
+        performingRefresh = false;
     }
 
     private class ViewPopupMenu extends JPopupMenu
