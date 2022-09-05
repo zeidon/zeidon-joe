@@ -1062,22 +1062,28 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         {
             QualEntity parentQualEntity = qualMap.get( entityDef.getParent() );
             if ( parentQualEntity != null && parentQualEntity.activateLimit != null )
+            {
+                getTask().dblog().trace( "Can't join %s with parent because of activate limit on parent", entityDef.getName() );
                 return false;
+            }
 
             // If the parent of entityDef is the root and we're activating with pagination
             // then we can't join because the join will throw off the row count.
             if ( entityDef.getParent() == activateOptions.getLodDef().getRoot() && pagingOptions != null )
             {
-                getTask().log().trace( "Can't join %s with parent because of pagination", entityDef.getName() );
+                getTask().dblog().trace( "Can't join %s with parent because of pagination", entityDef.getName() );
                 return false;
             }
         }
 
         QualEntity qualEntity = qualMap.get( entityDef );
         if ( qualEntity != null )
+        {
+            getTask().dblog().trace( "Can't join %s with parent because it has qualification", entityDef.getName() );
             return false; // Can't join entities that have qualification (aka RESTRICT)
+        }
 
-        return getEntityDefData( entityDef ).isJoinable( entityDef );
+        return getEntityDefData( entityDef ).isJoinable( getTask(), entityDef );
     }
 
     /**
@@ -3142,7 +3148,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
             joinAll1To1 = abstractSqlHandler.joinAll1To1;
             Builder<EntityDef> builder = ImmutableList.builder();
-            addJoinedChildren( builder, this.entityDef );
+            addJoinedChildren( abstractSqlHandler.getTask(), builder, this.entityDef );
             joinedChildren = builder.build();
             requiresVersioningQualification = computeVersioningQualification();
         }
@@ -3182,14 +3188,14 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return false;
         }
 
-        private void addJoinedChildren( Builder<EntityDef> builder, EntityDef parent )
+        private void addJoinedChildren( Task task, Builder<EntityDef> builder, EntityDef parent )
         {
             for ( EntityDef child : parent.getChildren() )
             {
-                if ( isJoinable( child ) )
+                if ( isJoinable( task, child ) )
                 {
                     builder.add( child );
-                    addJoinedChildren( builder, child );
+                    addJoinedChildren( task, builder, child );
                 }
             }
         }
@@ -3199,22 +3205,31 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return joinedChildren;
         }
 
-        private boolean isJoinable( EntityDef def )
+        private boolean isJoinable( Task task, EntityDef def )
         {
             if ( def.getParent() == null )
                 return false;
 
             //TODO: We can't handle recursive records yet.
             if ( def.isRecursive() )
+            {
+                task.dblog().trace( "Can't join %s with parent because joins aren't supported for recursive entities", def.getName() );
                 return false;
+            }
 
             // If there is an activate limit for this entity then we can't join it
             // with it's parent because we have to set the limit in the SQL call.
             if ( def.getActivateLimit() != null )
+            {
+                task.dblog().trace( "Can't join %s with parent because it has an activate limit.", def.getName() );
                 return false;
+            }
 
             if ( def.getLazyLoadConfig().isLazyLoad() )
+            {
+                task.dblog().trace( "Can't join %s with parent because it is lazy-loaded", def.getName() );
                 return false;
+            }
 
             DataRecord dataRecord = def.getDataRecord();
             if ( dataRecord == null )
@@ -3228,12 +3243,15 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
                 // is many-to-one then we can load this entity by using the values from
                 // its parent.  In that situation we don't want to join this entity.
                 if ( relRecord.getRelationshipType().isManyToOne() )
+                {
+                    task.dblog().trace( "Not joining %s with parent because it's AutoLoad from parent", def.getName() );
                     return false;
+                }
             }
 
             RelRecord relRecord = dataRecord.getRelRecord();
-            if ( relRecord != null && relRecord.getRelationshipType() != null &&
-                 relRecord.getRelationshipType().isManyToOne() )
+            if ( relRecord != null && relRecord.getRelationshipType() != null
+                    && relRecord.getRelationshipType().isManyToOne() )
             {
                 if ( joinAll1To1 )
                     return true;
@@ -3242,9 +3260,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             return dataRecord.isJoinable();
         }
 
-        boolean loadedByParent()
+        boolean loadedByParent( Task task )
         {
-            return isJoinable( entityDef );
+            return isJoinable( task, entityDef );
         }
     }
 
