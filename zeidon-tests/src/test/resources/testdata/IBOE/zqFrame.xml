@@ -1,0 +1,2720 @@
+<zOI recordName="zqFrame" appName="nazsis" increFlags="Y" locked="N">
+  <zqFrame created="Y">
+    <FirstLevelOperator updated="Y">AND</FirstLevelOperator>
+    <QueryObjectName updated="Y">qStuEnr</QueryObjectName>
+    <QueryObjectRootEntityName updated="Y">Student</QueryObjectRootEntityName>
+    <ResultType updated="Y">P</ResultType>
+    <ReportTitle updated="Y">CINDY - Cumulative GPA for all Active Students</ReportTitle>
+    <ContractedFlag updated="Y">Y</ContractedFlag>
+    <dDisplayBooleanValue updated="Y">C1</dDisplayBooleanValue>
+    <dDisplayBooleanLong updated="Y">Student.Status = A</dDisplayBooleanLong>
+
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">Student</EntityName>
+      <AttributeName updated="Y">Status</AttributeName>
+      <Value updated="Y">A</Value>
+      <SearchType updated="Y">=</SearchType>
+      <ListDisplayFlag updated="Y"></ListDisplayFlag>
+      <MaxCardinality updated="Y">0</MaxCardinality>
+      <RootQualificationFlag updated="Y">Y</RootQualificationFlag>
+      <Prompt updated="Y">Student.Status</Prompt>
+      <Title updated="Y">Status</Title>
+      <DataType updated="Y">S</DataType>
+      <OriginalOrder updated="Y">1</OriginalOrder>
+      <ReportInterfaceFlag updated="Y">Y</ReportInterfaceFlag>
+      <wBooleanConditionName updated="Y">C1</wBooleanConditionName>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+    </GeneralParameter>
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">Person</EntityName>
+      <AttributeName updated="Y">CampusID</AttributeName>
+      <ListDisplayFlag updated="Y">Y</ListDisplayFlag>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+      <RootQualificationFlag updated="Y"></RootQualificationFlag>
+      <Prompt updated="Y">...Person.CampusID</Prompt>
+      <Title updated="Y">CampusID</Title>
+      <DataType updated="Y">S</DataType>
+      <DisplayOrder updated="Y">1</DisplayOrder>
+      <OriginalOrder updated="Y">2</OriginalOrder>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+    </GeneralParameter>
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">Person</EntityName>
+      <AttributeName updated="Y">LastName</AttributeName>
+      <ListDisplayFlag updated="Y">Y</ListDisplayFlag>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+      <RootQualificationFlag updated="Y"></RootQualificationFlag>
+      <Prompt updated="Y">...Person.LastName</Prompt>
+      <Title updated="Y">LastName</Title>
+      <DataType updated="Y">S</DataType>
+      <DisplayOrder updated="Y">2</DisplayOrder>
+      <OriginalOrder updated="Y">3</OriginalOrder>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+    </GeneralParameter>
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">Person</EntityName>
+      <AttributeName updated="Y">FirstName</AttributeName>
+      <ListDisplayFlag updated="Y">Y</ListDisplayFlag>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+      <RootQualificationFlag updated="Y"></RootQualificationFlag>
+      <Prompt updated="Y">...Person.FirstName</Prompt>
+      <Title updated="Y">FirstName</Title>
+      <DataType updated="Y">S</DataType>
+      <DisplayOrder updated="Y">3</DisplayOrder>
+      <OriginalOrder updated="Y">4</OriginalOrder>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+    </GeneralParameter>
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">AcademicStanding</EntityName>
+      <AttributeName updated="Y">CumulativeGPA</AttributeName>
+      <ListDisplayFlag updated="Y">Y</ListDisplayFlag>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+      <Prompt updated="Y">...AcademicStanding.CumulativeGPA</Prompt>
+      <Title updated="Y">CumulativeGPA</Title>
+      <DataType updated="Y">M</DataType>
+      <DisplayOrder updated="Y">4</DisplayOrder>
+      <OriginalOrder updated="Y">5</OriginalOrder>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+    </GeneralParameter>
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">AcademicStanding</EntityName>
+      <AttributeName updated="Y">AttemptedCredits</AttributeName>
+      <ListDisplayFlag updated="Y">Y</ListDisplayFlag>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+      <Prompt updated="Y">...AcademicStanding.AttemptedCredits</Prompt>
+      <Title updated="Y">AttemptedCredits</Title>
+      <DataType updated="Y">M</DataType>
+      <DisplayOrder updated="Y">5</DisplayOrder>
+      <OriginalOrder updated="Y">6</OriginalOrder>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+    </GeneralParameter>
+    <GeneralParameter created="Y">
+      <EntityName updated="Y">AcademicStandingCollegeTerm</EntityName>
+      <AttributeName updated="Y">YearSemester</AttributeName>
+      <Value updated="Y">2020-2021 Fall</Value>
+      <SearchType updated="Y">=</SearchType>
+      <SubgroupSearchType updated="Y">ANY</SubgroupSearchType>
+      <ListDisplayFlag updated="Y">Y</ListDisplayFlag>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+      <Prompt updated="Y">......AcademicStandingCollegeTerm.YearSemester</Prompt>
+      <Title updated="Y">YearSemester</Title>
+      <DataType updated="Y">S</DataType>
+      <DisplayOrder updated="Y">6</DisplayOrder>
+      <OriginalOrder updated="Y">7</OriginalOrder>
+      <ScopingEntityName updated="Y">AcademicStanding</ScopingEntityName>
+      <ReportInterfaceFlag updated="Y">Y</ReportInterfaceFlag>
+      <wSelectedToShow updated="Y">Y</wSelectedToShow>
+
+      <ScopingQueryEntity created="Y" updated="Y" included="Y" isLinkedSource="Y" entityKey="37808">
+        <EntityName updated="Y">AcademicStanding</EntityName>
+      </ScopingQueryEntity>
+    </GeneralParameter>
+    <ParentEntity created="Y" updated="Y">
+      <EntityName updated="Y">Student</EntityName>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Person</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Address</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Demographics</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Prospect</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Counselor</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CounselorPerson</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">FirstMajorChoice</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">SecondMajorChoice</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">ThirdMajorChoice</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Church</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">AdministrativeDivision</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">EnrollmentWaiverTransfer</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Class</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Course</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">College</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CollegeTerm</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CollegeYear</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Faculty</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">FacultyPrimaryCampusLocation</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">PrimaryFaculty</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">PrimaryFacultyCampusLocation</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+  </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Misconduct</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">EnrollmentModification</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">User</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">EnrollmentModificationClass</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">StudentMajorDegreeTrack</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">DegreeTrack</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">DegreeMajor</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Department</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">MajorCollege</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CollegeGradeScale</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+  </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Degree</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">DegreeYearData</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">DegreeGradeScale</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+  </ChildEntity>
+</ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">DegreeCandidacy</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">GraduationDate</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CeremonyGraduationDate</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">StudentMajorModesOfStudy</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">Advisor</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">AdvisorPerson</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+  </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">StudentMinorDegreeTrack</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">MinorDegreeTrack</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">DegreeMinor</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+    </ChildEntity>
+  </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">AcademicStanding</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">AcademicStandingCollegeTerm</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <QueryAttribute created="Y" updated="Y">
+        <AttributeName updated="Y">CumulativeGPA</AttributeName>
+        <DisplayOrder updated="Y">4</DisplayOrder>
+        <MappingEntityName updated="Y">AcademicStanding</MappingEntityName>
+        <Prompt updated="Y">CumulativeGPA</Prompt>
+        <Length updated="Y">20</Length>
+        <Type updated="Y">M</Type>
+      </QueryAttribute>
+      <QueryAttribute created="Y" updated="Y">
+        <AttributeName updated="Y">AttemptedCredits</AttributeName>
+        <DisplayOrder updated="Y">5</DisplayOrder>
+        <MappingEntityName updated="Y">AcademicStanding</MappingEntityName>
+        <Prompt updated="Y">AttemptedCredits</Prompt>
+        <Length updated="Y">20</Length>
+        <Type updated="Y">M</Type>
+      </QueryAttribute>
+      <QueryAttribute created="Y" updated="Y">
+        <AttributeName updated="Y">YearSemester</AttributeName>
+        <DisplayOrder updated="Y">6</DisplayOrder>
+        <MappingEntityName updated="Y">AcademicStandingCollegeTerm</MappingEntityName>
+        <Prompt updated="Y">YearSemester</Prompt>
+        <Length updated="Y">20</Length>
+        <Type updated="Y">S</Type>
+      </QueryAttribute>
+    </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">PrimaryCampusLocation</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CampusLocation</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">CurrentDegreeEntryCollegeYear</EntityName>
+        <MaxCardinality updated="Y">1</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">1</LOD_MaxCardinality>
+      </ChildEntity>
+      <ChildEntity created="Y" updated="Y">
+        <EntityName updated="Y">LeaveOfAbsence</EntityName>
+        <MaxCardinality updated="Y">99</MaxCardinality>
+        <LOD_MaxCardinality updated="Y">99</LOD_MaxCardinality>
+      </ChildEntity>
+      <QueryAttribute created="Y" updated="Y">
+        <AttributeName updated="Y">CampusID</AttributeName>
+        <DisplayOrder updated="Y">1</DisplayOrder>
+        <MappingEntityName updated="Y">Person</MappingEntityName>
+        <Prompt updated="Y">CampusID</Prompt>
+        <Length updated="Y">20</Length>
+        <Type updated="Y">S</Type>
+      </QueryAttribute>
+      <QueryAttribute created="Y" updated="Y">
+        <AttributeName updated="Y">LastName</AttributeName>
+        <DisplayOrder updated="Y">2</DisplayOrder>
+        <MappingEntityName updated="Y">Person</MappingEntityName>
+        <Prompt updated="Y">LastName</Prompt>
+        <Length updated="Y">20</Length>
+        <Type updated="Y">S</Type>
+      </QueryAttribute>
+      <QueryAttribute created="Y" updated="Y">
+        <AttributeName updated="Y">FirstName</AttributeName>
+        <DisplayOrder updated="Y">3</DisplayOrder>
+        <MappingEntityName updated="Y">Person</MappingEntityName>
+        <Prompt updated="Y">FirstName</Prompt>
+        <Length updated="Y">20</Length>
+        <Type updated="Y">S</Type>
+      </QueryAttribute>
+    </ParentEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Student</EntityName>
+      <MaxCardinality updated="Y">0</MaxCardinality>
+      <RootQualificationFlag updated="Y">Y</RootQualificationFlag>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Person</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Address</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Demographics</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Prospect</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Counselor</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CounselorPerson</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">FirstMajorChoice</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">SecondMajorChoice</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">ThirdMajorChoice</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Church</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">AdministrativeDivision</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">EnrollmentWaiverTransfer</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Class</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Course</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">College</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CollegeTerm</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CollegeYear</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Faculty</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">FacultyPrimaryCampusLocation</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">PrimaryFaculty</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">PrimaryFacultyCampusLocation</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Misconduct</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">EnrollmentModification</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">User</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">EnrollmentModificationClass</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">StudentMajorDegreeTrack</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">DegreeTrack</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">DegreeMajor</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Department</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">MajorCollege</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CollegeGradeScale</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Degree</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">DegreeYearData</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">DegreeGradeScale</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">DegreeCandidacy</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">GraduationDate</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CeremonyGraduationDate</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">StudentMajorModesOfStudy</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">Advisor</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">AdvisorPerson</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">StudentMinorDegreeTrack</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">MinorDegreeTrack</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">DegreeMinor</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">AcademicStanding</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">AcademicStandingCollegeTerm</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">PrimaryCampusLocation</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CampusLocation</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">CurrentDegreeEntryCollegeYear</EntityName>
+      <MaxCardinality updated="Y">1</MaxCardinality>
+    </ObjectEntity>
+    <ObjectEntity created="Y">
+      <EntityName updated="Y">LeaveOfAbsence</EntityName>
+      <MaxCardinality updated="Y">99</MaxCardinality>
+    </ObjectEntity>
+    <BooleanExpression created="Y">
+
+      <Condition created="Y">
+        <EntityName updated="Y">Student</EntityName>
+        <AttributeName updated="Y">Status</AttributeName>
+        <Prompt updated="Y">Student.Status</Prompt>
+        <Value updated="Y">A</Value>
+        <SearchType updated="Y">=</SearchType>
+        <BooleanConditionName updated="Y">C1</BooleanConditionName>
+        <FullSearchCriteria updated="Y">= A</FullSearchCriteria>
+      </Condition>
+    </BooleanExpression>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Student</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Person</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Address</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Demographics</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Prospect</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Counselor</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CounselorPerson</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">FirstMajorChoice</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">SecondMajorChoice</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">ThirdMajorChoice</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Church</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">AdministrativeDivision</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">EnrollmentWaiverTransfer</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Class</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Course</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">College</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CollegeTerm</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CollegeYear</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Faculty</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">FacultyPrimaryCampusLocation</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">PrimaryFaculty</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">PrimaryFacultyCampusLocation</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Misconduct</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">EnrollmentModification</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">User</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">EnrollmentModificationClass</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">StudentMajorDegreeTrack</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">DegreeTrack</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">DegreeMajor</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Department</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">MajorCollege</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CollegeGradeScale</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Degree</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">DegreeYearData</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">DegreeGradeScale</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">DegreeCandidacy</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">GraduationDate</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CeremonyGraduationDate</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">StudentMajorModesOfStudy</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">Advisor</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">AdvisorPerson</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">StudentMinorDegreeTrack</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">MinorDegreeTrack</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">DegreeMinor</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y" entityKey="37961">
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">AcademicStandingCollegeTerm</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">PrimaryCampusLocation</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CampusLocation</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">CurrentDegreeEntryCollegeYear</EntityName>
+    </ScopingSourceQueryEntity>
+    <ScopingSourceQueryEntity created="Y" updated="Y">
+      <EntityName updated="Y">LeaveOfAbsence</EntityName>
+    </ScopingSourceQueryEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">Student (0-m)</Name>
+      <EntityName updated="Y">Student</EntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CurrentLevel</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">eMailAddress</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ResidencyStatus</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DateOfDeparture</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EntryYearMonth</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dMajors</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dFullNameLFM</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreationDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dDegreeList</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TotalEarnedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dAttemptedCreditsTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dClassificationByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dCollegeTermLoad</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dCumulativeEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dCumulativeGPA_Term</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dDepartment</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dDegrees</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dFinalGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dGradeScaleType</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DirectoryDataBlock</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dMajor</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dPartTimeFullTimeFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dTestTest</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dTotalCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dLastProspectAdmittedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dLastProspectAdmittedYearMonth</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dLastProspectAdmittedYearWeek</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wAssociateCompletionCategory</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wAttemptedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wBachelorCompletionCategory</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Custom1</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Custom2</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Custom3</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LS_StudentID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wCumEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wCumulativeGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wEnrolledForTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wEnrollmentRequestDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradAttemptedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradCumEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradCumulativeGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradFinalGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradStartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wGradTotalEarnedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WithdrawalReason</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wLastCohort</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wMadeJuniorLevelFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wMadeSeniorLevelFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wMadeSophomoreLevelFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wMasterCompletionCategory</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wProcessedFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wStartingCohort</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wStartingLocation</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUgradAttemptedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUgradCumEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUgradCumulativeGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUgradEarnedCreditsByTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUgradFinalGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUndergradStartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUndergradTotalEarnedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wUserName</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....Person (0-1)</Name>
+      <EntityName updated="Y">Person</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InstID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CampusID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DateOfBirth</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WorkPhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">eMailAddress</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WorkEMailAddress</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreferredEmail</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HomePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Gender</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FirstName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MiddleName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreferedFirstName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Photo</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Suffix</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Salutation</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ChurchDenomination</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dFullNameLFM</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Address (0-1)</Name>
+      <EntityName updated="Y">Address</EntityName>
+      <ParentEntityName updated="Y">Person</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Line1</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Line2</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Line3</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">City</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StateProvince</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Country</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">County</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PostalCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Phone1</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Latitude</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Longitude</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GeographicPositionZipCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GeographicPositionMiles</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Demographics (0-1)</Name>
+      <EntityName updated="Y">Demographics</EntityName>
+      <ParentEntityName updated="Y">Person</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">IPEDS_Ethnicity</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CitizenshipCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PrimaryLanguage</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreferredLanguage</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AlienRegNumber</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Ethnicity</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NationOfCitizenship</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Prospect (0-m)</Name>
+      <EntityName updated="Y">Prospect</EntityName>
+      <ParentEntityName updated="Y">Person</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HSGraduationYear</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ApplicationDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdmissionDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DepositDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WithdrawDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InquiryDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LeadDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ApplicationFeePaid</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EntranceClassification</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InitEntranceClassification</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ExpectedEntryTerm</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ExpectedEntryYear</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InitialEntryYear</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Resident</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AcceptanceStatus</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StudentID</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............Counselor (0-1)</Name>
+      <EntityName updated="Y">Counselor</EntityName>
+      <ParentEntityName updated="Y">Prospect</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedBy</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastModifiedBy</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................CounselorPerson (0-1)</Name>
+      <EntityName updated="Y">CounselorPerson</EntityName>
+      <ParentEntityName updated="Y">Counselor</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FirstName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MiddleName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Suffix</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MaidenName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Gender</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HomePhone</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............FirstMajorChoice (0-1)</Name>
+      <EntityName updated="Y">FirstMajorChoice</EntityName>
+      <ParentEntityName updated="Y">Prospect</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............SecondMajorChoice (0-1)</Name>
+      <EntityName updated="Y">SecondMajorChoice</EntityName>
+      <ParentEntityName updated="Y">Prospect</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............ThirdMajorChoice (0-1)</Name>
+      <EntityName updated="Y">ThirdMajorChoice</EntityName>
+      <ParentEntityName updated="Y">Prospect</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InactiveFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WebSiteHyperLinkCode</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Church (0-1)</Name>
+      <EntityName updated="Y">Church</EntityName>
+      <ParentEntityName updated="Y">Person</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SpecialType</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Phone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DistrictCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Denomination</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....AdministrativeDivision (0-1)</Name>
+      <EntityName updated="Y">AdministrativeDivision</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....EnrollmentWaiverTransfer (0-m)</Name>
+      <EntityName updated="Y">EnrollmentWaiverTransfer</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DeliveryMethod</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalGradePct</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalGradePoint</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalGrade</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TakingClassType</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreditHours</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DroppedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GradUndergradOverrideFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">dCollegeType</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Class (0-1)</Name>
+      <EntityName updated="Y">Class</EntityName>
+      <ParentEntityName updated="Y">EnrollmentWaiverTransfer</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassDeliveryMethod</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Section</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CancelledDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreditHours</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassStartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassEndDate</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............Course (0-1)</Name>
+      <EntityName updated="Y">Course</EntityName>
+      <ParentEntityName updated="Y">Class</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Number</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Title</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................College (0-1)</Name>
+      <EntityName updated="Y">College</EntityName>
+      <ParentEntityName updated="Y">Course</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............CollegeTerm (0-1)</Name>
+      <EntityName updated="Y">CollegeTerm</EntityName>
+      <ParentEntityName updated="Y">Class</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Semester</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">YearSemester</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CourseStartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CourseEndDate</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................CollegeYear (0-1)</Name>
+      <EntityName updated="Y">CollegeYear</EntityName>
+      <ParentEntityName updated="Y">CollegeTerm</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Year</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............Faculty (0-m)</Name>
+      <EntityName updated="Y">Faculty</EntityName>
+      <ParentEntityName updated="Y">Class</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ShortName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdministrativeFacultyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DepartmentHeadFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DivisionChairFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdjunctFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PartTimeFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ModifiedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedBy</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastModifiedBy</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................FacultyPrimaryCampusLocation (0-1)</Name>
+      <EntityName updated="Y">FacultyPrimaryCampusLocation</EntityName>
+      <ParentEntityName updated="Y">Faculty</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PublicFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Description</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Code</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ReportCode</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............PrimaryFaculty (0-1)</Name>
+      <EntityName updated="Y">PrimaryFaculty</EntityName>
+      <ParentEntityName updated="Y">Class</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ShortName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdministrativeFacultyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DepartmentHeadFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DivisionChairFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdjunctFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PartTimeFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ModifiedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedBy</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastModifiedBy</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................PrimaryFacultyCampusLocation (0-1)</Name>
+      <EntityName updated="Y">PrimaryFacultyCampusLocation</EntityName>
+      <ParentEntityName updated="Y">PrimaryFaculty</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PublicFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Description</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Code</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ReportCode</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Misconduct (0-1)</Name>
+      <EntityName updated="Y">Misconduct</EntityName>
+      <ParentEntityName updated="Y">EnrollmentWaiverTransfer</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Notes</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Action</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....EnrollmentModification (0-m)</Name>
+      <EntityName updated="Y">EnrollmentModification</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CourseNumber</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">YearSemester</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ModifiedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NewStatus</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OriginalStatus</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NewFinalGrade</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OriginalFinalGrade</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........User (0-1)</Name>
+      <EntityName updated="Y">User</EntityName>
+      <ParentEntityName updated="Y">EnrollmentModification</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">UserName</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........EnrollmentModificationClass (0-1)</Name>
+      <EntityName updated="Y">EnrollmentModificationClass</EntityName>
+      <ParentEntityName updated="Y">EnrollmentModification</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AutoSchedulingThresholdPercent</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">BookInformation</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CancelledDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CancelledReason</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassDeliveryMethod</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassEndDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassReportingDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ClassStartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ConvCourseTopic</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CourseTitle</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreditHours</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DirectedStudyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DirectedStudyInitByCollegeFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DistributedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DistributedNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DistributionDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EnrollmentLimit</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FacultyGradeEntryAllowsIP_Flag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FacultyGradeEntryNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FacultyHasSubmittedGradesFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FacultyHasSubmittedMidtermGFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FacultyMidtermGradeEntryNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FacultyNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalExamDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalExamEndTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinalExamStartTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GradesVerifiedFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GradesVerifiedUserName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HistoricalEnrollmentCount</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HistoricalWaitlistedCount</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HonorsFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">IndependentStudyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LabFee</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LMSFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LS_ClassID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LS_CourseID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LS_InstructorName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MidtermGradesVerifiedFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MidtermGradesVerifiedUserName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NoFinalExamFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NoShowRosterNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NoShowRosterSubmittedFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NoShowRosterVerifiedFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Note</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NumberOfReservedSeats</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OverrideClassTuition</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OverrideDeliveryMethod</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OverrideFlatPrice</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OverridePricePerCreditHour</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PassFailClass</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreviousCourseID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PricePerClass</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SchedulingNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Section</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SpecialPermissionFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Syllabus</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TotalSessions</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">VariableCreditFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">NoLMSExportFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditFlag</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....StudentMajorDegreeTrack (0-m)</Name>
+      <EntityName updated="Y">StudentMajorDegreeTrack</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EndDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GraduationDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Ranking</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DegreePathway</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ExamBoardRecommendation</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TranscriptMajorOverride</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">wSortDate</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........DegreeTrack (0-1)</Name>
+      <EntityName updated="Y">DegreeTrack</EntityName>
+      <ParentEntityName updated="Y">StudentMajorDegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ShortName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TranscriptDisplayName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............DegreeMajor (0-1)</Name>
+      <EntityName updated="Y">DegreeMajor</EntityName>
+      <ParentEntityName updated="Y">DegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................Department (0-1)</Name>
+      <EntityName updated="Y">Department</EntityName>
+      <ParentEntityName updated="Y">DegreeMajor</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................MajorCollege (0-1)</Name>
+      <EntityName updated="Y">MajorCollege</EntityName>
+      <ParentEntityName updated="Y">DegreeMajor</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.........................CollegeGradeScale (0-1)</Name>
+      <EntityName updated="Y">CollegeGradeScale</EntityName>
+      <ParentEntityName updated="Y">MajorCollege</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............Degree (0-1)</Name>
+      <EntityName updated="Y">Degree</EntityName>
+      <ParentEntityName updated="Y">DegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">....................DegreeYearData (0-m)</Name>
+      <EntityName updated="Y">DegreeYearData</EntityName>
+      <ParentEntityName updated="Y">Degree</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FromYear</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ThroughYear</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MinimumCreditsRequired</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.........................DegreeGradeScale (0-1)</Name>
+      <EntityName updated="Y">DegreeGradeScale</EntityName>
+      <ParentEntityName updated="Y">DegreeYearData</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........DegreeCandidacy (0-1)</Name>
+      <EntityName updated="Y">DegreeCandidacy</EntityName>
+      <ParentEntityName updated="Y">StudentMajorDegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StudentHeightMeters</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ReceivedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DiplomaFullName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DiplomaReceivedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DiplomaOrderSentFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DiplomaOrderSentDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LateSubmissionFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StudentHeightFeet</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StudentHeightInches</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GownCut</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GownOrderSentFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GownOrderSentDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GradParticipationFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PetitionToParticipateState</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............GraduationDate (0-1)</Name>
+      <EntityName updated="Y">GraduationDate</EntityName>
+      <ParentEntityName updated="Y">DegreeCandidacy</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Date</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Year</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CeremonyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ActiveFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DegreeCandidacyDeadlineDate</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............CeremonyGraduationDate (0-1)</Name>
+      <EntityName updated="Y">CeremonyGraduationDate</EntityName>
+      <ParentEntityName updated="Y">DegreeCandidacy</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Date</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Year</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CeremonyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ActiveFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DegreeCandidacyDeadlineDate</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........StudentMajorModesOfStudy (0-m)</Name>
+      <EntityName updated="Y">StudentMajorModesOfStudy</EntityName>
+      <ParentEntityName updated="Y">StudentMajorDegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ModeOfStudy</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........Advisor (0-1)</Name>
+      <EntityName updated="Y">Advisor</EntityName>
+      <ParentEntityName updated="Y">StudentMajorDegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ShortName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdministrativeFacultyFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DepartmentHeadFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DivisionChairFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AdjunctFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PartTimeFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ModifiedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedBy</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastModifiedBy</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............AdvisorPerson (0-1)</Name>
+      <EntityName updated="Y">AdvisorPerson</EntityName>
+      <ParentEntityName updated="Y">Advisor</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CallbackDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CampusID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ChurchDenomination</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CIP_SubCategory</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ContactPreference</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ConvertedKey</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ConvertedString</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedBy</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DateOfBirth</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Deceased</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DeceasedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DriversLicenseNumber</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DriversLicenseState</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">eMailAddress</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressCity</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressCountry</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressLine1</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressLine2</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressLine3</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressState</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactAddressZipCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactEmail</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactHomePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactLastUpdDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactMobilePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactNote</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactRelationship</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EmergencyContactWorkPhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Extension</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Fax</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FirstName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FiscalIDRG</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DataPermissionReceived</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Gender</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">GovernmentID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HideSSN</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HomePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InstID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InternationalHomePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InternationalMobilePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InternationalWorkPhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">IsConvictedOfFelony</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">IsVeteran</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastDuplicateAnalyzedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastModifiedBy</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LastName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MaidenName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MajorName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MaritalStatus</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MaritalStatusDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MasterPromissorySignedDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MiddleName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MobilePhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ModifiedDateTime</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Note</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Occupation</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OccupationCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">OrdainedFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ParentsEmailAddress</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PatronBarcode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PatronType</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Photo</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreferedFirstName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreferredEmail</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Prefix</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PhotoRelease</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PreviousName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">RetiredPastorFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Salutation</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SchoolEmail</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SSN</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Suffix</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Title</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">UserName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WebPassword</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WorkEmail</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WorkEMailAddress</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">WorkPhone</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ExternalFinanceID</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....StudentMinorDegreeTrack (0-m)</Name>
+      <EntityName updated="Y">StudentMinorDegreeTrack</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........MinorDegreeTrack (0-1)</Name>
+      <EntityName updated="Y">MinorDegreeTrack</EntityName>
+      <ParentEntityName updated="Y">StudentMinorDegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Description</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DegreeCode</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ExceptionFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Type</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MinimumCredit</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">MinimumGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Status</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TranscriptDisplayName</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditTotalCreditsTaken</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditTotalCreditsEarned</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditGraduationCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditDevelopmentalCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditEnrolledCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditEnrolledCreditsRepeating</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditPreTransferCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditMinimumCreditsRequired</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AuditMajorGPA</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">...............DegreeMinor (0-1)</Name>
+      <EntityName updated="Y">DegreeMinor</EntityName>
+      <ParentEntityName updated="Y">MinorDegreeTrack</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">TranscriptNameDisplay</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Description</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">InactiveFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DegreeCode</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....AcademicStanding (0-m)</Name>
+      <EntityName updated="Y">AcademicStanding</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SemesterGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CumulativeGPA</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AttemptedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DeansListAttemptedCredits</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AcademicLevel</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">RecommendedStanding</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">AcademicStanding</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">FinancialStanding</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">DeansListFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">HonorsFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">PhiDeltaFlag</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">SemesterRanking</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Note</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Year</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">..........AcademicStandingCollegeTerm (0-1)</Name>
+      <EntityName updated="Y">AcademicStandingCollegeTerm</EntityName>
+      <ParentEntityName updated="Y">AcademicStanding</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Semester</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">YearSemester</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....PrimaryCampusLocation (0-1)</Name>
+      <EntityName updated="Y">PrimaryCampusLocation</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Description</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....CampusLocation (0-m)</Name>
+      <EntityName updated="Y">CampusLocation</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Name</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Description</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....CurrentDegreeEntryCollegeYear (0-1)</Name>
+      <EntityName updated="Y">CurrentDegreeEntryCollegeYear</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Year</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">BeginDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EndDate</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <DisplayTreeEntity created="Y">
+      <Name updated="Y">.....LeaveOfAbsence (0-m)</Name>
+      <EntityName updated="Y">LeaveOfAbsence</EntityName>
+      <ParentEntityName updated="Y">Student</ParentEntityName>
+
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">ID</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">LeaveReason</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">StartDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">EndDate</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Active</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">Note</Name>
+      </DisplayTreeAttribute>
+      <DisplayTreeAttribute created="Y">
+        <Name updated="Y">CreatedDateTime</Name>
+      </DisplayTreeAttribute>
+    </DisplayTreeEntity>
+    <GraphTypeDefinition created="Y">
+      <Type updated="Y">Pie Chart</Type>
+
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Looping Entity</Name>
+        <MappingType updated="Y">E</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Pie Slice Title Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Pie Slice Size Numeric Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+    </GraphTypeDefinition>
+    <GraphTypeDefinition created="Y">
+      <Type updated="Y">Basic Bar Chart</Type>
+
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Looping Entity</Name>
+        <MappingType updated="Y">E</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Bar Title Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Bar Size Numeric Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+    </GraphTypeDefinition>
+    <GraphTypeDefinition created="Y">
+      <Type updated="Y">2-Level Bar Chart</Type>
+
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Looping Entity</Name>
+        <MappingType updated="Y">E</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Level-1 Title Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Level-2 Looping Entity</Name>
+        <MappingType updated="Y">E</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Level-2 Title Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+      <GraphTypeMappingParameter created="Y">
+        <Name updated="Y">Level-2 Size Numeric Attribute</Name>
+        <MappingType updated="Y">A</MappingType>
+      </GraphTypeMappingParameter>
+    </GraphTypeDefinition>
+  </zqFrame>
+</zOI>

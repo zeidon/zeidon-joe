@@ -1,0 +1,4787 @@
+{
+  ".meta" : {
+    "version" : "1"
+  },
+  "OIs" : [ {
+    ".oimeta" : {
+      "application" : "IBOE",
+      "odName" : "zqFrame",
+      "incremental" : true
+    },
+    "zqFrame" : [ {
+      ".meta" : {
+        "incrementals" : "C"
+      },
+      "FirstLevelOperator" : "AND",
+      "QueryObjectName" : "qStuEnr",
+      "QueryObjectRootEntityName" : "Student",
+      "ResultType" : "P",
+      "ReportTitle" : "CINDY - Cumulative GPA for all Active Students",
+      "ContractedFlag" : "Y",
+      "GeneralParameter" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Student",
+        "AttributeName" : "Status",
+        "Value" : "A",
+        "SearchType" : "=",
+        "ListDisplayFlag" : "",
+        "MaxCardinality" : "0",
+        "RootQualificationFlag" : "Y",
+        "Prompt" : "Student.Status",
+        "Title" : "Status",
+        "DataType" : "S",
+        "OriginalOrder" : 1,
+        "ReportInterfaceFlag" : "Y",
+        "wBooleanConditionName" : "C1",
+        "wSelectedToShow" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Person",
+        "AttributeName" : "CampusID",
+        "ListDisplayFlag" : "Y",
+        "MaxCardinality" : "1",
+        "RootQualificationFlag" : "",
+        "Prompt" : "...Person.CampusID",
+        "Title" : "CampusID",
+        "DataType" : "S",
+        "DisplayOrder" : 1,
+        "OriginalOrder" : 2,
+        "wSelectedToShow" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Person",
+        "AttributeName" : "LastName",
+        "ListDisplayFlag" : "Y",
+        "MaxCardinality" : "1",
+        "RootQualificationFlag" : "",
+        "Prompt" : "...Person.LastName",
+        "Title" : "LastName",
+        "DataType" : "S",
+        "DisplayOrder" : 2,
+        "OriginalOrder" : 3,
+        "wSelectedToShow" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Person",
+        "AttributeName" : "FirstName",
+        "ListDisplayFlag" : "Y",
+        "MaxCardinality" : "1",
+        "RootQualificationFlag" : "",
+        "Prompt" : "...Person.FirstName",
+        "Title" : "FirstName",
+        "DataType" : "S",
+        "DisplayOrder" : 3,
+        "OriginalOrder" : 4,
+        "wSelectedToShow" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AcademicStanding",
+        "AttributeName" : "CumulativeGPA",
+        "ListDisplayFlag" : "Y",
+        "MaxCardinality" : "99",
+        "Prompt" : "...AcademicStanding.CumulativeGPA",
+        "Title" : "CumulativeGPA",
+        "DataType" : "M",
+        "DisplayOrder" : 4,
+        "OriginalOrder" : 5,
+        "wSelectedToShow" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AcademicStanding",
+        "AttributeName" : "AttemptedCredits",
+        "ListDisplayFlag" : "Y",
+        "MaxCardinality" : "99",
+        "Prompt" : "...AcademicStanding.AttemptedCredits",
+        "Title" : "AttemptedCredits",
+        "DataType" : "M",
+        "DisplayOrder" : 5,
+        "OriginalOrder" : 6,
+        "wSelectedToShow" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AcademicStandingCollegeTerm",
+        "AttributeName" : "YearSemester",
+        "Value" : "2020-2021 Fall",
+        "SearchType" : "=",
+        "SubgroupSearchType" : "ANY",
+        "ListDisplayFlag" : "Y",
+        "MaxCardinality" : "1",
+        "Prompt" : "......AcademicStandingCollegeTerm.YearSemester",
+        "Title" : "YearSemester",
+        "DataType" : "S",
+        "DisplayOrder" : 6,
+        "OriginalOrder" : 7,
+        "ScopingEntityName" : "AcademicStanding",
+        "ReportInterfaceFlag" : "Y",
+        "wSelectedToShow" : "Y",
+        "ScopingQueryEntity" : [ {
+          ".meta" : {
+            "incrementals" : "UCI",
+            "isLinkedSource" : true,
+            "entityKey" : "38630"
+          },
+          "EntityName" : "AcademicStanding",
+          ".EntityName" : {
+            "updated" : "true"
+          }
+        } ]
+      } ],
+      "ParentEntity" : [ {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Student",
+        ".EntityName" : {
+          "updated" : "true"
+        },
+        "ChildEntity" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "Person",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 1,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 1,
+          "ChildEntity" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Address",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Demographics",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Prospect",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 99,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 99,
+            "ChildEntity" : [ {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "Counselor",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "CounselorPerson",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1
+              } ]
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "FirstMajorChoice",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "SecondMajorChoice",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "ThirdMajorChoice",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Church",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          } ]
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "AdministrativeDivision",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 1,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 1
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "EnrollmentWaiverTransfer",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99,
+          "ChildEntity" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Class",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1,
+            "ChildEntity" : [ {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "Course",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "College",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1
+              } ]
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "CollegeTerm",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "CollegeYear",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1
+              } ]
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "Faculty",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 99,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 99,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "FacultyPrimaryCampusLocation",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1
+              } ]
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "PrimaryFaculty",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "PrimaryFacultyCampusLocation",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1
+              } ]
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Misconduct",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          } ]
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "EnrollmentModification",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99,
+          "ChildEntity" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "User",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "EnrollmentModificationClass",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          } ]
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "StudentMajorDegreeTrack",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99,
+          "ChildEntity" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "DegreeTrack",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1,
+            "ChildEntity" : [ {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "DegreeMajor",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "Department",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1
+              }, {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "MajorCollege",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 1,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 1,
+                "ChildEntity" : [ {
+                  ".meta" : {
+                    "incrementals" : "UC"
+                  },
+                  "EntityName" : "CollegeGradeScale",
+                  ".EntityName" : {
+                    "updated" : "true"
+                  },
+                  "MaxCardinality" : 1,
+                  ".MaxCardinality" : {
+                    "updated" : "true"
+                  },
+                  "LOD_MaxCardinality" : 1
+                } ]
+              } ]
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "Degree",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1,
+              "ChildEntity" : [ {
+                ".meta" : {
+                  "incrementals" : "UC"
+                },
+                "EntityName" : "DegreeYearData",
+                ".EntityName" : {
+                  "updated" : "true"
+                },
+                "MaxCardinality" : 99,
+                ".MaxCardinality" : {
+                  "updated" : "true"
+                },
+                "LOD_MaxCardinality" : 99,
+                "ChildEntity" : [ {
+                  ".meta" : {
+                    "incrementals" : "UC"
+                  },
+                  "EntityName" : "DegreeGradeScale",
+                  ".EntityName" : {
+                    "updated" : "true"
+                  },
+                  "MaxCardinality" : 1,
+                  ".MaxCardinality" : {
+                    "updated" : "true"
+                  },
+                  "LOD_MaxCardinality" : 1
+                } ]
+              } ]
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "DegreeCandidacy",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1,
+            "ChildEntity" : [ {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "GraduationDate",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            }, {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "CeremonyGraduationDate",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            } ]
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "StudentMajorModesOfStudy",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 99,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 99
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "Advisor",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1,
+            "ChildEntity" : [ {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "AdvisorPerson",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            } ]
+          } ]
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "StudentMinorDegreeTrack",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99,
+          "ChildEntity" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "MinorDegreeTrack",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1,
+            "ChildEntity" : [ {
+              ".meta" : {
+                "incrementals" : "UC"
+              },
+              "EntityName" : "DegreeMinor",
+              ".EntityName" : {
+                "updated" : "true"
+              },
+              "MaxCardinality" : 1,
+              ".MaxCardinality" : {
+                "updated" : "true"
+              },
+              "LOD_MaxCardinality" : 1
+            } ]
+          } ]
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "AcademicStanding",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99,
+          "ChildEntity" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "EntityName" : "AcademicStandingCollegeTerm",
+            ".EntityName" : {
+              "updated" : "true"
+            },
+            "MaxCardinality" : 1,
+            ".MaxCardinality" : {
+              "updated" : "true"
+            },
+            "LOD_MaxCardinality" : 1
+          } ],
+          "QueryAttribute" : [ {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "AttributeName" : "CumulativeGPA",
+            ".AttributeName" : {
+              "updated" : "true"
+            },
+            "DisplayOrder" : 4,
+            "MappingEntityName" : "AcademicStanding",
+            ".MappingEntityName" : {
+              "updated" : "true"
+            },
+            "Prompt" : "CumulativeGPA",
+            ".Prompt" : {
+              "updated" : "true"
+            },
+            "Length" : 20,
+            ".Length" : {
+              "updated" : "true"
+            },
+            "Type" : "M",
+            ".Type" : {
+              "updated" : "true"
+            }
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "AttributeName" : "AttemptedCredits",
+            ".AttributeName" : {
+              "updated" : "true"
+            },
+            "DisplayOrder" : 5,
+            "MappingEntityName" : "AcademicStanding",
+            ".MappingEntityName" : {
+              "updated" : "true"
+            },
+            "Prompt" : "AttemptedCredits",
+            ".Prompt" : {
+              "updated" : "true"
+            },
+            "Length" : 20,
+            ".Length" : {
+              "updated" : "true"
+            },
+            "Type" : "M",
+            ".Type" : {
+              "updated" : "true"
+            }
+          }, {
+            ".meta" : {
+              "incrementals" : "UC"
+            },
+            "AttributeName" : "YearSemester",
+            ".AttributeName" : {
+              "updated" : "true"
+            },
+            "DisplayOrder" : 6,
+            "MappingEntityName" : "AcademicStandingCollegeTerm",
+            ".MappingEntityName" : {
+              "updated" : "true"
+            },
+            "Prompt" : "YearSemester",
+            ".Prompt" : {
+              "updated" : "true"
+            },
+            "Length" : 20,
+            ".Length" : {
+              "updated" : "true"
+            },
+            "Type" : "S",
+            ".Type" : {
+              "updated" : "true"
+            }
+          } ]
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "PrimaryCampusLocation",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 1,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 1
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "CampusLocation",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "CurrentDegreeEntryCollegeYear",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 1,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 1
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "EntityName" : "LeaveOfAbsence",
+          ".EntityName" : {
+            "updated" : "true"
+          },
+          "MaxCardinality" : 99,
+          ".MaxCardinality" : {
+            "updated" : "true"
+          },
+          "LOD_MaxCardinality" : 99
+        } ],
+        "QueryAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "AttributeName" : "CampusID",
+          ".AttributeName" : {
+            "updated" : "true"
+          },
+          "DisplayOrder" : 1,
+          "MappingEntityName" : "Person",
+          ".MappingEntityName" : {
+            "updated" : "true"
+          },
+          "Prompt" : "CampusID",
+          ".Prompt" : {
+            "updated" : "true"
+          },
+          "Length" : 20,
+          ".Length" : {
+            "updated" : "true"
+          },
+          "Type" : "S",
+          ".Type" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "AttributeName" : "LastName",
+          ".AttributeName" : {
+            "updated" : "true"
+          },
+          "DisplayOrder" : 2,
+          "MappingEntityName" : "Person",
+          ".MappingEntityName" : {
+            "updated" : "true"
+          },
+          "Prompt" : "LastName",
+          ".Prompt" : {
+            "updated" : "true"
+          },
+          "Length" : 20,
+          ".Length" : {
+            "updated" : "true"
+          },
+          "Type" : "S",
+          ".Type" : {
+            "updated" : "true"
+          }
+        }, {
+          ".meta" : {
+            "incrementals" : "UC"
+          },
+          "AttributeName" : "FirstName",
+          ".AttributeName" : {
+            "updated" : "true"
+          },
+          "DisplayOrder" : 3,
+          "MappingEntityName" : "Person",
+          ".MappingEntityName" : {
+            "updated" : "true"
+          },
+          "Prompt" : "FirstName",
+          ".Prompt" : {
+            "updated" : "true"
+          },
+          "Length" : 20,
+          ".Length" : {
+            "updated" : "true"
+          },
+          "Type" : "S",
+          ".Type" : {
+            "updated" : "true"
+          }
+        } ]
+      } ],
+      "ObjectEntity" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Student",
+        "MaxCardinality" : 0,
+        "RootQualificationFlag" : "Y"
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Person",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Address",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Demographics",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Prospect",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Counselor",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CounselorPerson",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "FirstMajorChoice",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "SecondMajorChoice",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "ThirdMajorChoice",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Church",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AdministrativeDivision",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "EnrollmentWaiverTransfer",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Class",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Course",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "College",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CollegeTerm",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CollegeYear",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Faculty",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "FacultyPrimaryCampusLocation",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "PrimaryFaculty",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "PrimaryFacultyCampusLocation",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Misconduct",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "EnrollmentModification",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "User",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "EnrollmentModificationClass",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "StudentMajorDegreeTrack",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "DegreeTrack",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "DegreeMajor",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Department",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "MajorCollege",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CollegeGradeScale",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Degree",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "DegreeYearData",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "DegreeGradeScale",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "DegreeCandidacy",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "GraduationDate",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CeremonyGraduationDate",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "StudentMajorModesOfStudy",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "Advisor",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AdvisorPerson",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "StudentMinorDegreeTrack",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "MinorDegreeTrack",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "DegreeMinor",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AcademicStanding",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "AcademicStandingCollegeTerm",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "PrimaryCampusLocation",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CampusLocation",
+        "MaxCardinality" : 99
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "CurrentDegreeEntryCollegeYear",
+        "MaxCardinality" : 1
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "EntityName" : "LeaveOfAbsence",
+        "MaxCardinality" : 99
+      } ],
+      "BooleanExpression" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Condition" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "EntityName" : "Student",
+          "AttributeName" : "Status",
+          "Prompt" : "Student.Status",
+          "Value" : "A",
+          "SearchType" : "=",
+          "BooleanConditionName" : "C1",
+          "FullSearchCriteria" : "= A"
+        } ]
+      } ],
+      "ScopingSourceQueryEntity" : [ {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Student",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Person",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Address",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Demographics",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Prospect",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Counselor",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CounselorPerson",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "FirstMajorChoice",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "SecondMajorChoice",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "ThirdMajorChoice",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Church",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "AdministrativeDivision",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "EnrollmentWaiverTransfer",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Class",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Course",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "College",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CollegeTerm",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CollegeYear",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Faculty",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "FacultyPrimaryCampusLocation",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "PrimaryFaculty",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "PrimaryFacultyCampusLocation",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Misconduct",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "EnrollmentModification",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "User",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "EnrollmentModificationClass",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "StudentMajorDegreeTrack",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "DegreeTrack",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "DegreeMajor",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Department",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "MajorCollege",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CollegeGradeScale",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Degree",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "DegreeYearData",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "DegreeGradeScale",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "DegreeCandidacy",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "GraduationDate",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CeremonyGraduationDate",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "StudentMajorModesOfStudy",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "Advisor",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "AdvisorPerson",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "StudentMinorDegreeTrack",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "MinorDegreeTrack",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "DegreeMinor",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC",
+          "linkedSource" : "38630"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "AcademicStandingCollegeTerm",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "PrimaryCampusLocation",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CampusLocation",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "CurrentDegreeEntryCollegeYear",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      }, {
+        ".meta" : {
+          "incrementals" : "UC"
+        },
+        "EntityName" : "LeaveOfAbsence",
+        ".EntityName" : {
+          "updated" : "true"
+        }
+      } ],
+      "DisplayTreeEntity" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "Student (0-m)",
+        "EntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CurrentLevel"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "eMailAddress"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ResidencyStatus"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DateOfDeparture"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EntryYearMonth"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dMajors"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dFullNameLFM"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreationDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dDegreeList"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TotalEarnedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dAttemptedCreditsTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dClassificationByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dCollegeTermLoad"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dCumulativeEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dCumulativeGPA_Term"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dDepartment"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dDegrees"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dFinalGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dGradeScaleType"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DirectoryDataBlock"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dMajor"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dPartTimeFullTimeFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dTestTest"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dTotalCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dLastProspectAdmittedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dLastProspectAdmittedYearMonth"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dLastProspectAdmittedYearWeek"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wAssociateCompletionCategory"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wAttemptedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wBachelorCompletionCategory"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Custom1"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Custom2"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Custom3"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LS_StudentID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wCumEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wCumulativeGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wEnrolledForTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wEnrollmentRequestDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradAttemptedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradCumEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradCumulativeGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradFinalGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradStartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wGradTotalEarnedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WithdrawalReason"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wLastCohort"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wMadeJuniorLevelFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wMadeSeniorLevelFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wMadeSophomoreLevelFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wMasterCompletionCategory"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wProcessedFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wStartingCohort"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wStartingLocation"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUgradAttemptedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUgradCumEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUgradCumulativeGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUgradEarnedCreditsByTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUgradFinalGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUndergradStartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUndergradTotalEarnedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wUserName"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....Person (0-1)",
+        "EntityName" : "Person",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InstID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CampusID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DateOfBirth"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WorkPhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "eMailAddress"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WorkEMailAddress"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreferredEmail"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HomePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Gender"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FirstName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MiddleName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreferedFirstName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Photo"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Suffix"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Salutation"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ChurchDenomination"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dFullNameLFM"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Address (0-1)",
+        "EntityName" : "Address",
+        "ParentEntityName" : "Person",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Line1"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Line2"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Line3"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "City"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StateProvince"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Country"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "County"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PostalCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Phone1"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Latitude"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Longitude"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GeographicPositionZipCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GeographicPositionMiles"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Demographics (0-1)",
+        "EntityName" : "Demographics",
+        "ParentEntityName" : "Person",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "IPEDS_Ethnicity"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CitizenshipCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PrimaryLanguage"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreferredLanguage"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AlienRegNumber"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Ethnicity"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NationOfCitizenship"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Prospect (0-m)",
+        "EntityName" : "Prospect",
+        "ParentEntityName" : "Person",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HSGraduationYear"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ApplicationDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdmissionDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DepositDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WithdrawDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InquiryDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LeadDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ApplicationFeePaid"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EntranceClassification"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InitEntranceClassification"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ExpectedEntryTerm"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ExpectedEntryYear"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InitialEntryYear"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Resident"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AcceptanceStatus"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StudentID"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............Counselor (0-1)",
+        "EntityName" : "Counselor",
+        "ParentEntityName" : "Prospect",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedBy"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastModifiedBy"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................CounselorPerson (0-1)",
+        "EntityName" : "CounselorPerson",
+        "ParentEntityName" : "Counselor",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FirstName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MiddleName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Suffix"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MaidenName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Gender"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HomePhone"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............FirstMajorChoice (0-1)",
+        "EntityName" : "FirstMajorChoice",
+        "ParentEntityName" : "Prospect",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............SecondMajorChoice (0-1)",
+        "EntityName" : "SecondMajorChoice",
+        "ParentEntityName" : "Prospect",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............ThirdMajorChoice (0-1)",
+        "EntityName" : "ThirdMajorChoice",
+        "ParentEntityName" : "Prospect",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InactiveFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WebSiteHyperLinkCode"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Church (0-1)",
+        "EntityName" : "Church",
+        "ParentEntityName" : "Person",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SpecialType"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Phone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DistrictCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Denomination"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....AdministrativeDivision (0-1)",
+        "EntityName" : "AdministrativeDivision",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....EnrollmentWaiverTransfer (0-m)",
+        "EntityName" : "EnrollmentWaiverTransfer",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DeliveryMethod"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalGradePct"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalGradePoint"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalGrade"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TakingClassType"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreditHours"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DroppedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GradUndergradOverrideFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "dCollegeType"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Class (0-1)",
+        "EntityName" : "Class",
+        "ParentEntityName" : "EnrollmentWaiverTransfer",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassDeliveryMethod"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Section"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CancelledDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreditHours"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassStartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassEndDate"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............Course (0-1)",
+        "EntityName" : "Course",
+        "ParentEntityName" : "Class",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Number"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Title"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................College (0-1)",
+        "EntityName" : "College",
+        "ParentEntityName" : "Course",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............CollegeTerm (0-1)",
+        "EntityName" : "CollegeTerm",
+        "ParentEntityName" : "Class",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Semester"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "YearSemester"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CourseStartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CourseEndDate"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................CollegeYear (0-1)",
+        "EntityName" : "CollegeYear",
+        "ParentEntityName" : "CollegeTerm",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Year"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............Faculty (0-m)",
+        "EntityName" : "Faculty",
+        "ParentEntityName" : "Class",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ShortName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdministrativeFacultyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DepartmentHeadFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DivisionChairFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdjunctFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PartTimeFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ModifiedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedBy"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastModifiedBy"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................FacultyPrimaryCampusLocation (0-1)",
+        "EntityName" : "FacultyPrimaryCampusLocation",
+        "ParentEntityName" : "Faculty",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PublicFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Description"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Code"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ReportCode"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............PrimaryFaculty (0-1)",
+        "EntityName" : "PrimaryFaculty",
+        "ParentEntityName" : "Class",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ShortName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdministrativeFacultyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DepartmentHeadFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DivisionChairFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdjunctFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PartTimeFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ModifiedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedBy"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastModifiedBy"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................PrimaryFacultyCampusLocation (0-1)",
+        "EntityName" : "PrimaryFacultyCampusLocation",
+        "ParentEntityName" : "PrimaryFaculty",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PublicFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Description"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Code"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ReportCode"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Misconduct (0-1)",
+        "EntityName" : "Misconduct",
+        "ParentEntityName" : "EnrollmentWaiverTransfer",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Notes"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Action"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....EnrollmentModification (0-m)",
+        "EntityName" : "EnrollmentModification",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CourseNumber"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "YearSemester"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ModifiedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NewStatus"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OriginalStatus"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NewFinalGrade"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OriginalFinalGrade"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........User (0-1)",
+        "EntityName" : "User",
+        "ParentEntityName" : "EnrollmentModification",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "UserName"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........EnrollmentModificationClass (0-1)",
+        "EntityName" : "EnrollmentModificationClass",
+        "ParentEntityName" : "EnrollmentModification",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AutoSchedulingThresholdPercent"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "BookInformation"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CancelledDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CancelledReason"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassDeliveryMethod"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassEndDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassReportingDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ClassStartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ConvCourseTopic"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CourseTitle"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreditHours"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DirectedStudyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DirectedStudyInitByCollegeFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DistributedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DistributedNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DistributionDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EnrollmentLimit"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FacultyGradeEntryAllowsIP_Flag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FacultyGradeEntryNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FacultyHasSubmittedGradesFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FacultyHasSubmittedMidtermGFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FacultyMidtermGradeEntryNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FacultyNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalExamDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalExamEndTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinalExamStartTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GradesVerifiedFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GradesVerifiedUserName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HistoricalEnrollmentCount"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HistoricalWaitlistedCount"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HonorsFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "IndependentStudyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LabFee"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LMSFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LS_ClassID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LS_CourseID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LS_InstructorName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MidtermGradesVerifiedFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MidtermGradesVerifiedUserName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NoFinalExamFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NoShowRosterNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NoShowRosterSubmittedFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NoShowRosterVerifiedFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Note"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NumberOfReservedSeats"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OverrideClassTuition"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OverrideDeliveryMethod"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OverrideFlatPrice"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OverridePricePerCreditHour"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PassFailClass"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreviousCourseID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PricePerClass"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SchedulingNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Section"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SpecialPermissionFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Syllabus"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TotalSessions"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "VariableCreditFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "NoLMSExportFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditFlag"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....StudentMajorDegreeTrack (0-m)",
+        "EntityName" : "StudentMajorDegreeTrack",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EndDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GraduationDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Ranking"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DegreePathway"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ExamBoardRecommendation"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TranscriptMajorOverride"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "wSortDate"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........DegreeTrack (0-1)",
+        "EntityName" : "DegreeTrack",
+        "ParentEntityName" : "StudentMajorDegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ShortName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TranscriptDisplayName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............DegreeMajor (0-1)",
+        "EntityName" : "DegreeMajor",
+        "ParentEntityName" : "DegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................Department (0-1)",
+        "EntityName" : "Department",
+        "ParentEntityName" : "DegreeMajor",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................MajorCollege (0-1)",
+        "EntityName" : "MajorCollege",
+        "ParentEntityName" : "DegreeMajor",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".........................CollegeGradeScale (0-1)",
+        "EntityName" : "CollegeGradeScale",
+        "ParentEntityName" : "MajorCollege",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............Degree (0-1)",
+        "EntityName" : "Degree",
+        "ParentEntityName" : "DegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "....................DegreeYearData (0-m)",
+        "EntityName" : "DegreeYearData",
+        "ParentEntityName" : "Degree",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FromYear"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ThroughYear"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MinimumCreditsRequired"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".........................DegreeGradeScale (0-1)",
+        "EntityName" : "DegreeGradeScale",
+        "ParentEntityName" : "DegreeYearData",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........DegreeCandidacy (0-1)",
+        "EntityName" : "DegreeCandidacy",
+        "ParentEntityName" : "StudentMajorDegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StudentHeightMeters"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ReceivedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DiplomaFullName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DiplomaReceivedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DiplomaOrderSentFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DiplomaOrderSentDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LateSubmissionFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StudentHeightFeet"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StudentHeightInches"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GownCut"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GownOrderSentFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GownOrderSentDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GradParticipationFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PetitionToParticipateState"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............GraduationDate (0-1)",
+        "EntityName" : "GraduationDate",
+        "ParentEntityName" : "DegreeCandidacy",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Date"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Year"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CeremonyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ActiveFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DegreeCandidacyDeadlineDate"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............CeremonyGraduationDate (0-1)",
+        "EntityName" : "CeremonyGraduationDate",
+        "ParentEntityName" : "DegreeCandidacy",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Date"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Year"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CeremonyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ActiveFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DegreeCandidacyDeadlineDate"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........StudentMajorModesOfStudy (0-m)",
+        "EntityName" : "StudentMajorModesOfStudy",
+        "ParentEntityName" : "StudentMajorDegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ModeOfStudy"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........Advisor (0-1)",
+        "EntityName" : "Advisor",
+        "ParentEntityName" : "StudentMajorDegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ShortName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdministrativeFacultyFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DepartmentHeadFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DivisionChairFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AdjunctFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PartTimeFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ModifiedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedBy"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastModifiedBy"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............AdvisorPerson (0-1)",
+        "EntityName" : "AdvisorPerson",
+        "ParentEntityName" : "Advisor",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CallbackDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CampusID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ChurchDenomination"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CIP_SubCategory"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ContactPreference"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ConvertedKey"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ConvertedString"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedBy"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DateOfBirth"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Deceased"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DeceasedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DriversLicenseNumber"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DriversLicenseState"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "eMailAddress"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressCity"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressCountry"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressLine1"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressLine2"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressLine3"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressState"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactAddressZipCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactEmail"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactHomePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactLastUpdDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactMobilePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactNote"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactRelationship"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EmergencyContactWorkPhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Extension"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Fax"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FirstName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FiscalIDRG"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DataPermissionReceived"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Gender"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "GovernmentID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HideSSN"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HomePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InstID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InternationalHomePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InternationalMobilePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InternationalWorkPhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "IsConvictedOfFelony"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "IsVeteran"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastDuplicateAnalyzedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastModifiedBy"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LastName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MaidenName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MajorName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MaritalStatus"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MaritalStatusDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MasterPromissorySignedDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MiddleName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MobilePhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ModifiedDateTime"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Note"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Occupation"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OccupationCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "OrdainedFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ParentsEmailAddress"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PatronBarcode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PatronType"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Photo"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreferedFirstName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreferredEmail"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Prefix"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PhotoRelease"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PreviousName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "RetiredPastorFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Salutation"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SchoolEmail"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SSN"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Suffix"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Title"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "UserName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WebPassword"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WorkEmail"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WorkEMailAddress"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "WorkPhone"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ExternalFinanceID"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....StudentMinorDegreeTrack (0-m)",
+        "EntityName" : "StudentMinorDegreeTrack",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........MinorDegreeTrack (0-1)",
+        "EntityName" : "MinorDegreeTrack",
+        "ParentEntityName" : "StudentMinorDegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Description"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DegreeCode"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ExceptionFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Type"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MinimumCredit"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "MinimumGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Status"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TranscriptDisplayName"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditTotalCreditsTaken"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditTotalCreditsEarned"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditGraduationCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditDevelopmentalCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditEnrolledCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditEnrolledCreditsRepeating"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditPreTransferCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditMinimumCreditsRequired"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AuditMajorGPA"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "...............DegreeMinor (0-1)",
+        "EntityName" : "DegreeMinor",
+        "ParentEntityName" : "MinorDegreeTrack",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "TranscriptNameDisplay"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Description"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "InactiveFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DegreeCode"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....AcademicStanding (0-m)",
+        "EntityName" : "AcademicStanding",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SemesterGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CumulativeGPA"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AttemptedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DeansListAttemptedCredits"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AcademicLevel"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "RecommendedStanding"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "AcademicStanding"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "FinancialStanding"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "DeansListFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "HonorsFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "PhiDeltaFlag"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "SemesterRanking"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Note"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Year"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : "..........AcademicStandingCollegeTerm (0-1)",
+        "EntityName" : "AcademicStandingCollegeTerm",
+        "ParentEntityName" : "AcademicStanding",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Semester"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "YearSemester"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....PrimaryCampusLocation (0-1)",
+        "EntityName" : "PrimaryCampusLocation",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Description"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....CampusLocation (0-m)",
+        "EntityName" : "CampusLocation",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Name"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Description"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....CurrentDegreeEntryCollegeYear (0-1)",
+        "EntityName" : "CurrentDegreeEntryCollegeYear",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Year"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "BeginDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EndDate"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Name" : ".....LeaveOfAbsence (0-m)",
+        "EntityName" : "LeaveOfAbsence",
+        "ParentEntityName" : "Student",
+        "DisplayTreeAttribute" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "ID"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "LeaveReason"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "StartDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "EndDate"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Active"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Note"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "CreatedDateTime"
+        } ]
+      } ],
+      "GraphTypeDefinition" : [ {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "Pie Chart",
+        "GraphTypeMappingParameter" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Looping Entity",
+          "MappingType" : "E"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Pie Slice Title Attribute",
+          "MappingType" : "A"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Pie Slice Size Numeric Attribute",
+          "MappingType" : "A"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "Basic Bar Chart",
+        "GraphTypeMappingParameter" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Looping Entity",
+          "MappingType" : "E"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Bar Title Attribute",
+          "MappingType" : "A"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Bar Size Numeric Attribute",
+          "MappingType" : "A"
+        } ]
+      }, {
+        ".meta" : {
+          "incrementals" : "C"
+        },
+        "Type" : "2-Level Bar Chart",
+        "GraphTypeMappingParameter" : [ {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Looping Entity",
+          "MappingType" : "E"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Level-1 Title Attribute",
+          "MappingType" : "A"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Level-2 Looping Entity",
+          "MappingType" : "E"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Level-2 Title Attribute",
+          "MappingType" : "A"
+        }, {
+          ".meta" : {
+            "incrementals" : "C"
+          },
+          "Name" : "Level-2 Size Numeric Attribute",
+          "MappingType" : "A"
+        } ]
+      } ]
+    } ]
+  } ]
+}

@@ -8230,6 +8230,25 @@ omUser_fnLocalBuildQualActivateUserLST( View     vSubtask,
 	        fPersTst.cursor( "Person" ).setFirst();
 	        //Assert.assertEquals( fPersTst.cursor( "Person" ).getEntityCount(), 0 );
 	        */
+	    	
+ 		  zVIEW zqFrame = new zVIEW( );
+	 	   try
+	 	   {
+	 		  ActivateOI_FromFile( zqFrame, "zqFrame", ViewToWindow, "target/test-classes/testdata//ZENCAs/zqFrame.json", zSINGLE );
+	 		  /*
+	 	       zVIEW view.setView( task.deserializeOi()
+	 	                         .fromFile( fileName )
+	 	                         .setLodDef( lodDefName )
+	 	                         .setFlags( control )
+	 	                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+	 	                         .activateFirst() );
+	 	                         */
+	 	   }
+	 	   catch( Exception e )
+	 	   {
+	 		   task.log().info(e.getMessage());
+	 	   }
+	    	
 	        View fPersTst2 = new QualificationBuilder( zencas )        		
 	                .setLodDef( "fPersTst2" )
 	                .addAttribQual( "Person", "FirstName", "LIKE", "a%" )

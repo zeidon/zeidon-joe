@@ -15,6 +15,7 @@ import com.quinsoft.zeidon.Task;
 import com.quinsoft.zeidon.View;
 import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
+import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.vml.VmlObjectOperations;
 import com.quinsoft.zeidon.vml.zVIEW;
 
@@ -56,6 +57,16 @@ public class TestIBOE
         System.out.println("===== Finished TEST_SAVE_Student ========");
 	}
 
+
+	@Test
+	public void testzqFrame()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mSAProf" );
+		IBOEVmlTester tester = new IBOEVmlTester( testview );
+		tester.testzqFrame( testview );
+        System.out.println("===== Finished TEST_SAVE_Student ========");
+	}
 
 
 	private class IBOEVmlTester extends VmlObjectOperations
@@ -147,6 +158,97 @@ public class TestIBOE
 		      return( 0 );
 		   } 
 
+
+		    @Test
+		    public void testzqFrame( View     ViewToWindow) 
+		    {
+		    	/* At NMM we had a problem where we were activating lPersonResultsSearch where the root limit is set to 200
+		    	 * and the joins from the root "Person" are all "activate by joining with parent" and the relationships are all (0,m).
+		    	 * The JOE would take the 200 limit (where there were Person duplicates) and then take out the duplicate Person(s) so
+		    	 * we were left with a entity count < 200.
+		    	 */
+		    	
+	 		   zVIEW zqFrame = new zVIEW( );
+	 		   int      RESULT = 0;
+		 	   try
+		 	   {
+		 		   // When this was the json file, it failed. When por, it worked.
+			 	  //ActivateOI_FromFile( zqFrame, "zqFrame", ViewToWindow, "target/test-classes/testdata//IBOE/zqFrame.json", zSINGLE );
+			 	  ActivateOI_FromFile( zqFrame, "zqFrame", ViewToWindow, "target/test-classes/testdata//IBOE/zqFrame.por", zSINGLE );
+		 		  /*
+		 	       zVIEW view.setView( task.deserializeOi()
+		 	                         .fromFile( fileName )
+		 	                         .setLodDef( lodDefName )
+		 	                         .setFlags( control )
+		 	                         .setApplication( qualView == null ? task.getApplication() : qualView.getApplication() )
+		 	                         .activateFirst() );
+		 	                         */
+		 	      RESULT = SetCursorFirstEntity( zqFrame, "GeneralParameter", "" );
+		 	      while ( RESULT > zCURSOR_UNCHANGED )
+		 	      { 
+		 	         //:IF zqFrame.GeneralParameter.SearchType != ""
+		 	         if ( CompareAttributeToString( zqFrame, "GeneralParameter", "SearchType", "" ) != 0 )
+		 	         { 
+		 	            //:// Don't copy search criteria which are just to eliminate entities for performance sake.
+		 	            //:IF zqFrame.GeneralParameter.AttributeName != "ID" AND zqFrame.GeneralParameter.Value != "0"
+		 	            if ( CompareAttributeToString( zqFrame, "GeneralParameter", "AttributeName", "ID" ) != 0 && CompareAttributeToString( zqFrame, "GeneralParameter", "Value", "0" ) != 0 )
+		 	            { 
+		 	               //:CREATE ENTITY zqFrame.SelectionCriteria 
+		 	               RESULT = CreateEntity( zqFrame, "SelectionCriteria", zPOS_AFTER );
+
+		 	               //://SetMatchingAttributesByName( zqFrame, "SelectionCriteria",
+		 	               //://                             zqFrame, "GeneralParameter", zSET_ALL )
+		 	               //://zqFrame.SelectionCriteria.ParameterSeqNo = 
+		 	               //:zqFrame.SelectionCriteria.Prompt = zqFrame.GeneralParameter.Prompt 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "Prompt", zqFrame, "GeneralParameter", "Prompt" );
+		 	               //:zqFrame.SelectionCriteria.ReportInterfaceFlag = zqFrame.GeneralParameter.ReportInterfaceFlag 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "ReportInterfaceFlag", zqFrame, "GeneralParameter", "ReportInterfaceFlag" );
+		 	               //:zqFrame.SelectionCriteria.ScopingEntityName = zqFrame.GeneralParameter.ScopingEntityName 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "ScopingEntityName", zqFrame, "GeneralParameter", "ScopingEntityName" );
+		 	               //:zqFrame.SelectionCriteria.SearchType = zqFrame.GeneralParameter.SearchType 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "SearchType", zqFrame, "GeneralParameter", "SearchType" );
+		 	               //:zqFrame.SelectionCriteria.SubgroupSearchType = zqFrame.GeneralParameter.SubgroupSearchType 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "SubgroupSearchType", zqFrame, "GeneralParameter", "SubgroupSearchType" );
+		 	               //://zqFrame.SelectionCriteria.SubparameterSeqNo = 
+		 	               //://zqFrame.SelectionCriteria.SubsectionQualification = 
+		 	               //:zqFrame.SelectionCriteria.Title = zqFrame.GeneralParameter.Title 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "Title", zqFrame, "GeneralParameter", "Title" );
+		 	               //:zqFrame.SelectionCriteria.Value = zqFrame.GeneralParameter.Value 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "Value", zqFrame, "GeneralParameter", "Value" );
+		 	               //:                                            
+		 	               //:// ExternalValue may not be set, so we want ExternalValue to be just Value.
+		 	               //:IF zqFrame.SelectionCriteria.ExternalValue = ""
+		 	               if ( CompareAttributeToString( zqFrame, "SelectionCriteria", "ExternalValue", "" ) == 0 )
+		 	               { 
+		 	                  //:zqFrame.SelectionCriteria.ExternalValue = zqFrame.SelectionCriteria.Value 
+		 	                  SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "ExternalValue", zqFrame, "SelectionCriteria", "Value" );
+		 	               } 
+
+		 	               //:END
+		 	               //:zqFrame.SelectionCriteria.BooleanCriteriaName     = zqFrame.GeneralParameter.wBooleanConditionName 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "BooleanCriteriaName", zqFrame, "GeneralParameter", "wBooleanConditionName" );
+		 	               //:zqFrame.SelectionCriteria.SubsectionQualification = zqFrame.GeneralParameter.dSubSelectQualification 
+		 	               SetAttributeFromAttribute( zqFrame, "SelectionCriteria", "SubsectionQualification", zqFrame, "GeneralParameter", "dSubSelectQualification" );
+		 	            } 
+
+		 	            //:END
+		 	         } 
+
+		 	         RESULT = SetCursorNextEntity( zqFrame, "GeneralParameter", "" );
+		 	         //:END
+		 	      } 
+			 	   
+			 	   zqFrame.cursor("GeneralParameter").setFirst();
+			 	   zqFrame.cursor("GeneralParameter").setNext();
+			 	   String sValue = zqFrame.cursor("GeneralParameter").getAttribute("Value").getString();
+			    	
+					Assert.assertEquals( sValue, "" );
+		 	   }
+		 	   catch( Exception e )
+		 	   {
+		 		   task.log().info(e.getMessage());
+		 	   }
+		    }
    }
 
 }
