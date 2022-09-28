@@ -19,22 +19,26 @@
 
 package com.quinsoft.zeidon.config;
 
+import com.quinsoft.zeidon.ZeidonLogger;
+
 /**
  * Implementation of HomeDirectory that is a supplied string.
- * 
+ *
  * @author DG
  *
  */
 public class HomeDirectoryFromString implements HomeDirectory
 {
     private final String homeDirectory;
-    
+
     /**
      * @param homeDirectory
+     * @param zeidonLogger
      */
-    public HomeDirectoryFromString(String homeDirectory)
+    public HomeDirectoryFromString(String homeDirectory, ZeidonLogger zeidonLogger)
     {
         this.homeDirectory = homeDirectory;
+        zeidonLogger.info( "Home directory: %s", homeDirectory );
     }
 
 

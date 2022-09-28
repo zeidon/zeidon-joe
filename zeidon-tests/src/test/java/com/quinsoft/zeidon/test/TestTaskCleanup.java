@@ -31,7 +31,7 @@ public class TestTaskCleanup
     {
         // Set up options to run OE with cleanup.
         DefaultJavaOeConfiguration options = new DefaultJavaOeConfiguration();
-        options.setHomeDirectory( new HomeDirectoryFromString( "src/test/resources/testdata" ) );
+        options.setHomeDirectory( new HomeDirectoryFromString( "src/test/resources/testdata", options.getZeidonLogger() ) );
 
         Cache<String, Task> c = CacheBuilder.newBuilder()
                                             .concurrencyLevel( 2 )

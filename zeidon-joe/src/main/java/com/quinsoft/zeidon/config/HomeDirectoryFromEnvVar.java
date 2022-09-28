@@ -18,6 +18,7 @@
  */
 package com.quinsoft.zeidon.config;
 
+import com.quinsoft.zeidon.ZeidonLogger;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +35,7 @@ public class HomeDirectoryFromEnvVar implements HomeDirectory
 {
     private final String zeidonHomeDir;
 
-    public HomeDirectoryFromEnvVar()
+    public HomeDirectoryFromEnvVar(ZeidonLogger zeidonLogger)
     {
         String rootDir = JoeUtils.getEnvProperty( "ZEIDON_HOME", true );
         if ( StringUtils.isNotBlank( rootDir ) )
@@ -44,6 +45,7 @@ public class HomeDirectoryFromEnvVar implements HomeDirectory
         if ( ! rootDir.endsWith( File.pathSeparator ) && ! rootDir.endsWith( "/" ) )
             rootDir = rootDir + "/";
 
+        zeidonLogger.info( "Home directory: %s", rootDir );
         zeidonHomeDir = rootDir.intern();
     }
 
