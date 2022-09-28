@@ -76,7 +76,7 @@ class ApplicationList
                 logger.info( "Loading applications from resource %s", url.getFile() );
                 InputStream stream = url.openStream();
                 ApplicationHandler appHandler = new ApplicationHandler( apps );
-                PortableFileReader.ReadPortableFile( objectEngine, stream, logger, appHandler );
+                PortableFileReader.readPortableFile( objectEngine, stream, logger, appHandler );
             }
         }
         catch( Exception e )
@@ -96,7 +96,7 @@ class ApplicationList
                 {
                     logger.info( "Loading apps using ZEIDON_HOME %s/zeidon.app", home.getHomeDirectory() );
                     ApplicationHandler appHandler = new ApplicationHandler( apps );
-                    PortableFileReader.ReadPortableFile( objectEngine, inputStream, logger, appHandler );
+                    PortableFileReader.readPortableFile( objectEngine, inputStream, logger, appHandler );
                 }
             }
             catch ( Exception e )
@@ -116,7 +116,7 @@ class ApplicationList
         if ( applications.containsKey( applicationName.toLowerCase() ) )
         {
             ApplicationImpl app = applications.get( applicationName.toLowerCase() );
-            app.loadDomains( task );
+            app.loadDomainsIfNotLoaded( task );
             return app;
         }
 

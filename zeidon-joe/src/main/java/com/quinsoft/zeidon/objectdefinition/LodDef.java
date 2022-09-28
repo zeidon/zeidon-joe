@@ -173,7 +173,7 @@ public class LodDef implements PortableFileAttributeHandler
     {
         try
         {
-            PortableFileReader.ReadPortableFile( task.getObjectEngine(), file, task.log(), new LodDefHandler( this ) );
+            PortableFileReader.readPortableFile( task.getObjectEngine(), file, task.log(), new LodDefHandler( this ) );
             task.log().info( "LodDef %s loaded from: %s", this, filename );
         }
         catch ( Exception e )

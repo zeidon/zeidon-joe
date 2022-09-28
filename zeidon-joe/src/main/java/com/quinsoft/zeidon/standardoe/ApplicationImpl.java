@@ -167,7 +167,7 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
         return viewNameList;
     }
 
-    synchronized void loadDomains( Task task )
+    synchronized void loadDomainsIfNotLoaded( Task task )
     {
         if ( domainList != null )
             return;  // Already loaded the domains.

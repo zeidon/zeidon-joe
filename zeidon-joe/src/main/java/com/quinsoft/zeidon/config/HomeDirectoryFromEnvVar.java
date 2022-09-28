@@ -18,7 +18,6 @@
  */
 package com.quinsoft.zeidon.config;
 
-import com.quinsoft.zeidon.ZeidonException;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import org.apache.commons.lang3.StringUtils;
 
