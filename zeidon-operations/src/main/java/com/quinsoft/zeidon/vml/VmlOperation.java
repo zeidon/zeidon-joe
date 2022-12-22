@@ -5401,11 +5401,24 @@ public abstract class VmlOperation
 
       return nRC;
    }
-
+   
    protected int DropView( View view )
    {
 	  try{
 		  view.drop( );
+	  } catch ( Exception e ){
+		  return -1;
+	  }
+      return 0;
+   }
+
+   protected int DropView( zVIEW view )
+   {
+	  try{
+		  view.getView().drop();
+		  view.setView(null);
+		  view.drop( );
+		  view = null;
 	  } catch ( Exception e ){
 		  return -1;
 	  }
