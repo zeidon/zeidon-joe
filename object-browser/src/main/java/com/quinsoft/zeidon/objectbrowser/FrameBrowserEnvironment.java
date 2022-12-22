@@ -97,8 +97,8 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
         Task task = getOe().getTaskById( browserTask.taskId );
         if ( task == null )
         {
-            JOptionPane.showMessageDialog( null, "This task has been reclaimed by the Garbage Collector.  Hit Refresh to remove.",
-                                           "Invalid Task", JOptionPane.INFORMATION_MESSAGE );
+            //JOptionPane.showMessageDialog( null, "This task has been reclaimed by the Garbage Collector.  Hit Refresh to remove.",
+            //                               "Invalid Task", JOptionPane.INFORMATION_MESSAGE );
             return list;
         }
 
@@ -131,12 +131,16 @@ public class FrameBrowserEnvironment extends BrowserEnvironment
     {
         Task task = getOe().getTaskById( v.task.taskId );
         View view = task.getViewByKey( v.viewId );
+        /*
         if ( view == null )
             JOptionPane.showMessageDialog( null, "This view has been reclaimed by the Garbage Collector.  Hit Refresh to remove.",
                                            "Invalid View", JOptionPane.INFORMATION_MESSAGE );
         else
             view.setLazyLoad( false ); // Set lazy load so the browser doesn't change anything.
-
+        */     
+        if ( view != null )
+            view.setLazyLoad( false ); // Set lazy load so the browser doesn't change anything.
+        
         return view;
     }
 
