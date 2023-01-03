@@ -74,7 +74,7 @@ class DomainList
         String appDir = application.getObjectDir();
         String domainFile = appDir + "/" + DomainList.S_DOMAIN_FILE;
         DomainReader reader = new DomainReader( task );
-        PortableFileReader.ReadPortableFile( task, domainFile, task.log(), reader );
+        PortableFileReader.readPortableFile( task, domainFile, task.log(), reader );
     }
 
     private class DomainReader extends NullEntityHandler implements PortableFileAttributeHandler
@@ -128,7 +128,7 @@ class DomainList
         	{
 	            if ( entityName.equals( "Domain" ) )
 	            {
-	                if ( ! domainProperties.containsKey( "Name" )) 
+	                if ( ! domainProperties.containsKey( "Name" ))
 	                    throw new ZeidonException( "Domain does not have 'Name' specified" ).appendMessage( "Values = " + domainProperties.toString() );
 
 	                if ( ! domainProperties.containsKey( "JavaClass" ) )

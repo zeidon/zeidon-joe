@@ -78,9 +78,9 @@ public class DefaultJavaOeConfiguration implements JavaOeConfiguration
         if ( homeDirectory == null )
         {
             if ( JoeUtils.getEnvProperty( "ZEIDON_HOME" ) != null )
-                homeDirectory = new HomeDirectoryFromEnvVar();
+                homeDirectory = new HomeDirectoryFromEnvVar( getZeidonLogger() );
             else
-                homeDirectory = new HomeDirectoryFromString( "" );
+                homeDirectory = new HomeDirectoryFromString( "", getZeidonLogger() );
         }
 
         return homeDirectory;

@@ -468,7 +468,7 @@ public class PortableFileReader
         this.attributeHandler = attributeHandler;
     }
 
-    public static void ReadPortableFile( Task task, String filename, ZeidonLogger logger, PortableFileEntityHandler entityHandler )
+    public static void readPortableFile( Task task, String filename, ZeidonLogger logger, PortableFileEntityHandler entityHandler )
     {
         try
         {
@@ -477,7 +477,7 @@ public class PortableFileReader
             if ( is == null )
                 throw new ZeidonException( "Couldn't find file %s", filename );
 
-            ReadPortableFile( task.getObjectEngine(), is, logger, entityHandler );
+            readPortableFile( task.getObjectEngine(), is, logger, entityHandler );
         }
         catch ( Exception e )
         {
@@ -486,7 +486,7 @@ public class PortableFileReader
         }
     }
 
-    public static void ReadPortableFile( ObjectEngine objectEngine, InputStream inputStream, ZeidonLogger logger, PortableFileEntityHandler entityHandler )
+    public static void readPortableFile( ObjectEngine objectEngine, InputStream inputStream, ZeidonLogger logger, PortableFileEntityHandler entityHandler )
     {
         try
         {
