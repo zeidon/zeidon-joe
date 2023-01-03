@@ -68,8 +68,8 @@ public class TimeDomain extends DateTimeDomain
         if ( thisTime.getMinute() != thatTime.getMinute() )
             return Integer.compare( thisTime.getMinute(), thatTime.getMinute() );
 
-        if ( thisTime.getSecond() != thatTime.getSecond() )
-            return Integer.compare( thisTime.getSecond(), thatTime.getSecond() );
+        if ( thisTime.getHour() != thatTime.getHour() )
+            return Integer.compare( thisTime.getHour(), thatTime.getHour() );
 
         return Integer.compare( thisTime.getNano(), thatTime.getNano() );
     }
