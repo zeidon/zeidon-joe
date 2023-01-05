@@ -5123,6 +5123,7 @@ public abstract class VmlOperation
 	   }
 	   catch( Exception e )
 	   {
+		  task.log().info(e.getMessage());
 	      return -1;
 	   }
       return 0;
@@ -5156,13 +5157,15 @@ public abstract class VmlOperation
 
    protected int CommitOI_ToFile( View view, String fileName, int control )
    {
-      view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
+	  view.serializeOi().withIncremental().toFile( fileName );
+      //view.writeOiToFile( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 
    protected int CommitOI_ToXML_File( View view, String fileName, int control )
    {
-      view.writeOiToXml( fileName, WriteOiFlags.convertLongFlags( control ) );
+	  view.serializeOi().withIncremental().asXml().toFile(fileName);
+      //view.writeOiToXml( fileName, WriteOiFlags.convertLongFlags( control ) );
       return 0;
    }
 
