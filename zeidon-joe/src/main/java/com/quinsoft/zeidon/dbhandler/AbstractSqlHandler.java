@@ -2261,7 +2261,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
     protected boolean addAllParentFksForSingleSelectWithArray( SqlStatement stmt, DataField keyDataField, Set<Object> keys )
     {
-        stmt.appendWhere( " = ANY ( " );
+        startInForCollection( stmt ); // Allows Postgres to use " = ANY (" instead of " IN ("
         BoundAttributeData data = new BoundAttributeData( keyDataField, keys );
         stmt.addBoundAttribute( stmt.where, data );
         stmt.appendWhere( " ) " );
