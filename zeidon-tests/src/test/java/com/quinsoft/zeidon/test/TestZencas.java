@@ -212,6 +212,16 @@ public class TestZencas
 	}
 
 	@Test
+	public void testActivateWithDate()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.testActivateWithDate( testview );
+        System.out.println("===== Finished testActivateWithDate ========");
+	}
+
+	@Test
 	public void testRestrictWithParentJoin()
 	{
 	    View         testview;
@@ -3736,7 +3746,47 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
 		    Assert.assertEquals( -1, RESULT);
 			return 0;
 		}
+		public int
+		testActivateWithDate( View ViewToWindow )
+		{
+			zVIEW    wXferO = new zVIEW( );
+			zVIEW    mUser = new zVIEW( );
+			zVIEW    vQualObject = new zVIEW( );
+			int RESULT=0;
+			
 
+			   RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+			   RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+			   SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+
+			   SetAttributeFromAttribute( wXferO, "Root", "WorkString", wXferO, "Root", "dCurrentDate" );
+			   String szTempString_1 = "";
+			//: ACTIVATe mUser where mUser.User.LastLoginDateTime > wXferO.Root.CurrentFunction 
+			   {StringBuilder sb_szTempString_1;
+			   if ( szTempString_1 == null )
+			      sb_szTempString_1 = new StringBuilder( 32 );
+			   else
+			      sb_szTempString_1 = new StringBuilder( szTempString_1 );
+			       GetStringFromAttribute( sb_szTempString_1, wXferO, "Root", "WorkString" );
+			   szTempString_1 = sb_szTempString_1.toString( );}
+			   
+
+
+			   RESULT = SfActivateSysEmptyOI( vQualObject, "KZDBHQUA", ViewToWindow, zMULTIPLE );
+			   CreateEntity( vQualObject, "EntitySpec", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "EntitySpec", "EntityName", "User" );
+			   CreateEntity( vQualObject, "QualAttrib", zPOS_AFTER );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "EntityName", "User" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "AttributeName", "LastLoginDateTime" );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Value", szTempString_1.toString( ) );
+			   SetAttributeFromString( vQualObject, "QualAttrib", "Oper", ">" );
+			   		   
+			   RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vQualObject, zSINGLE );
+			   DropView( vQualObject );
+			
+			return 0;
+		}
+		
 		public int
 		testBlobs( View ViewToWindow )
 		{
