@@ -19,6 +19,7 @@
 
 package com.quinsoft.zeidon.domains;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -312,7 +313,15 @@ public class DateTimeDomain extends AbstractDomain
             // VML operations use "" as synonymous with null.
             if ( StringUtils.isBlank( s ) )
                 return null;
-
+            
+            // What if the date has the time zone as part of the string? We currently get an error. I'm going to try and take that off.
+            int timeZonePos = s.indexOf("[");
+            if ( timeZonePos > -1 )
+            {
+            	s = s.substring(0, timeZonePos);
+            	return ZonedDateTime.parse(s);
+            }
+            
             // A common internal date/time format is the DefaultTimeFormat.  Let's try
             // a quick check to see if 's' is the same length and only digits.
             if ( s.length() >= ObjectEngine.INTERNAL_DATE_STRING_FORMAT.length() && JoeUtils.onlyDigits( s ) )
