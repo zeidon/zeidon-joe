@@ -437,9 +437,6 @@ public class EntityDef implements PortableFileAttributeHandler
         if ( this.isDerived() )
             return "Derived entities cannot be loaded with Single Select";
 
-        if ( this.isAutoloadFromParent() )
-            return "AutoLoad from parent is incompatible with Single Select";
-
         RelRecord relRecord = childRecord.getRelRecord();
         if ( relRecord == null )
             return "Entity has no relationship with parent for ACTIVATEONE";
@@ -481,6 +478,10 @@ public class EntityDef implements PortableFileAttributeHandler
                     break;
             }
         }
+
+        // If we get here then we should be good.  Always turn off AutoLoad because it might cause problems.
+        // TODO: Maybe we can make it work with autoload?
+        this.autoloadFromParent = false;
 
         return null;
     }

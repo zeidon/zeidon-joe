@@ -840,7 +840,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         qualAttrib.columnAttributeValue = attributeDef;
 
-        // Verify that columnAttributeValue.getViewEntity is a child of qualAttrib.viewEntity or
+        // Verify that columnAttributeValue.getEntityDef is a child of qualAttrib.entityDef or
         // vice-versa.  We could potentially support siblings if they have 1-to-1 relationships
         // with their parents.
         if ( entityDef != qualAttrib.entityDef &&
@@ -884,7 +884,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
 
     /**
-     * This determines what ViewEntities can be loaded in a single SELECT statement.
+     * This determines what EntityDefs can be loaded in a single SELECT statement.
      * @param view
      */
     private void determineEntitiesThatCanBeLoadedInOneSelect(View view)
