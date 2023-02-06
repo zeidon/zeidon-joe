@@ -43,7 +43,7 @@ public class DomainDateTimeFormatter
     private final DateTimeFormatter[] formatters;
     private final String formatString;
 
-    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd[['T'][ ]HH:mm:ss[.SSS][.S][xxx][X]]";
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd[['T'][ ]HH:mm[:ss[.SSS][.S]][xxx][X]['['][VV][']']]";
 
     public DomainDateTimeFormatter( String editString )
     {
