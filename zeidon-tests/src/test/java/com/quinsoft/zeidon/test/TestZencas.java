@@ -1411,6 +1411,16 @@ public class TestZencas
         System.out.println("===== Finished mFAProfTemporalIssue3 ========");
     }
 
+	@Test
+	public void mFAProfTemporalIssue4()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfTemporalIssue4( testview );
+        System.out.println("===== Finished mFAProfTemporalIssue4 ========");
+	}
+
     @Test
     public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest()
     {
@@ -2045,6 +2055,82 @@ public class TestZencas
 
            return 0;
         }
+
+		public int
+		mFAProfTemporalIssue4( View ViewToWindow )
+		{
+		   zVIEW    mPerson = new zVIEW( );
+		   zVIEW    mFAProf = new zVIEW( );
+		   zVIEW    mFASrc = new zVIEW( );
+		   zVIEW    lTermLST = new zVIEW( );
+		   zVIEW    mStudenC = new zVIEW( );
+		   zVIEW    wXferO = new zVIEW( );
+		   zVIEW    vTempViewVar_0 = new zVIEW( );
+		   int RESULT=0;
+
+		   // KJS 02/06/23 - In GNECsis we are getting an error when doing a CreateTemporalSubobjectVersion on a
+		   // parent entity, then on a child entity.
+		   // The scenario works in a different situation. The difference being that in the error situation the first CreateTemporal 
+		   // is on a "Derived" entity. In the situation that works, the first CreateTemporal is on a "normal" related entity.
+		   /*
+				com.quinsoft.zeidon.TemporalEntityException: Attempting to create a temporal subobject for an entity that has a child entity linked to another temporal entity.
+				EntityDef  = ZENCAs.mStudenC.TESTEntity
+				Temporal root: ZENCAs.mStudenC.TESTEntity Keys: ID=NULL; 
+				Linked instance: ZENCAs.mStudenC.TESTEntity Keys: ID=NULL; 
+		    */
+		    RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+		    RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+		    SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+		    fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+			RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+			OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+		   o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+		   RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+		   DropView( vTempViewVar_0 );
+
+
+		   o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+		   RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+		   DropView( vTempViewVar_0 );
+	       SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+
+	       // In mFAProf, we have "FinAidAward", with a child "FinAidAwardDisbursement". We create both of these entities,
+	       // then do a CreateTemporalSubobjectVersion on both. No error.
+		    RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
+		    SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+		    RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
+		    RESULT = CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+		    mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+			RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+			RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+
+			CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+
+		    // In mStudenC, we have a derived "US_Registration", with a child "TESTEntity". We create both of these entities,
+		    // then do a CreateTemporalSubobjectVersion on both. Second CreateTemporal give a link error.
+			o_fnLocalBuildmStudenC( ViewToWindow, vTempViewVar_0, 16406 );
+			RESULT = ActivateObjectInstance( mStudenC, "mStudenC", ViewToWindow, vTempViewVar_0, zSINGLE );
+			DropView( vTempViewVar_0 );
+			SetNameForView( mStudenC, "mStudenC", null, zLEVEL_TASK );
+
+	        mStudenC_Object m_mStudenC_Object = new mStudenC_Object( mStudenC );
+	        m_mStudenC_Object.omStudenC_BuildUS_RegEntries( mStudenC, 162); // Spring 2
+			mStudenC.cursor("US_Registration").setFirst();        
+			//mStudenC.cursor("US_Registration").setNext();    
+		    RESULT = CreateEntity( mStudenC, "TESTEntity", zPOS_AFTER );
+			
+			CreateTemporalSubobjectVersion( mStudenC, "US_Registration" );
+			// Following gives error.
+			CreateTemporalSubobjectVersion( mStudenC, "TESTEntity" );
+
+		   return 0;
+		}
 
         public int
         mFAProfTemporalPerProfileFinAidAwardPeriodPathTest( View ViewToWindow )
