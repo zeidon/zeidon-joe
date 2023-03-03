@@ -139,6 +139,8 @@ class CommitMultipleOIs
             final EntityDef entityDef = ei.getEntityDef();
             if ( entityDef.isDerivedPath() )
                 continue;
+            if ( ! entityDef.isUpdate() )
+            	continue;
 
             final AttributeDef autoSeq = entityDef.getAutoSeq();
             if ( autoSeq == null )
