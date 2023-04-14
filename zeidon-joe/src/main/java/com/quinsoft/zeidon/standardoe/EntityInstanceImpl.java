@@ -385,8 +385,10 @@ class EntityInstanceImpl implements EntityInstance
             ei = ei.nextVersion;
         }
 
-        if ( ei.versionStatus == VersionStatus.CANCELED )
-            return null;
+        // KJS - On the cancel subobject, we were passing back a null when we were trying
+        // to get lastChild etc in removeEntityFromChains. Which made the chain incorrect.
+        //if ( ei.versionStatus == VersionStatus.CANCELED )
+        //    return null;
 
         return ei;
     }
@@ -2207,7 +2209,6 @@ class EntityInstanceImpl implements EntityInstance
                 } );
             }
         }
-
 
         dropEntity();
 
