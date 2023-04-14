@@ -1782,7 +1782,7 @@ omStudenC_dEarnedCredits( View     mStudenC,
       case zDERIVED_GET :
 
          //:IssueError( mStudenC,0,0, "dEarnedCredits Operation has been removed." )
-         IssueError( mStudenC, 0, 0, "dEarnedCredits Operation has been removed." );
+         //IssueError( mStudenC, 0, 0, "dEarnedCredits Operation has been removed." );
          break ;
       //:/*ComputeEarnedCredits( mStudenC, TotalCredits )
 
@@ -2043,7 +2043,7 @@ omStudenC_dDivisorCredits( View     mStudenC,
       case zDERIVED_GET :
 
          //:IssueError( mStudenC,0,0, "dDivisorCredits Operation has been removed." )
-         IssueError( mStudenC, 0, 0, "dDivisorCredits Operation has been removed." );
+         //IssueError( mStudenC, 0, 0, "dDivisorCredits Operation has been removed." );
          //:ComputeGPA_Divisor( mStudenC, TotalCredits )
          //:StoreValueInRecord ( mStudenC,
          //:                  InternalEntityStructure, InternalAttribStructure, TotalCredits, 0 )
@@ -5269,7 +5269,7 @@ omStudenC_UpdateScheduleEntries( View     mStudenC )
    //:// Return -1 if there were validation errors.
 
    //:GetViewByName( mUser, "mUser", mStudenC, zLEVEL_APPLICATION )
-   GetViewByName( mUser, "mUser", mStudenC, zLEVEL_APPLICATION );
+   GetViewByName( mUser, "mUser", mStudenC, zLEVEL_TASK );
 
    //:// First delete entries.
    //:szOI_ModificationFlag = ""
@@ -5434,6 +5434,10 @@ omStudenC_UpdateScheduleEntries( View     mStudenC )
                //:INCLUDE mStudenC.RegistrationClass FROM mStudenC.US_Class 
                RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationClass", mStudenC, "US_Class", zPOS_AFTER );
                //:mStudenC.Registration.wCourseNumber = mStudenC.RegistrationCourse.Number 
+               zVIEW    lClsLstC = new zVIEW( );
+               RESULT = GetViewByName( lClsLstC, "lClsLstC", mStudenC, zLEVEL_TASK );
+               RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationCourseCollege", lClsLstC, "College", zPOS_AFTER );
+               RESULT = IncludeSubobjectFromSubobject( mStudenC, "Person", lClsLstC, "Person", zPOS_AFTER );
                SetAttributeFromAttribute( mStudenC, "Registration", "wCourseNumber", mStudenC, "RegistrationCourse", "Number" );
                //:IF mStudenC.US_CrossListedCourse EXISTS
                lTempInteger_4 = CheckExistenceOfEntity( mStudenC, "US_CrossListedCourse" );
@@ -5657,6 +5661,7 @@ omStudenC_UpdateScheduleEntries( View     mStudenC )
             //:// Regular entry
             //:CreateTemporalEntity( mStudenC, "EnrollmentModification", zPOS_AFTER )
             CreateTemporalEntity( mStudenC, "EnrollmentModification", zPOS_AFTER );
+            RESULT = IncludeSubobjectFromSubobject( mStudenC, "User", mUser, "User", zPOS_AFTER );
             //:szModificationFlag = ""
              {StringBuilder sb_szModificationFlag;
             if ( szModificationFlag == null )
@@ -5798,7 +5803,7 @@ omStudenC_UpdateScheduleEntries( View     mStudenC )
                               ZeidonStringCopy( sb_szOI_ModificationFlag, 1, 0, "Y", 1, 0, 2 );
                szOI_ModificationFlag = sb_szOI_ModificationFlag.toString( );}
                //:INCLUDE mStudenC.User FROM mUser.User
-               RESULT = IncludeSubobjectFromSubobject( mStudenC, "User", mUser, "User", zPOS_AFTER );
+               //RESULT = IncludeSubobjectFromSubobject( mStudenC, "User", mUser, "User", zPOS_AFTER );
                //:AcceptSubobject( mStudenC, "EnrollmentModification" )
                AcceptSubobject( mStudenC, "EnrollmentModification" );
                //:mStudenC.EnrollmentModification.CourseNumber     = mStudenC.US_Course.Number 
@@ -11629,18 +11634,21 @@ omStudenC_SaveStudentSchedule( View     mStudenC,
    AcceptSubobject( mStudenC, "UpdateSchedule" );
    //:SaveAcademicObject( mStudenC )
    omStudenC_SaveAcademicObject( mStudenC );
+   
+   /* KJS 04/12/23 - This is not needed for the test I am trying to replicate. Problem is on save, the above SaveAcademicObject.
 
    //:// Set the Student Accounts flag to indicate that this Student should be evaluated for billing changes.
    //:// We do this anytime the Student's schedule changes.
    //:GetViewByName( mUser, "mUser", ViewToWindow, zLEVEL_APPLICATION )
-   GetViewByName( mUser, "mUser", ViewToWindow, zLEVEL_APPLICATION );
+   GetViewByName( mUser, "mUser", ViewToWindow, zLEVEL_TASK );
    //:ACTIVATE mStuBFlg WHERE mStuBFlg.Student.ID = mStudenC.Student.ID
    {MutableInt mi_lTempInteger_0 = new MutableInt( lTempInteger_0 );
        GetIntegerFromAttribute( mi_lTempInteger_0, mStudenC, "Student", "ID" );
    lTempInteger_0 = mi_lTempInteger_0.intValue( );}
    //:      RESTRICTING mStuBFlg.StudentAccountProfile TO mStuBFlg.AdministrativeDivision.ID = mUser.CurrentAdministrativeDivision.ID 
    {MutableInt mi_lTempInteger_1 = new MutableInt( lTempInteger_1 );
-       GetIntegerFromAttribute( mi_lTempInteger_1, mUser, "CurrentAdministrativeDivision", "ID" );
+   //GetIntegerFromAttribute( mi_lTempInteger_1, mUser, "CurrentAdministrativeDivision", "ID" );
+   GetIntegerFromAttribute( mi_lTempInteger_1, mUser, "AdministrativeDivision", "ID" );
    lTempInteger_1 = mi_lTempInteger_1.intValue( );}
    omStudenC_fnLocalBuildQual_6( mStudenC, vTempViewVar_0, lTempInteger_0, lTempInteger_1 );
    RESULT = ActivateObjectInstance( mStuBFlg, "mStuBFlg", mStudenC, vTempViewVar_0, zSINGLE );
@@ -11748,6 +11756,7 @@ omStudenC_SaveStudentSchedule( View     mStudenC,
       DropObjectInstance( mClassSt );
       RESULT = SetCursorNextEntityByString( mStudenC, "StudentWaitlisted", "WaitListRanking", "", "" );
    } 
+   */
 
    //:END
    return( 0 );

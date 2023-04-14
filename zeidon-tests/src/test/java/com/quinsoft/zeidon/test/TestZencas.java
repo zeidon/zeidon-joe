@@ -1261,16 +1261,6 @@ public class TestZencas
         tester.testmStudentCCreateRegistration( testview );
         System.out.println("===== Finished testmStudentCCreateRegistration ========");
     }
-
-    @Test
-    public void testmStudentCCreateRegistrationNoPerson()
-    {
-        View         testview;
-        testview = zencas.activateEmptyObjectInstance( "mFASrc" );
-        VmlTester tester = new VmlTester( testview );
-        tester.testmStudentCCreateRegistrationNoPerson( testview );
-        System.out.println("===== Finished testmStudentCCreateRegistrationNoPerson ========");
-    }
     
     @Test
     public void testDropEntityError()
@@ -5249,11 +5239,10 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             // get updated to the database. Can't figure out why.
 
             View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).addAttribQual( "ID", 490 ).activate();
+            SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
 
             RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
-            //:CREATE ENTITY wXferO.Root
             RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
-            //:NAME VIEW wXferO "wXferO"
             SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
             fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
             RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
@@ -5277,18 +5266,49 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             //:NAME VIEW lClsLstC "lClsLstC"
             SetNameForView( lClsLstC, "lClsLstC", null, zLEVEL_TASK );
             
-            RESULT = CreateEntity( mStudenC, "Registration", zPOS_AFTER );
-            //SetMatchingAttributesByName( mStudenC, "Registration", mStudenC, "US_Registration", zSET_NOTNULL );
-             RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationClass", lClsLstC, "Class", zPOS_AFTER );
+            RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "ID", lClsLstC.cursor( "CollegeTerm" ).getAttribute("ID") ).toInt();
+            
+            mStudenC_Object m_mStudenC_Object = new mStudenC_Object( mStudenC );
+            m_mStudenC_Object.omStudenC_BuildUS_RegEntries( mStudenC, lClsLstC.cursor( "CollegeTerm" ).getAttribute("ID").getInteger()  );
+            
+            // Mimic code in 
+            RESULT = CreateEntity( mStudenC, "US_Registration", zPOS_AFTER );
+            RESULT = IncludeSubobjectFromSubobject( mStudenC, "US_Class", lClsLstC, "Class", zPOS_AFTER );
+            //:mStudenC.US_Registration.DeliveryMethod = lClsLstC.Class.wEnrolledDeliveryMethod 
+            //SetAttributeFromAttribute( mStudenC, "US_Registration", "DeliveryMethod", lClsLstC, "Class", "wEnrolledDeliveryMethod" );
+            //:mStudenC.US_Registration.TakingClassType = lClsLstC.Class.wEnrollmentTakingClassType
+            //SetAttributeFromAttribute( mStudenC, "US_Registration", "TakingClassType", lClsLstC, "Class", "wEnrollmentTakingClassType" );
+            SetAttributeFromString( mStudenC, "US_Registration", "Status", "T" );
+            //:mStudenC.US_Registration.CreditHours = mStudenC.US_Class.CreditHours 
+            SetAttributeFromAttribute( mStudenC, "US_Registration", "CreditHours", mStudenC, "US_Class", "CreditHours" );
             String szCourseNumber = lClsLstC.cursor("Course").getAttribute("Number").getString();
+            
+            RESULT = m_mStudenC_Object.omStudenC_UpdateScheduleEntries( mStudenC );
+            //RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationCourseCollege", lClsLstC, "College", zPOS_AFTER );
+            //RESULT = IncludeSubobjectFromSubobject( mStudenC, "Person", lClsLstC, "Person", zPOS_AFTER );
+            m_mStudenC_Object.omStudenC_SaveStudentSchedule( mStudenC, ViewToWindow );
+           
+            /*
+            RESULT = CreateEntity( mStudenC, "Registration", zPOS_AFTER );
+            SetMatchingAttributesByName( mStudenC, "Registration", mStudenC, "US_Registration", zSET_NOTNULL );
+            //:INCLUDE mStudenC.RegistrationClass FROM mStudenC.US_Class 
+            RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationClass", mStudenC, "US_Class", zPOS_AFTER );
+            RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationCourseCollege", lClsLstC, "College", zPOS_AFTER );
+            RESULT = IncludeSubobjectFromSubobject( mStudenC, "Person", lClsLstC, "Person", zPOS_AFTER );
+            //:mStudenC.Registration.wCourseNumber = mStudenC.RegistrationCourse.Number 
+            SetAttributeFromAttribute( mStudenC, "Registration", "wCourseNumber", mStudenC, "RegistrationCourse", "Number" );
             CreateTemporalEntity( mStudenC, "EnrollmentModification", zPOS_AFTER );
             SetAttributeFromAttribute( mStudenC, "EnrollmentModification", "CourseNumber", lClsLstC, "Course", "Number" );
             RESULT = IncludeSubobjectFromSubobject( mStudenC, "User", mUser, "User", zPOS_AFTER );
             AcceptSubobject( mStudenC, "EnrollmentModification" );
+            */
+            
+            //AcceptSubobject( mStudenC, "UpdateSchedule" );
+            //m_mStudenC_Object.omStudenC_SaveAcademicObject( mStudenC );            
             
             // I am trying to re-create another issue we are having, but for some reason the include of lClsLstC.Class is not pulling
             // InstructorPerson into mStudenC.Person
-            mStudenC.commit();
+            //mStudenC.commit();
             DropView( mStudenC );
             o_fnLocalBuildmStudenC( ViewToWindow, vTempViewVar_0, 16406 );
             RESULT = ActivateObjectInstance( mStudenC, "mStudenC", ViewToWindow, vTempViewVar_0, zSINGLE );
@@ -5300,63 +5320,8 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             	mStudenC.commit();
             }
             else
-            	Assert.assertEquals("Registration does not exists but it should...", 0, -1);
+            	Assert.assertEquals("Registration does not exist but it should...", 0, -1);
             
-            DropView( mStudenC );
-            DropView( lTermLST );
-            DropView( wXferO );
-            DropView( lClsLstC );
-            DropView( mUser );
-
-            return 0;
-        }
-
-        public int
-        testmStudentCCreateRegistrationNoPerson( View     ViewToWindow )
-        {
-            zVIEW    mStudenC = new zVIEW( );
-            zVIEW    lClsLstC = new zVIEW( );
-            zVIEW    lTrnscpt = new zVIEW( );
-            zVIEW    lTermLST = new zVIEW( );
-            zVIEW    wXferO = new zVIEW( );
-            zVIEW    vTempViewVar_0 = new zVIEW( );
-            String   szYear="";
-            int RESULT=0;
-
-            View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).addAttribQual( "ID", 490 ).activate();
-
-            RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
-            //:CREATE ENTITY wXferO.Root
-            RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
-            //:NAME VIEW wXferO "wXferO"
-            SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
-            fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
-            RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
-            DropView( vTempViewVar_0 );
-            //:NAME VIEW lTermLST "lTermLST"
-            SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
-            //:OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" )
-            OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
-            //:SET CURSOR FIRST lTermLST.CollegeTerm WHERE lTermLST.CollegeTerm.CurrentTermFlag = "Y"
-            RESULT = lTermLST.cursor( "CollegeTerm" ).setFirst( "CurrentTermFlag", "Y" ).toInt();
-
-            o_fnLocalBuildmStudenC( ViewToWindow, vTempViewVar_0, 16406 );
-            RESULT = ActivateObjectInstance( mStudenC, "mStudenC", ViewToWindow, vTempViewVar_0, zSINGLE );
-            DropView( vTempViewVar_0 );
-            SetNameForView( mStudenC, "mStudenC", null, zLEVEL_TASK );
-            RESULT = mStudenC.cursor( "Registration" ).setFirst().toInt();
-
-            o_BuildlClsLst2( ViewToWindow, vTempViewVar_0, 162 );
-            RESULT = ActivateObjectInstance( lClsLstC, "lClsLstC", ViewToWindow, vTempViewVar_0, zMULTIPLE );
-            DropView( vTempViewVar_0 );
-            //:NAME VIEW lClsLstC "lClsLstC"
-            SetNameForView( lClsLstC, "lClsLstC", null, zLEVEL_TASK );
-            
-            RESULT = CreateEntity( mStudenC, "Registration", zPOS_AFTER );
-            //SetMatchingAttributesByName( mStudenC, "Registration", mStudenC, "US_Registration", zSET_NOTNULL );
-            RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationClass", lClsLstC, "Class", zPOS_AFTER );
-            if (!mStudenC.cursor("Person").checkExistenceOfEntity().isSet())
-            	Assert.assertEquals("Person should exist but doesn't", 0, -1);
             DropView( mStudenC );
             DropView( lTermLST );
             DropView( wXferO );

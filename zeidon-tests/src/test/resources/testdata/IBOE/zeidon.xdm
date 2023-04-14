@@ -1,6 +1,20 @@
-z1000-Zeidon    ZEIDON   TZDMXGPO 10/24/18   15:22:01 1.0a2    
+z1000-Zeidon    ZEIDON   TZDMXGPO 03/28/23   14:29:28 1.0a2    
 eDomainGroup 1
 aName      NazSIS
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110002058
+aName      AcademicHold
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110002059
+aName      AcademicHold
+aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -27,10 +41,10 @@ aExternalValue System
 aInternalValue System
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000573
 aName      ActivityStatus
-aDesc      AdminDivisionStaticTableDomain
+aDesc      AdminDivisionDynamicTableDomain
 aDomainType T
 aDataType  S
 aMaxStringLth 1
@@ -378,6 +392,42 @@ aExternalValue Waived
 aInternalValue W
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154860
+aName      ApplicationSections
+aDomainType E
+aDataType  S
+aMaxStringLth 10000000
+aContextRestriction N
+
+eContext   3
+aZKey      510154861
+aName      ApplicationSections
+aIsDefault Y
+
+eContext   3
+aZKey      510154862
+aName      NoTranslation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154857
+aName      ApplicationSettings
+aDomainType E
+aDataType  S
+aMaxStringLth 10000000
+aContextRestriction N
+
+eContext   3
+aZKey      510154858
+aName      ApplicationSettings
+aIsDefault Y
+
+eContext   3
+aZKey      510154859
+aName      NoTranslation
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110004957
 aName      ApprovedDeniedState
@@ -600,6 +650,23 @@ aExternalValue Manual
 aInternalValue M
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000837
+aName      BillingCode
+aDesc      Used for specialized billing rules.
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000838
+aName      BillingCode
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.BlobDomain
 aZKey      110000002
 aName      Blob
@@ -694,6 +761,24 @@ aInternalValue Relative
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154854
+aName      BuildingName
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      510154855
+aName      BuildingName
+aIsDefault Y
+
+eContext   3
+aZKey      510154856
+aName      NoTranslation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110002755
 aName      CampusID
 aDesc      Unique ID identifying a student/faculty or staff person on campus
@@ -706,6 +791,24 @@ eContext   3
 aZKey      110002756
 aName      CampusID
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154830
+aName      CampusName
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      510154831
+aName      CampusName
+aIsDefault Y
+
+eContext   3
+aZKey      510154832
+aName      NoTranslation
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -1651,7 +1754,7 @@ aExternalValue false
 aInternalValue false
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000424
 aName      CohortActivityType
 aDomainType T
@@ -1665,16 +1768,6 @@ eContext   3
 aZKey      110000425
 aName      CohortActivityType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110000426
-aExternalValue Not Enough Students
-aInternalValue N
-
-eTableEntry 4
-aZKey      110000427
-aExternalValue Location Problems
-aInternalValue L
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -1742,6 +1835,24 @@ aExternalValue Completed
 aInternalValue D
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154842
+aName      CollegeDegreeName
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      510154843
+aName      CollegeDegreeName
+aIsDefault Y
+
+eContext   3
+aZKey      510154844
+aName      NoTranslation
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110002807
 aName      CollegeSemester
@@ -1794,35 +1905,6 @@ eContext   3
 aZKey      110002127
 aName      CollegeTermSemester
 aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      110002761
-aName      CollegeType
-aDomainType T
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      110002762
-aName      CollegeType
-aIsDefault Y
-
-eTableEntry 4
-aZKey      110002764
-aExternalValue Undergraduate
-aInternalValue U
-
-eTableEntry 4
-aZKey      110002765
-aExternalValue Graduate
-aInternalValue G
-
-eTableEntry 4
-aZKey      110002766
-aExternalValue Certificate
-aInternalValue C
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -2170,9 +2252,21 @@ aDLL_Name  TZAPDMAA
 aOperName  zdmDynamicTable
 
 eContext   3
+aZKey      110000836
+aName      AD_ISO3116CountryNumericCode
+
+eContext   3
+aZKey      110000835
+aName      AD_ISO3166CountryName
+
+eContext   3
 aZKey      110000658
 aName      Country
 aIsDefault Y
+
+eContext   3
+aZKey      110000841
+aName      CurrentHESAValues
 
 eContext   3
 aZKey      110000671
@@ -2184,12 +2278,30 @@ aName      OnlineAppCountry
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154845
+aName      CourseDescription
+aDomainType E
+aDataType  S
+aMaxStringLth 10000000
+aContextRestriction N
+
+eContext   3
+aZKey      510154846
+aName      CourseDescription
+aIsDefault Y
+
+eContext   3
+aZKey      510154847
+aName      NoTranslation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110002864
 aName      CourseNumber
 aDesc      The string which uniquely identifies a Course
 aDomainType E
 aDataType  S
-aMaxStringLth 10
+aMaxStringLth 20
 aContextRestriction N
 
 eContext   3
@@ -2274,6 +2386,43 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154851
+aName      CourseTitleLang
+aDesc      This is different from CourseTitle domain because it is specific to the course table/entity.
+aDomainType E
+aDataType  S
+aMaxStringLth 100
+aContextRestriction N
+
+eContext   3
+aZKey      510154852
+aName      CourseTitleLang
+aIsDefault Y
+
+eContext   3
+aZKey      510154853
+aName      NoTranslation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154866
+aName      CourseTopic
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+
+eContext   3
+aZKey      510154867
+aName      CourseTopic
+aIsDefault Y
+
+eContext   3
+aZKey      510154868
+aName      NoTranslation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110002862
 aName      CourseTopicNumber
 aDesc      A string which uniquely identifies a Course Topic within a Course
@@ -2286,6 +2435,84 @@ eContext   3
 aZKey      110002863
 aName      CourseTopicNumber
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110001839
+aName      CustomAttributeDataType
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      110001840
+aName      CustomAttributeDataType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110001846
+aExternalValue Prospect
+aInternalValue PR
+
+eTableEntry 4
+aZKey      110001850
+aExternalValue Instructor
+aInternalValue I
+
+eTableEntry 4
+aZKey      110001842
+aExternalValue Student
+aInternalValue S
+
+eTableEntry 4
+aZKey      110001843
+aExternalValue Financial Aid
+aInternalValue FA
+
+eTableEntry 4
+aZKey      110001841
+aExternalValue Person
+aInternalValue P
+
+eTableEntry 4
+aZKey      110001844
+aExternalValue Student Accounts
+aInternalValue SA
+
+eTableEntry 4
+aZKey      110001851
+aExternalValue Employee
+aInternalValue E
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      111000799
+aName      DashboardEntryDefinitionType
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      111000800
+aName      DashboardEntryDefinitionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      111000801
+aExternalValue List
+aInternalValue List
+
+eTableEntry 4
+aZKey      111000802
+aExternalValue Pie Chart
+aInternalValue Pie
+
+eTableEntry 4
+aZKey      111000804
+aExternalValue Simple Bar
+aInternalValue SimpleBar
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -2327,42 +2554,66 @@ aMaxStringLth 1
 aContextRestriction N
 
 eContext   3
-aZKey      110007686
+aZKey      318135436
+aName      CustomFieldData
+
+eTableEntry 4
+aZKey      318135437
+aExternalValue Text
+aInternalValue S
+
+eTableEntry 4
+aZKey      318135518
+aExternalValue Yes or No
+aInternalValue Y
+
+eTableEntry 4
+aZKey      318135438
+aExternalValue Date
+aInternalValue D
+
+eContext   3
+aZKey      318135439
 aName      DataTypeDomain
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110007688
+aZKey      318135440
 aExternalValue String
 aInternalValue S
 
 eTableEntry 4
-aZKey      110007689
+aZKey      318135441
 aExternalValue Number
 aInternalValue L
 
 eTableEntry 4
-aZKey      110007690
+aZKey      318135442
 aExternalValue Decimal
 aInternalValue M
 
 eTableEntry 4
-aZKey      110007691
+aZKey      318135443
 aExternalValue Date
 aInternalValue D
 
 eTableEntry 4
-aZKey      110007692
+aZKey      318135519
+aExternalValue Yes or No
+aInternalValue Y
+
+eTableEntry 4
+aZKey      318135444
 aExternalValue Date & Time
 aInternalValue T
 
 eTableEntry 4
-aZKey      110007693
+aZKey      318135445
 aExternalValue Time
 aInternalValue I
 
 eTableEntry 4
-aZKey      110007694
+aZKey      318135446
 aExternalValue Blob
 aInternalValue B
 
@@ -2386,6 +2637,7 @@ aJavaEditString yyyyMMdd
 eContext   3
 aZKey      90000068
 aName      Day
+aJavaEditString e
 
 eContext   3
 aZKey      90000074
@@ -2441,6 +2693,18 @@ aEditString mm-dd-YYYY
 aJavaEditString MM-dd-yyyy
 
 eContext   3
+aZKey      354026027
+aName      MM.DD.YY
+aEditString mm.dd.YY
+aJavaEditString MM.dd.yy
+
+eContext   3
+aZKey      354026026
+aName      MM.DD.YYYY
+aEditString mm.dd.YYYY
+aJavaEditString MM.dd.yyyy
+
+eContext   3
 aZKey      354026021
 aName      MM/DD/YY
 aEditString mm/dd/YYYY
@@ -2451,6 +2715,12 @@ aZKey      90000054
 aName      MM/DD/YYYY
 aEditString mm/dd/YYYY
 aJavaEditString MM/dd/yyyy
+
+eContext   3
+aZKey      354026028
+aName      Mon-DD-YYYY
+aEditString Mmm-dd-YYYY
+aJavaEditString MMM-dd-yyyy
 
 eContext   3
 aZKey      90000064
@@ -2679,6 +2949,30 @@ aEditString mm-dd-YYYY
 aJavaEditString MM-dd-yyyy
 
 eContext   3
+aZKey      354026023
+aName      MM.DD.YYYY
+aEditString mm.dd.YYYY
+aJavaEditString MM.dd.yyyy
+
+eContext   3
+aZKey      354026024
+aName      MM.DD.YYYY HH:MM
+aEditString mm.dd.YYYY HH:MI
+aJavaEditString MM.dd.yyyy HH:mm
+
+eContext   3
+aZKey      354026022
+aName      MM.DD.YYYY HH:MM AM
+aEditString mm.dd.YYYY HH:Mi AM
+aJavaEditString MM.dd.yyyy hh:mm a
+
+eContext   3
+aZKey      354026025
+aName      MM.DD.YYYY HH:MM:SS
+aEditString mm.dd.YYYY HH:MI:SS
+aJavaEditString MM.dd.yyyy HH:mm:ss
+
+eContext   3
 aZKey      90000094
 aName      MM/DD/YYYY
 aEditString mm/dd/YYYY
@@ -2879,11 +3173,13 @@ eContext   3
 aZKey      90000132
 aName      DECIMAL1
 aDecimalFormat 1
+aJavaEditString #,##0.0
 
 eContext   3
 aZKey      90000133
 aName      DECIMAL2
 aDecimalFormat 2
+aJavaEditString #,##0.00
 aIsDefault Y
 
 eContext   3
@@ -3262,7 +3558,7 @@ eContext   3
 aZKey      90000202
 aName      DECIMAL2
 aDecimalFormat 2
-aJavaEditString #,###.00
+aJavaEditString #,##0.00
 aIsDefault Y
 
 eContext   3
@@ -3388,11 +3684,13 @@ eContext   3
 aZKey      90000179
 aName      DECIMAL2
 aDecimalFormat 2
+aJavaEditString #,##0.00
 
 eContext   3
 aZKey      90000180
 aName      DECIMAL3
 aDecimalFormat 3
+aJavaEditString #,##0.000
 aIsDefault Y
 
 eContext   3
@@ -3818,6 +4116,24 @@ aName      DegreeMajorCode
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154836
+aName      DegreeMajorName
+aDomainType E
+aDataType  S
+aMaxStringLth 256
+aContextRestriction N
+
+eContext   3
+aZKey      510154837
+aName      DegreeMajorName
+aIsDefault Y
+
+eContext   3
+aZKey      510154838
+aName      NoTranslation
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110002718
 aName      DegreeTrackComprehensiveScore
@@ -3917,6 +4233,24 @@ aExternalValue Developmental
 aInternalValue D
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154839
+aName      DegreeTrackName
+aDomainType E
+aDataType  S
+aMaxStringLth 256
+aContextRestriction N
+
+eContext   3
+aZKey      510154840
+aName      DegreeTrackName
+aIsDefault Y
+
+eContext   3
+aZKey      510154841
+aName      NoTranslation
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110002745
 aName      DegreeTrackStatus
@@ -4000,6 +4334,24 @@ aExternalValue Communication Arts
 aInternalValue CommunicationArts
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154833
+aName      DepartmentName
+aDomainType E
+aDataType  S
+aMaxStringLth 50
+aContextRestriction N
+
+eContext   3
+aZKey      510154834
+aName      DepartmentName
+aIsDefault Y
+
+eContext   3
+aZKey      510154835
+aName      NoTranslation
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110005047
 aName      DependencyStatus
@@ -4061,11 +4413,11 @@ aDomainType E
 aDataType  S
 aMaxStringLth 32000
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmText
+aDLL_Name  TZAPDMAD
+aOperName  zdmInteger
 
 eContext   3
-aZKey      90000031
+aZKey      318135517
 aName      Description
 aIsDefault Y
 
@@ -4093,27 +4445,27 @@ aMaxStringLth 1
 aContextRestriction N
 
 eContext   3
-aZKey      110007679
+aZKey      318135431
 aName      DM_DomainType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110007681
+aZKey      318135432
 aExternalValue A
 aInternalValue A
 
 eTableEntry 4
-aZKey      110007682
+aZKey      318135433
 aExternalValue T
 aInternalValue T
 
 eTableEntry 4
-aZKey      110007683
+aZKey      318135434
 aExternalValue E
 aInternalValue E
 
 eTableEntry 4
-aZKey      110007684
+aZKey      318135435
 aExternalValue F
 aInternalValue F
 
@@ -4128,24 +4480,29 @@ aMaxStringLth 1
 aContextRestriction N
 
 eContext   3
-aZKey      110005204
+aZKey      110000767
 aName      DocumentType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110005206
-aExternalValue Postal Mailing
-aInternalValue M
+aZKey      110000768
+aExternalValue HTML Email
+aInternalValue H
 
 eTableEntry 4
-aZKey      110005207
-aExternalValue E-Mailing
-aInternalValue E
+aZKey      110000769
+aExternalValue TXT Email
+aInternalValue T
 
 eTableEntry 4
-aZKey      110005208
-aExternalValue Report
-aInternalValue R
+aZKey      110000770
+aExternalValue ODT Document
+aInternalValue O
+
+eTableEntry 4
+aZKey      110000772
+aExternalValue DOCX Document
+aInternalValue D
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -4380,6 +4737,16 @@ aZKey      110002046
 aExternalValue Credit Card
 aInternalValue C
 
+eTableEntry 4
+aZKey      110002063
+aExternalValue MPESA
+aInternalValue P
+
+eTableEntry 4
+aZKey      110002064
+aExternalValue Bank Payment
+aInternalValue B
+
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.EmailAddressDomain
 aZKey      110001823
@@ -4432,6 +4799,10 @@ eTableEntry 4
 aZKey      110001740
 aExternalValue Person
 aInternalValue R
+
+eTableEntry 4
+aZKey      110002053
+aInternalValue PS
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -4827,7 +5198,7 @@ aExternalValue Private
 aInternalValue T
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000577
 aName      EventType
 aDomainType T
@@ -4844,6 +5215,20 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110002056
+aName      ExamBoardRecommendation
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      110002057
+aName      ExamBoardRecommendation
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000506
 aName      ExamType
 aDomainType T
@@ -4997,6 +5382,22 @@ eTableEntry 4
 aZKey      110001811
 aExternalValue Trans - Acct Amount for Category
 aInternalValue TAA
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000831
+aName      ExternalAccess
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000832
+aName      ExternalAccess
+aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -5187,6 +5588,11 @@ eTableEntry 4
 aZKey      110001290
 aExternalValue Gift Aid
 aInternalValue G
+
+eTableEntry 4
+aZKey      110001335
+aExternalValue Not EFA
+aInternalValue N
 
 eTableEntry 4
 aZKey      110001291
@@ -7078,6 +7484,20 @@ aInternalValue A
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110001336
+aName      FA_RuleCode
+aDomainType T
+aDataType  S
+aMaxStringLth 8
+aContextRestriction N
+
+eContext   3
+aZKey      110001337
+aName      FA_RuleCode
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110000936
 aName      FA_RuleType
 aDomainType T
@@ -7378,6 +7798,30 @@ aName      FacultyType
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110001330
+aName      FAISIR_AssumeYesNo
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110001331
+aName      FAISIR_AssumeYesNo
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110001332
+aExternalValue Assumed Yes
+aInternalValue 1
+
+eTableEntry 4
+aZKey      110001333
+aExternalValue Assumed No
+aInternalValue 2
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000041
 aName      FAISIR_DynamicTableMultiple
@@ -7552,6 +7996,7 @@ eContext   3
 aZKey      110001678
 aName      FederalIdentificationNumber
 aEditString 99-9999999
+aJavaEditString 99-9999999
 aIsDefault Y
 
 eDomain    2
@@ -7587,6 +8032,50 @@ eTableEntry 4
 aZKey      110000677
 aExternalValue Final
 aInternalValue F
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000811
+aName      FileUploadSize
+aDomainType T
+aDataType  L
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      110000812
+aName      FileUploadSize
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110000815
+aExternalValue 10
+aInternalValue 10000000
+
+eTableEntry 4
+aZKey      110000816
+aExternalValue 20
+aInternalValue 20000000
+
+eTableEntry 4
+aZKey      110000817
+aExternalValue 30
+aInternalValue 30000000
+
+eTableEntry 4
+aZKey      110000818
+aExternalValue 40
+aInternalValue 40000000
+
+eTableEntry 4
+aZKey      110000820
+aExternalValue 50
+aInternalValue 50000000
+
+eTableEntry 4
+aZKey      110000821
+aExternalValue 60
+aInternalValue 60000000
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -7846,6 +8335,11 @@ eTableEntry 4
 aZKey      110001207
 aExternalValue Credit Card - Discover
 aInternalValue D
+
+eTableEntry 4
+aZKey      110001338
+aExternalValue Bsnk Transfer
+aInternalValue B
 
 eContext   3
 aZKey      110001208
@@ -8120,6 +8614,11 @@ aExternalValue Donors
 aInternalValue Donors
 
 eTableEntry 4
+aZKey      110000773
+aExternalValue Directory
+aInternalValue Directory
+
+eTableEntry 4
 aZKey      110000553
 aExternalValue Faculty Services
 aInternalValue FacultyServices
@@ -8215,6 +8714,11 @@ aExternalValue Students
 aInternalValue Students
 
 eTableEntry 4
+aZKey      110000783
+aExternalValue Alumni Portal
+aInternalValue Alumni Portal
+
+eTableEntry 4
 aZKey      110000554
 aExternalValue System Administration
 aInternalValue System Administration
@@ -8223,6 +8727,80 @@ eTableEntry 4
 aZKey      110000563
 aExternalValue VehicleRegistration
 aInternalValue VehicleRegistration
+
+eContext   3
+aZKey      110000786
+aName      HelpAreas
+
+eTableEntry 4
+aZKey      110000788
+aExternalValue Academics
+aInternalValue Academics
+
+eTableEntry 4
+aZKey      110000789
+aExternalValue Admissions
+aInternalValue Admissions
+
+eTableEntry 4
+aZKey      110000790
+aExternalValue Constituency
+aInternalValue Constituency
+
+eTableEntry 4
+aZKey      110000791
+aExternalValue Development
+aInternalValue Development
+
+eTableEntry 4
+aZKey      110000792
+aExternalValue Financial Aid
+aInternalValue FinancialAid
+
+eTableEntry 4
+aZKey      110000793
+aExternalValue Staff Portal
+aInternalValue General
+
+eTableEntry 4
+aZKey      110000794
+aExternalValue Human Resources
+aInternalValue HumanResources
+
+eTableEntry 4
+aZKey      110000795
+aExternalValue Instructor Portal
+aInternalValue Instructor Portal
+
+eTableEntry 4
+aZKey      110000796
+aExternalValue Student Life
+aInternalValue Student Life
+
+eTableEntry 4
+aZKey      110000797
+aExternalValue Student Accounts
+aInternalValue StudentAccounts
+
+eTableEntry 4
+aZKey      110000798
+aExternalValue Student Portal
+aInternalValue Student Portal
+
+eTableEntry 4
+aZKey      110000799
+aExternalValue Alumni Portal
+aInternalValue Alumni Portal
+
+eTableEntry 4
+aZKey      110000853
+aExternalValue Reports
+aInternalValue Reports
+
+eTableEntry 4
+aZKey      110000800
+aExternalValue System Administration
+aInternalValue System Administration
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -8414,7 +8992,7 @@ aMaxStringLth 50
 aContextRestriction N
 
 eContext   3
-aZKey      110001836
+aZKey      110007698
 aName      GeneralName_Address
 aIsDefault Y
 
@@ -8934,7 +9512,7 @@ aExternalValue Operating
 aInternalValue O
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aJavaClass com.quinsoft.zeidon.domains.IntegerDomain
 aZKey      110000046
 aName      GovernmentID
 aDomainType E
@@ -9007,36 +9585,6 @@ aZKey      110004529
 aName      GraduationYear
 aEditString 9999
 aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      110002667
-aName      GradUndergradOverrideFlag
-aDesc      G - Undergrad Class is taken as grad, U - Grad Class is taken as undergrad
-aDomainType T
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      110002668
-aName      GradUndergradOverrideFlag
-aIsDefault Y
-
-eTableEntry 4
-aZKey      110002670
-aExternalValue Graduate
-aInternalValue G
-
-eTableEntry 4
-aZKey      110002671
-aExternalValue Undergraduate
-aInternalValue U
-
-eTableEntry 4
-aZKey      110002672
-aExternalValue Certificate
-aInternalValue C
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -9139,6 +9687,20 @@ aInternalValue I
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003055
+aName      HealthSupportType
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      110003056
+aName      HealthSupportType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110004925
 aName      HealthTB_RiskAssessment
 aDomainType T
@@ -9231,6 +9793,1010 @@ aInternalValue P
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000715
+aName      HESAAccommodationType
+aDesc      Records the type of accommodation the student is living in during term time.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000716
+aName      HESAAccommodationType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000867
+aName      HESAActDurationType
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000869
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000868
+aName      HESAActDurationType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000870
+aName      HESAActivityTypeID
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000872
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000871
+aName      HESAActivityTypeID
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000747
+aName      HESAAwardingBodyRelationship
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000748
+aName      HESAAwardingBodyRelationship
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000711
+aName      HESACareLeaverType
+aDesc      Records whether the Student is a care leaver.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000845
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000712
+aName      HESACareLeaverType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000810
+aName      HESACarer
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000847
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000810
+aName      HESACarer
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000804
+aName      HESACompletionYearInstance
+aDesc      Completion of year of instance (FUNDCOMP)
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      110000804
+aName      HESACompletionYearInstance
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000707
+aName      HESACostCentre
+aDesc      The cost centre associated with the specified Module delivery.
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000708
+aName      HESACostCentre
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000767
+aName      HESACourseAim
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000768
+aName      HESACourseAim
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000685
+aName      HESACourseDeliveryInitiative
+aDesc      Scheme associated with course delivery.
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000686
+aName      HESACourseDeliveryInitiative
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000679
+aName      HESACourseDeliveryModeType
+aDesc      Full-time, Part-time, etc.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000680
+aName      HESACourseDeliveryModeType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000683
+aName      HESACourseDeliveryType
+aDesc      Type of Course delivery.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000684
+aName      HESACourseDeliveryType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000769
+aName      HESACourseSubject
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000770
+aName      HESACourseSubject
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000826
+aName      HESACreditScheme
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      110000827
+aName      HESACreditScheme
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000771
+aName      HESADegreeClassification
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000772
+aName      HESADegreeClassification
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000727
+aName      HESADisability
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000844
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000728
+aName      HESADisability
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000863
+aName      HESAEFundingLength
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000865
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000864
+aName      HESAEFundingLength
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000719
+aName      HESAEquivalentOrLowerQual
+aDesc      Capture whether a student is aiming for an Equivalent or Lower Qualification than one already achieved.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000720
+aName      HESAEquivalentOrLowerQual
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000729
+aName      HESAEthnicity
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+
+eContext   3
+aZKey      110000839
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000757
+aName      HESAETHNIC
+aDecimalFormat 3
+
+eContext   3
+aZKey      110000730
+aName      HESAEthnicity
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000695
+aName      HESAFeeEligibility
+aDesc      Distinguish those students who are eligible to pay home fees from those who are not, in cases where there are separate levels of fees for 'home' students and for others.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000696
+aName      HESAFeeEligibility
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000703
+aName      HESAFinancialSupportType
+aDesc      Type of financial support that this scheme provides.
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000704
+aName      HESAFinancialSupportType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000741
+aName      HESAFoundationYear
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000742
+aName      HESAFoundationYear
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000801
+aName      HESAFundability
+aDesc      HESA Fundability Code (FUNDCODE)
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      110000802
+aName      HESAFundability
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000723
+aName      HESAFundingBody
+aDesc      Collects the body that is responsible for allocating funding for a fundable StudentCourseSession.
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000866
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000724
+aName      HESAFundingBody
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000721
+aName      HESAFundingCompletion
+aDesc      The Student's completion status with respect to the associated Student course session.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000722
+aName      HESAFundingCompletion
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000687
+aName      HESAFundingLevel
+aDesc      Indicates the level of qualifications normally required to enter the Course delivery, and the number of teaching weeks in a single year of the Course delivery.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000688
+aName      HESAFundingLevel
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000824
+aName      HESAGenderID
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDecimal
+
+eContext   3
+aZKey      110000840
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000825
+aName      HESAGenderID
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000689
+aName      HESAHighestQualOnEntry
+aDesc      The highest qualification held by the student prior to the Engagement, this is not necessarily the qualification applicable to entry to the course.
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      110000851
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000690
+aName      HESAHighestQualOnEntry
+aIsDefault Y
+
+eContext   3
+aZKey      110000756
+aName      HESAQUALENT3
+aDecimalFormat 5
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000713
+aName      HESAIdentifierTypeCode
+aDesc      Records the type of identifier recorded in personIdentifier.PERSONALIDENTIFIER.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000714
+aName      HESAIdentifierTypeCode
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000739
+aName      HESAIncomingExchange
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000740
+aName      HESAIncomingExchange
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000774
+aName      HESAInitiatives
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000775
+aName      HESAInitiatives
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000876
+aName      HESAInvoiceID
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000878
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000877
+aName      HESAInvoiceID
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000805
+aName      HESALevelApplicableFunding
+aDesc      Level applicable to funding council HESES (FUNDLEV)
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      110000806
+aName      HESALevelApplicableFunding
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000745
+aName      HESALevelOfCreditPoints
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000746
+aName      HESALevelOfCreditPoints
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000781
+aName      HESANotActive
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000782
+aName      HESANotActive
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000681
+aName      HESANumericRange
+aDesc      1,2,3,4,etc.
+aDomainType T
+aDataType  S
+aMaxStringLth 3
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000682
+aName      HESANumericRange
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110000749
+aExternalValue 1
+aInternalValue 1
+
+eTableEntry 4
+aZKey      110000751
+aExternalValue 3
+aInternalValue 3
+
+eTableEntry 4
+aZKey      110000750
+aExternalValue 4
+aInternalValue 4
+
+eTableEntry 4
+aZKey      110000754
+aExternalValue 5
+aInternalValue 5
+
+eTableEntry 4
+aZKey      110000752
+aExternalValue 10
+aInternalValue 10
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000699
+aName      HESAOpenEngagementFlag
+aDesc      Where the Student is continuing on the associated Engagement.
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000700
+aName      HESAOpenEngagementFlag
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000731
+aName      HESAParentalEducation
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000848
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000732
+aName      HESAParentalEducation
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000744
+aName      HESAPlacement
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000744
+aName      HESAPlacement
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000854
+aName      HESAPrerequisite
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000856
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000855
+aName      HESAPrerequisite
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000691
+aName      HESAPreviousProvider
+aDesc      The last provider attended by the student prior to beginning the Engagement.
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110000850
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000755
+aName      HESAPREVINST
+
+eContext   3
+aZKey      110000692
+aName      HESAPreviousProvider
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000778
+aName      HESAQualAwarded
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000780
+aName      DFQualCategory
+
+eContext   3
+aZKey      110000779
+aName      HESAQualAwarded
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000709
+aName      HESAQualificationCategory
+aDesc      Qualification category.
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000710
+aName      HESAQualificationCategory
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000697
+aName      HESAQualResult
+aDesc      Result of Qualification achieved by the Student
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000852
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000698
+aName      HESAQualResult
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000717
+aName      HESAReasonCourseSessionEnding
+aDesc      Reason that a Student course session has ended
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000718
+aName      HESAReasonCourseSessionEnding
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000702
+aName      HESAReasonStudentRegEnding
+aDesc      Reason the Student Registration has ended
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000702
+aName      HESAReasonStudentRegEnding
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000733
+aName      HESAReligion
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+
+eContext   3
+aZKey      110000842
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000734
+aName      HESAReligion
+aIsDefault Y
+
+eContext   3
+aZKey      110000761
+aName      OLDHESAReligion
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000822
+aName      HESASexOrient
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000843
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000823
+aName      HESASexOrient
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000873
+aName      HESASOC2020
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000875
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000874
+aName      HESASOC2020
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000735
+aName      HESASocioEconomicClass
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000849
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000736
+aName      HESASocioEconomicClass
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000737
+aName      HESAStandardOccupationalClass
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000846
+aName      CurrentHESAValues
+
+eContext   3
+aZKey      110000738
+aName      HESAStandardOccupationalClass
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000693
+aName      HESAStudyIntention
+aDesc      The intended qualification at the time of entry to the Engagement.
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000694
+aName      HESAStudyIntention
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000705
+aName      HESASubjectIdentifier
+aDesc      The subject of study for the module.
+aDomainType T
+aDataType  S
+aMaxStringLth 6
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000706
+aName      HESASubjectIdentifier
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000725
+aName      HESAValueType
+aDesc      110
+values(Disability, Ethnicity, Nationality, ParentalEducation,Religion, SocioEconomic, StandardOccupational)
+ 
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000726
+aName      HESAValueType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110002899
 aName      HonorsGraduationLevel
 aDesc      NO LONGER USED
@@ -9258,6 +10824,25 @@ eTableEntry 4
 aZKey      110002903
 aExternalValue Cum
 aInternalValue C
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154848
+aName      HostMessages
+aDesc      This domain is for HostLoginPages/HostStandardTexts values. The HostLangDomain assumes that there is only one database row for the entity (as opposed to CourseTitle where there are hundreds of Course(s)).
+aDomainType E
+aDataType  S
+aMaxStringLth 10000000
+aContextRestriction N
+
+eContext   3
+aZKey      510154849
+aName      HostMessages
+aIsDefault Y
+
+eContext   3
+aZKey      510154850
+aName      NoTranslation
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -10140,6 +11725,20 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000807
+aName      IntendedLevelMPhilPhD
+aDomainType T
+aDataType  S
+aMaxStringLth 4
+aContextRestriction N
+
+eContext   3
+aZKey      110000808
+aName      IntendedLevelMPhilPhD
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110000457
 aName      InterestType
 aDomainType T
@@ -10206,7 +11805,9 @@ eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110001002
 aName      IPEDS_CollegeDegreeLevelCode
-aDesc      Code for input on IPEDS reports for degree level
+aDesc      219
+Code for input on IPEDS reports for degree level
+03/06/19 - Changing the values of this domain to the values in the Clearinghouse Program Credential levels. There is only code that converts this to program credential. 
 aDomainType T
 aDataType  S
 aMaxStringLth 2
@@ -10218,39 +11819,49 @@ aName      IPEDS_CollegeDegreeLevelCode
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110001004
-aExternalValue Certificate Less than 1 Year
-aInternalValue 1
+aZKey      110001315
+aExternalValue 01 - Undergraduate Certificate or Diploma Program
+aInternalValue 01
 
 eTableEntry 4
-aZKey      110001005
-aExternalValue Postseconday Certificate > 1 < 2 Years
-aInternalValue 2
+aZKey      110001316
+aExternalValue 02 - Associate's Degree
+aInternalValue 02
 
 eTableEntry 4
-aZKey      110001006
-aExternalValue Associate
-aInternalValue 3
+aZKey      110001317
+aExternalValue 03 - Bachelor's Degree
+aInternalValue 03
 
 eTableEntry 4
-aZKey      110001007
-aExternalValue Bachelor
-aInternalValue 5
+aZKey      110001318
+aExternalValue 04 - Post Baccalaureate Certificate
+aInternalValue 04
 
 eTableEntry 4
-aZKey      110001008
-aExternalValue Postbaccaalaureate Certificate
-aInternalValue 6
+aZKey      110001319
+aExternalValue 05 - Master's Degree
+aInternalValue 05
 
 eTableEntry 4
-aZKey      110001009
-aExternalValue Master
-aInternalValue 7
+aZKey      110001320
+aExternalValue 06 - Doctoral Degree
+aInternalValue 06
 
 eTableEntry 4
-aZKey      110001010
-aExternalValue Post Master Certificate
-aInternalValue 8
+aZKey      110001321
+aExternalValue 07 - First Professional Degree
+aInternalValue 07
+
+eTableEntry 4
+aZKey      110001322
+aExternalValue 08 - Graduate/Professional Certificate
+aInternalValue 08
+
+eTableEntry 4
+aZKey      110001323
+aExternalValue 99 - Non-Credintial Program (Preparatory Coursework/Teacher Certification)
+aInternalValue 99
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -10402,6 +12013,25 @@ aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      110002060
+aName      LanguageTranslation
+aDesc      This is for text/note fields only.
+aDomainType E
+aDataType  S
+aMaxStringLth 10000000
+aContextRestriction N
+
+eContext   3
+aZKey      110002061
+aName      LanguageTranslation
+aIsDefault Y
+
+eContext   3
+aZKey      110002062
+aName      UseTranslation
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110001816
 aName      LastName
 aDesc      Person's Last Name
@@ -10433,6 +12063,23 @@ aName      LDAPContext
 aIsDefault Y
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000758
+aName      LeaveReason
+aDesc      Reason for the leave from school.
+aDomainType T
+aDataType  S
+aMaxStringLth 30
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000759
+aName      LeaveReason
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110001639
 aName      Local
@@ -10444,6 +12091,21 @@ aContextRestriction N
 eContext   3
 aZKey      110001640
 aName      Local
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000765
+aName      LocalizedLanguage
+aDesc      Identifies the language localization of a person
+aDomainType T
+aDataType  S
+aMaxStringLth 5
+aContextRestriction N
+
+eContext   3
+aZKey      225105255
+aName      LocalizedLanguage
 aIsDefault Y
 
 eDomain    2
@@ -10519,11 +12181,11 @@ aDomainType E
 aDataType  S
 aMaxStringLth 8
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmQSName
+aDLL_Name  TZAPDMAD
+aOperName  zdmInteger
 
 eContext   3
-aZKey      90203297
+aZKey      318135456
 aName      MetaName
 aIsDefault Y
 
@@ -10540,6 +12202,65 @@ aContextRestriction N
 eContext   3
 aZKey      110001813
 aName      MiddleName
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003047
+aName      MisconductAction
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110003048
+aName      MisconductAction
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003049
+aName      MisconductStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110003050
+aName      MisconductStatus
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003045
+aName      MisconductType
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110003046
+aName      MisconductType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000833
+aName      ModeOfStudy
+aDesc      Various Modes of Study (Full-Time, Distance, Part-Time, etc.)
+aDomainType T
+aDataType  S
+aMaxStringLth 30
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000834
+aName      ModeOfStudy
 aIsDefault Y
 
 eDomain    2
@@ -10828,13 +12549,37 @@ aName      Note
 aDesc      10000 byte string
 aDomainType E
 aDataType  S
-aMaxStringLth 10000
+aMaxStringLth 10000000
 aContextRestriction N
 
 eContext   3
-aZKey      1158060
+aZKey      110001852
 aName      Note
 aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110005230
+aName      OCC_SchoolType
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110005231
+aName      OCC_SchoolType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110005234
+aExternalValue Collaborator
+aInternalValue R
+
+eTableEntry 4
+aZKey      110005235
+aExternalValue Our School
+aInternalValue H
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -10864,7 +12609,7 @@ aExternalValue Secretary
 aInternalValue Secretary
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000313
 aName      OrganizationCurrentInterestLevel
 aDesc      The current level of interest by the Organization in marketing collaboration
@@ -10881,7 +12626,7 @@ aName      OrganizationCurrentInterestLevel
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000315
 aName      OrganizationFollowUpAction
 aDesc      The follow-up action to be taken relative to the last marketing contact
@@ -10898,7 +12643,7 @@ aName      OrganizationFollowUpAction
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110000311
 aName      OrganizationResponseToContact
 aDesc      The response by the Organization to an initial marketing contact
@@ -10928,6 +12673,22 @@ aOperName  zdmDynamicTable
 eContext   3
 aZKey      110000468
 aName      OrgRelatedRole
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000828
+aName      OutcomesStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000829
+aName      OutcomesStatus
 aIsDefault Y
 
 eDomain    2
@@ -11631,6 +13392,23 @@ aInternalValue F
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000784
+aName      POLARNumericRange
+aDesc      1,2,3,4,5
+aDomainType T
+aDataType  S
+aMaxStringLth 2
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000785
+aName      POLARNumericRange
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110005176
 aName      PotentialGiftType
 aDomainType T
@@ -11667,28 +13445,30 @@ aDomainType T
 aDataType  S
 aMaxStringLth 5
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmDynamicTable
 
 eContext   3
-aZKey      110000371
+aZKey      225105250
 aName      PrimaryLanguage
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110000372
+aZKey      225105251
 aExternalValue English
 aInternalValue EN
 
 eTableEntry 4
-aZKey      110000373
+aZKey      225105252
 aExternalValue French
 aInternalValue FR
 
 eTableEntry 4
-aZKey      110000374
+aZKey      225105253
 aExternalValue Spanish
 aInternalValue SP
+
+eContext   3
+aZKey      225105254
+aName      SupportedLanguages
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -11724,6 +13504,25 @@ eTableEntry 4
 aZKey      110000233
 aExternalValue Certificate
 aInternalValue C
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110003052
+aName      ProposedChangeType
+aDomainType T
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+
+eContext   3
+aZKey      110003053
+aName      ProposedChangeType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110003054
+aExternalValue Person
+aInternalValue Person
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -11879,7 +13678,7 @@ aName      ProspectEnrollmentCategory
 aDesc      Enrollment categories as defined by external reports
 aDomainType T
 aDataType  S
-aMaxStringLth 20
+aMaxStringLth 40
 aContextRestriction N
 aDLL_Name  TZAPDMAA
 aOperName  zdmDynamicTable
@@ -11888,9 +13687,6 @@ eContext   3
 aZKey      110004942
 aName      ProspectEnrollmentCategory
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110004943
 
 eTableEntry 4
 aZKey      110004944
@@ -12107,34 +13903,13 @@ aDomainType E
 aDataType  S
 aMaxStringLth 32
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmText
+aDLL_Name  TZAPDMAD
+aOperName  zdmInteger
 
 eContext   3
-aZKey      90000041
+aZKey      318135507
 aName      QSFILENAME
 aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      1165598
-aName      QSFullPathName
-aDesc      Construct full path expanding embedded environment variables to their value.
-aDomainType E
-aDataType  S
-aMaxStringLth 260
-aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmExpandEnvVar
-
-eContext   3
-aZKey      1165599
-aName      QSFullPathName
-aIsDefault Y
-
-eContext   3
-aZKey      1165601
-aName      TEXT
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
@@ -12145,47 +13920,12 @@ aDomainType E
 aDataType  S
 aMaxStringLth 32
 aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmQSName
+aDLL_Name  TZAPDMAD
+aOperName  zdmInteger
 
 eContext   3
-aZKey      90000039
+aZKey      318135477
 aName      QSName
-aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      90000036
-aName      QSNameLJNS
-aDesc      QuinSoft Name - left justified, no spaces
-aDomainType E
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmQSName
-
-eContext   3
-aZKey      90000037
-aName      QSNameLJNS
-aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      90000034
-aName      QSNameUpper
-aDesc      Characters 'a-z', 'A-Z', '0-9'
-aDomainType E
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-aDLL_Name  TZAPDMAA
-aOperName  zdmText
-aDecimalFormat 1234
-
-eContext   3
-aZKey      90000035
-aName      QSNAMEUPPER
 aIsDefault Y
 
 eDomain    2
@@ -12264,6 +14004,20 @@ aExternalValue Report
 aInternalValue R
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      110000761
+aName      QueryComboUpd
+aDomainType T
+aDataType  S
+aMaxStringLth 200
+aContextRestriction N
+
+eContext   3
+aZKey      110000762
+aName      QueryComboUpd
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110000671
 aName      QueryDataType
@@ -12286,6 +14040,99 @@ eTableEntry 4
 aZKey      110000674
 aExternalValue Numeric
 aInternalValue N
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      111000796
+aName      QueryLanguageConversion
+aDesc      Translates Advanced Query display attributes for displaying query results in lists, reports,  documents and dashboards.
+aDomainType E
+aDataType  S
+aMaxStringLth 10000
+aContextRestriction N
+
+eContext   3
+aZKey      111000797
+aName      QueryLanguageConversion
+aIsDefault Y
+
+eContext   3
+aZKey      111000798
+aName      UpdateInterface
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      111000784
+aName      QueryObjSummaryAttributeType
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      111000785
+aName      QueryObjSummaryAttributeType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      111000786
+aExternalValue Sum
+aInternalValue Sum
+
+eTableEntry 4
+aZKey      111000795
+aExternalValue Count
+aInternalValue Count
+
+eTableEntry 4
+aZKey      111000787
+aExternalValue Average
+aInternalValue Average
+
+eTableEntry 4
+aZKey      111000788
+aExternalValue Max
+aInternalValue Max
+
+eTableEntry 4
+aZKey      111000789
+aExternalValue Min
+aInternalValue Min
+
+eTableEntry 4
+aZKey      111000792
+aExternalValue Range Count
+aInternalValue RangeCount
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      111000780
+aName      QueryObjSummaryCriteriaType
+aDesc      Distinct or Range, etc.
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      111000781
+aName      QueryObjSummaryCriteriaType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      111000782
+aExternalValue Distinct Value
+aInternalValue Distinct
+
+eTableEntry 4
+aZKey      111000783
+aExternalValue Value Range
+aInternalValue Range
+
+eTableEntry 4
+aZKey      111000793
+aExternalValue Discrete Set
+aInternalValue Discrete
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -12323,12 +14170,52 @@ aMaxStringLth 1
 aContextRestriction N
 
 eContext   3
+aZKey      110000742
+aName      GeneralQuery
+
+eTableEntry 4
+aZKey      110000743
+aExternalValue Printed Report
+aInternalValue P
+
+eTableEntry 4
+aZKey      110000744
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      110000745
+aExternalValue CSV File Sparse
+aInternalValue S
+
+eTableEntry 4
+aZKey      110000746
+aExternalValue Result Set List
+aInternalValue L
+
+eContext   3
+aZKey      110000738
+aName      mAnalDResultSetOptions
+
+eTableEntry 4
+aZKey      110000739
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      110000740
+aExternalValue CSV File Sparse
+aInternalValue S
+
+eTableEntry 4
+aZKey      110000741
+aExternalValue XML Document
+aInternalValue X
+
+eContext   3
 aZKey      110000663
 aName      QueryResultType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110000664
 
 eTableEntry 4
 aZKey      110000665
@@ -12359,6 +14246,25 @@ eTableEntry 4
 aZKey      110000670
 aExternalValue XML Document
 aInternalValue X
+
+eTableEntry 4
+aZKey      110000766
+aExternalValue Graphics
+aInternalValue GR
+
+eContext   3
+aZKey      110000754
+aName      ResultSetOptions
+
+eTableEntry 4
+aZKey      110000757
+aExternalValue CSV File Full
+aInternalValue F
+
+eTableEntry 4
+aZKey      110000758
+aExternalValue CSV File Sparse
+aInternalValue S
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -12467,6 +14373,11 @@ eTableEntry 4
 aZKey      110000730
 aExternalValue subselect
 aInternalValue subselect
+
+eTableEntry 4
+aZKey      110000773
+aExternalValue is in list
+aInternalValue is in list
 
 eTableEntry 4
 aZKey      110000731
@@ -12732,6 +14643,22 @@ aOperName  zdmDynamicTable
 eContext   3
 aZKey      110001746
 aName      RCodyVisit
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000776
+aName      ReasonEndDegreeTrack
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110000777
+aName      ReasonEndDegreeTrack
 aIsDefault Y
 
 eDomain    2
@@ -13036,8 +14963,80 @@ aZKey      110005066
 aName      ReportType
 aDomainType T
 aDataType  S
-aMaxStringLth 1
+aMaxStringLth 10
 aContextRestriction N
+
+eContext   3
+aZKey      110005283
+aName      Dashboard
+
+eTableEntry 4
+aZKey      110005290
+aExternalValue Graph
+aInternalValue GPH
+
+eTableEntry 4
+aZKey      110005291
+aExternalValue Extension Summary
+aInternalValue QOE_SUMM
+
+eContext   3
+aZKey      110005273
+aName      MailMerge
+
+eTableEntry 4
+aZKey      110005274
+aExternalValue ODT Document Template
+aInternalValue ODT_T
+
+eTableEntry 4
+aZKey      110005275
+aExternalValue DOCX Document Template
+aInternalValue DOCX_T
+
+eTableEntry 4
+aZKey      110005276
+aExternalValue HTML Document Template
+aInternalValue HTML_T
+
+eTableEntry 4
+aZKey      110005277
+aExternalValue HTML Base Template
+aInternalValue HTML_BT
+
+eContext   3
+aZKey      110005270
+aName      Report
+
+eTableEntry 4
+aZKey      110005271
+aExternalValue CSV Sparse File
+aInternalValue CSV_S
+
+eTableEntry 4
+aZKey      110005272
+aExternalValue CSV Full File
+aInternalValue CSV_F
+
+eTableEntry 4
+aZKey      110005296
+aExternalValue ODT Document Template
+aInternalValue ODT_T
+
+eTableEntry 4
+aZKey      110005297
+aExternalValue DOCX Document Template
+aInternalValue DOCX_T
+
+eTableEntry 4
+aZKey      110005298
+aExternalValue HTML Document Template
+aInternalValue HTML_T
+
+eTableEntry 4
+aZKey      110005299
+aExternalValue HTML Base Template
+aInternalValue HTML_BT
 
 eContext   3
 aZKey      110005067
@@ -13045,22 +15044,49 @@ aName      ReportType
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110005068
+aZKey      110005069
+aExternalValue ODT Document Template
+aInternalValue ODT_T
 
 eTableEntry 4
-aZKey      110005069
-aExternalValue Document Template
-aInternalValue D
+aZKey      110005224
+aExternalValue DOCX Document Template
+aInternalValue DOCX_T
+
+eTableEntry 4
+aZKey      110005225
+aExternalValue HTML Document Template
+aInternalValue HTML_T
+
+eTableEntry 4
+aZKey      110005226
+aExternalValue HTML Base Template
+aInternalValue HTML_BT
+
+eTableEntry 4
+aZKey      110005227
+aExternalValue CSV Sparse File
+aInternalValue CSV_S
+
+eTableEntry 4
+aZKey      110005228
+aExternalValue CSV Full File
+aInternalValue CSV_F
+
+eTableEntry 4
+aZKey      110005229
+aExternalValue Graph
+aInternalValue GPH
+
+eTableEntry 4
+aZKey      110005236
+aExternalValue Extension Summary
+aInternalValue QOE_SUMM
 
 eTableEntry 4
 aZKey      110005070
-aExternalValue Painted Report
-aInternalValue P
-
-eTableEntry 4
-aZKey      110005071
-aExternalValue Query Display
-aInternalValue Q
+aExternalValue Standard Jasper Report
+aInternalValue STD_J
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -13164,7 +15190,7 @@ aName      RetentionRiskType
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aJavaClass com.quinsoft.zeidon.domains.DoubleDomain
 aZKey      110000026
 aName      Revenue
 aDesc      Dollar amounts, etc.
@@ -13179,7 +15205,7 @@ eContext   3
 aZKey      110000027
 aName      Revenue
 aDecimalFormat 2
-aJavaEditString #,###.00
+aJavaEditString #,##0.00
 aIsDefault Y
 
 eContext   3
@@ -13407,6 +15433,35 @@ aInternalValue O
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110002047
+aName      SA_1098T_HopeEligibility
+aDomainType T
+aDataType  S
+aMaxStringLth 1
+aContextRestriction N
+
+eContext   3
+aZKey      110002048
+aName      SA_1098T_HopeEligibility
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110002049
+aExternalValue Charge
+aInternalValue C
+
+eTableEntry 4
+aZKey      110002050
+aExternalValue Offset
+aInternalValue O
+
+eTableEntry 4
+aZKey      110002051
+aExternalValue Payment
+aInternalValue P
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110001190
 aName      SA_ApplyRule
 aDomainType T
@@ -13428,6 +15483,42 @@ eTableEntry 4
 aZKey      110001194
 aExternalValue Refund Rule
 aInternalValue R
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110001324
+aName      SA_FISAP_TransactionType
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+aDLL_Name  TZAPDMAA
+aOperName  zdmDynamicTable
+
+eContext   3
+aZKey      110001325
+aName      SA_FISAP_TransactionType
+aIsDefault Y
+
+eTableEntry 4
+aZKey      110001326
+aExternalValue Undergrad Tuition
+aInternalValue UTuition
+
+eTableEntry 4
+aZKey      110001327
+aExternalValue Grad Tuition
+aInternalValue GTuition
+
+eTableEntry 4
+aZKey      110001328
+aExternalValue Undergrad Fees
+aInternalValue UFees
+
+eTableEntry 4
+aZKey      110001329
+aExternalValue Grad Fees
+aInternalValue GFees
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -13722,9 +15813,6 @@ aName      SATransSource
 aIsDefault Y
 
 eTableEntry 4
-aZKey      110004875
-
-eTableEntry 4
 aZKey      110004876
 aExternalValue Financial Aid
 aInternalValue FA
@@ -13959,9 +16047,6 @@ eContext   3
 aZKey      110000697
 aName      SortOrderAscendingType
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110000698
 
 eTableEntry 4
 aZKey      110000699
@@ -14348,6 +16433,10 @@ aMaxStringLth 5
 aContextRestriction N
 
 eContext   3
+aZKey      110003044
+aName      ClassLevel
+
+eContext   3
 aZKey      110002905
 aName      ShortAcademicLevel
 
@@ -14548,6 +16637,20 @@ aInternalValue Processed
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110002054
+aName      StudentDegreePathway
+aDomainType T
+aDataType  S
+aMaxStringLth 10
+aContextRestriction N
+
+eContext   3
+aZKey      110002055
+aName      StudentDegreePathway
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110002701
 aName      StudentFinancialStanding
 aDesc      Financial standing as set by Financial Aid
@@ -14597,7 +16700,7 @@ aExternalValue Timeframe Success Plan
 aInternalValue S
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      110002527
 aName      StudentFinancialStandingEval
 aDomainType E
@@ -14609,46 +16712,6 @@ eContext   3
 aZKey      110002528
 aName      StudentFinancialStandingEval
 aIsDefault Y
-
-eTableEntry 4
-aZKey      110002530
-aExternalValue GPA<2.0
-aInternalValue GPA<2.0
-
-eTableEntry 4
-aZKey      110002531
-aExternalValue GPA<3.0
-aInternalValue GPA<3.0
-
-eTableEntry 4
-aZKey      110002532
-aExternalValue GPA<1.7
-aInternalValue GPA<1.7
-
-eTableEntry 4
-aZKey      110002533
-aExternalValue GPA<1.8
-aInternalValue GPA<1.8
-
-eTableEntry 4
-aZKey      110002534
-aExternalValue GPA<1.9
-aInternalValue GPA<1.9
-
-eTableEntry 4
-aZKey      110002535
-aExternalValue CR<.67
-aInternalValue CR<.67
-
-eTableEntry 4
-aZKey      110002536
-aExternalValue AC>54
-aInternalValue AC>54
-
-eTableEntry 4
-aZKey      110002537
-aExternalValue AC>192
-aInternalValue AC>192
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -15247,6 +17310,79 @@ aExternalValue Practicum
 aInternalValue P
 
 eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000019
+aName      TaskAction
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110000020
+aName      TaskAction
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000021
+aName      TaskAssignmentStatus
+aDesc      Status of Ability to Assign Tasks to People
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110000022
+aName      TaskAssignmentStatus
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000023
+aName      TaskEmailRecipientType
+aDesc      Type of Recipient that should recieve the email
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110000024
+aName      TaskEmailRecipientType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000025
+aName      TaskEmailType
+aDesc      Type of Email Correspondence
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110000026
+aName      TaskEmailType
+aIsDefault Y
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
+aZKey      110000027
+aName      TaskStatus
+aDomainType T
+aDataType  S
+aMaxStringLth 20
+aContextRestriction N
+
+eContext   3
+aZKey      110000028
+aName      TaskStatus
+aIsDefault Y
+
+eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StringDomain
 aZKey      90000032
 aName      Text
@@ -15343,6 +17479,25 @@ aZKey      90000079
 aName      Time
 aEditString HHMISS999
 aJavaEditString HHmmssSSS
+
+eDomain    2
+aJavaClass com.quinsoft.zeidon.domains.StringDomain
+aZKey      510154863
+aName      TransCodeDescription
+aDesc      Transaction Code Description field for language
+aDomainType E
+aDataType  S
+aMaxStringLth 254
+aContextRestriction N
+
+eContext   3
+aZKey      510154865
+aName      NoTranslation
+
+eContext   3
+aZKey      510154864
+aName      TransCodeDescription
+aIsDefault Y
 
 eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
@@ -15680,6 +17835,10 @@ aMaxStringLth 50
 aContextRestriction N
 
 eContext   3
+aZKey      110002052
+aName      DirectoryRole
+
+eContext   3
 aZKey      110002036
 aName      UserPersonRole
 aIsDefault Y
@@ -15918,69 +18077,6 @@ aName      XML_SubentityPosition
 aIsDefault Y
 
 eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      1178138
-aName      XRA_Tag
-aDesc      Double ^ to ^^and modify & to ^
-aDomainType A
-aDataType  S
-aMaxStringLth 32
-aContextRestriction N
-
-eContext   3
-aZKey      1178139
-aName      XRA_Tag
-aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StringDomain
-aZKey      1178141
-aName      XRA_Text
-aDesc      Double ^ to ^^ and modify & to ^
-aDomainType A
-aDataType  S
-aMaxStringLth 65534
-aContextRestriction N
-
-eContext   3
-aZKey      1178142
-aName      XRA_Text
-aIsDefault Y
-
-eDomain    2
-aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
-aZKey      1005026
-aName      XRA_YNA
-aDesc      Yes/No/All
-aDomainType T
-aDataType  S
-aMaxStringLth 1
-aContextRestriction N
-
-eContext   3
-aZKey      1005028
-aName      XRA_YNA
-aIsDefault Y
-
-eTableEntry 4
-aZKey      92484581
-
-eTableEntry 4
-aZKey      1005053
-aExternalValue A
-aInternalValue A
-
-eTableEntry 4
-aZKey      1005054
-aExternalValue N
-aInternalValue N
-
-eTableEntry 4
-aZKey      1005055
-aExternalValue Y
-aInternalValue Y
-
-eDomain    2
 aJavaClass com.quinsoft.zeidon.domains.StaticTableDomain
 aZKey      110000006
 aName      Y/N
@@ -16086,7 +18182,7 @@ aName      ZeidonMetaName
 aDesc      Zeidon Meta  Name
 aDomainType E
 aDataType  S
-aMaxStringLth 8
+aMaxStringLth 32
 aContextRestriction N
 
 eContext   3
@@ -16124,7 +18220,7 @@ aDataType  L
 aContextRestriction N
 
 eContext   3
-aZKey      110007677
+aZKey      318135430
 aName      ZKey
 aIsDefault Y
 

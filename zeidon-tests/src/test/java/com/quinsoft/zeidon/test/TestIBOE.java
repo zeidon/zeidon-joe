@@ -57,6 +57,16 @@ public class TestIBOE
         System.out.println("===== Finished TEST_SAVE_Student ========");
 	}
 
+	@Test
+	public void testCancelSubobject()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mStuEnrM" );
+		IBOEVmlTester tester = new IBOEVmlTester( testview );
+		tester.testCancelSubobject( testview );
+        System.out.println("===== Finished testCancelSubobject ========");
+	}
+
 	private class IBOEVmlTester extends VmlObjectOperations
 	{
 		public IBOEVmlTester( View view )
@@ -307,6 +317,42 @@ public class TestIBOE
 		      SetNameForView( mSAProf, "mSAProfVerify", null, zLEVEL_TASK );
 		      return( 0 );
 		   // END
+		   }
+
+
+		   public int
+		   testCancelSubobject( View     ViewToWindow )
+		   {
+		      zVIEW    mStuEnrM = new zVIEW( );
+		      int      nRC = 0;
+
+		      /*
+		       * There is a problem when deleting the first StudentAccountTransApplied (id 3590) in mSAProf. This entity is linked under "BillingPeriod" as well.
+		       * On the mSAProf.commit we run cleanupOI
+		       * This seems to incorrectly set a prevHierInstance for the second StudentAccountTransApplied (id 3587).
+		       * It actually seems to set the prevHierInstance correctly for StudentAccountTransApplied (id 3587) and it's linked entity "PeriodTransApplied" under "BillingPeriod"
+		       * but then when looping through the linked entities in cleanupOI we set the prevHierInstance again for StudentAccountTransApplied, this time incorrectly.
+		       * If you set a breakpoint in EntityInstanceImpl line 497 (set it before you do the mSAProf.commit) you will see what I mean.
+		       * Or you can set the breakpoint in AbstractCommitToDb line 104 (linked.dropEntity()).
+		       *
+		       * I can't tell if the problem originates with the .deleteEntity or if the problem is in cleanupOI. I just know on the third time we get to linked.dropEntity
+		       * I don't think we should get there (because that third time, when I do a link.parent() the parent is the StudentAccountTransApplied that was
+		       * deleted (3590), it's like looping through getAllLinkedInstances is incorrect.
+		       *
+		       *  The reason I noticed the incorrect prevHierInstance is because when we call mSAProf.cursor("StudentAccountTransApplied").orderEntities( "TransactionDate D" );
+		       *  We fail on assert, line 938 in EntityInstanceImpl - assert assertNoTwin( parent, prevInstance ) : "Internal error: calling code hasn't found a twin";
+		       *
+		       *  In the test code here I have tried looping through mSAProf2.getHierEntityList(). This always seems correct.
+		       */
+
+
+		      nRC = ActivateOI_FromFile( mStuEnrM, "mStuEnrM", ViewToWindow, "target/test-classes/testdata/IBOE/mStuEnrM.por", zMULTIPLE );
+		      SetNameForView( mStuEnrM, "mStuEnrM", null, zLEVEL_TASK );
+		      
+	          CreateTemporalEntity( mStuEnrM, "EnrollmentModification", zPOS_AFTER );
+	          CancelSubobject( mStuEnrM, "EnrollmentModification" );
+	          
+		      return( 0 );
 		   }
 
 			private int
