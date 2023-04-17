@@ -106,3 +106,14 @@ aAPP_QLPLR ./testdata/northwind
 aAPP_SOURCE ./testdata/northwind/main/scala
 aAPP_PACKAGE com.quinsoft.northwind
 
+
+eAPPLICATION 2
+aAPP_NAME  mmcrm
+aAPP_DLL   ./testdata/mmcrm
+aAPP_ADOBIN ./testdata/mmcrm
+aAPP_LOCAL ./testdata/mmcrm
+aAPP_SHARED ./testdata/mmcrm
+aAPP_QLPLR ./testdata/mmcrm
+aAPP_SOURCE ./testdata/mmcrm
+aAPP_PACKAGE com.quinsoft.mmcrm
+
