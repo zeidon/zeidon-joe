@@ -80,7 +80,7 @@ public class TestMMCRM
 		   zVIEW    mPayroll2 = new zVIEW( );
 		   int      RESULT = 0;
 
-		   /* We don't really need to working sample...
+		   // We don't really need to working sample...
 		   // THIS SAMPLE IS WORKING
 		   //:ACTIVATE mOrganization EMPTY
 		   RESULT = ActivateEmptyObjectInstance( mOrganization, "mOrganization", ViewToWindow, zSINGLE );
@@ -99,7 +99,7 @@ public class TestMMCRM
 		   SetNameForView( mPayroll, "mPayroll", null, zLEVEL_TASK );
 
 		   RESULT = IncludeSubobjectFromSubobject( mPayroll, "Organization", mOrganization, "Organization", zPOS_AFTER );
-		   */
+		   
 
 		   // THIS SAMPLE WITH TEMPORAL NOT WORKING
 		   //:ACTIVATE mOrganization2 EMPTY

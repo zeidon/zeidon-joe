@@ -164,6 +164,10 @@ class EntityInstanceImpl implements EntityInstance
          * This was a temporal entity but it was canceled.
          */
         CANCELED,
+        /**
+         * This was a temporal entity that was canceled but should now not be part of anything.
+         */
+        DROPPED,
 
         /**
          * This entity has been superseded by a newer temporal entity that was accepted.
@@ -387,8 +391,8 @@ class EntityInstanceImpl implements EntityInstance
 
         // KJS - On the cancel subobject, we were passing back a null when we were trying
         // to get lastChild etc in removeEntityFromChains. Which made the chain incorrect.
-        //if ( ei.versionStatus == VersionStatus.CANCELED )
-        //    return null;
+        if ( ei.versionStatus == VersionStatus.DROPPED )
+            return null;
 
         return ei;
     }
@@ -2247,7 +2251,25 @@ class EntityInstanceImpl implements EntityInstance
             setHidden( true );
 
         EntityInstanceImpl lastChild = removeEntityFromChains();
+        
+        if ( this.versionStatus == VersionStatus.CANCELED && this.prevVersion == null)
+        {
+            for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
+            {
+                if ( ei.versionStatus != VersionStatus.DROPPED )
+                {
+                    ei.setVersionStatus( VersionStatus.DROPPED );
 
+                    // For all linked instances, copy the persistentAttributes if they have
+                    // the same versionNumber.
+                    ei.linkedInstances2.stream( ei ).forEach( linked -> {
+                        linked.setVersionStatus( VersionStatus.DROPPED );
+                    } );
+                }
+            }
+        	setNextHier(null);
+        }
+        else
         // We reset the next hier pointer so when we're looping through the EIs in hier
         // order we skip past the ones we just removed.
         setNextHier( lastChild.getNextHier() );

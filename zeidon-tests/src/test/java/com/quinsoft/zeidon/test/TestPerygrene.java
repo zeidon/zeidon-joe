@@ -770,11 +770,27 @@ public class TestPerygrene
                // When we CancelSubobject on the parent entity, the child entities still exist.
                // I try this on work/derived/database entitites, to see if they work any differently.
                // Don C says this should work even though the child entities were created without Temporal...
-
         	   RESULT = ActivateEmptyObjectInstance( zqFrame, "zqFrame", ViewToWindow, zSINGLE );
         	   RESULT = CreateEntity( zqFrame, "zqFrame", zPOS_AFTER );
         	   SetNameForView( zqFrame, "zqFrame", null, zLEVEL_TASK );
+        	   CreateEntity( zqFrame, "DisplaySelectionSubCriteria", zPOS_AFTER );
+        	   
+               /*
+        	   // Work Entities NORMAL
+        	   CreateEntity( zqFrame, "SelectionCriteria", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteria", "Value", "Value1" );
+        	   //
+        	   CreateEntity( zqFrame, "DisplaySelectionSubCriteria", zPOS_AFTER );
 
+    		   RESULT = CreateEntity( zqFrame, "SelectionCriteriaSubParameter", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteriaSubParameter", "Value", "Parm1" );
+    		   RESULT = CreateEntity( zqFrame, "SelectionCriteriaSubParameter", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteriaSubParameter", "Value", "Parm2" );
+    		   RESULT = CreateEntity( zqFrame, "SelectionCriteriaSubParameter", zPOS_AFTER );
+    		   SetAttributeFromString( zqFrame, "SelectionCriteriaSubParameter", "Value", "Parm3" );
+
+    		   DeleteEntity( zqFrame, "SelectionCriteria", zREPOS_NONE );
+				*/
         	   // Work Entities
         	   CreateTemporalEntity( zqFrame, "SelectionCriteria", zPOS_AFTER );
     		   SetAttributeFromString( zqFrame, "SelectionCriteria", "Value", "Value1" );
