@@ -2121,6 +2121,8 @@ public class TestZencas
 
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
 			CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+			AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );
+			AcceptSubobject( mFAProf, "FinAidAward" );
 
 		    // In mStudenC, we have a derived "US_Registration", with a child "TESTEntity". We create both of these entities,
 		    // then do a CreateTemporalSubobjectVersion on both. Second CreateTemporal give a link error.
@@ -2136,9 +2138,37 @@ public class TestZencas
 		    RESULT = CreateEntity( mStudenC, "TESTEntity", zPOS_AFTER );
 			
 			CreateTemporalSubobjectVersion( mStudenC, "US_Registration" );
+			
+			/*
+			////////////////// THIS Works WITH THE Cancel US_Registration.
+			CancelSubobject( mStudenC, "US_Registration");
+			CreateTemporalSubobjectVersion( mStudenC, "US_Registration" );
+			CreateTemporalSubobjectVersion( mStudenC, "TESTEntity" );
+			CancelSubobject( mStudenC, "TESTEntity");
+			CancelSubobject( mStudenC, "US_Registration");
+			
+			CreateTemporalSubobjectVersion( mStudenC, "US_Registration" );
+			/////////////////
+			 */
+			
 			// Following gives error.
 			CreateTemporalSubobjectVersion( mStudenC, "TESTEntity" );
-
+			// If I take out the Optional check in EntityInstanceImpl, I can run the next lines, but the
+			// TESTEntity.getnextHier is US_Registration, which is incorrect.
+			mStudenC.cursor("TESTEntity").getAttribute("ID").setValue(123);
+			mStudenC.cursor("TESTEntity").getAttribute("Name").setValue("Aaaa");
+		    RESULT = CreateEntity( mStudenC, "TestTRCode", zPOS_AFTER );
+			assert mStudenC.cursor("TESTEntity").getAttribute("Name").getString().length() != 0 : "Name value is not set";
+			CancelSubobject( mStudenC, "TESTEntity");
+			assert mStudenC.cursor("TESTEntity").getAttribute("Name").getString().length() == 0 : "Name value set but should have been canceled";
+			
+			CreateTemporalSubobjectVersion( mStudenC, "TESTEntity" );
+			mStudenC.cursor("TESTEntity").getAttribute("ID").setValue(123);
+			mStudenC.cursor("TESTEntity").getAttribute("Name").setValue("Aaaa");
+		    RESULT = CreateEntity( mStudenC, "TestTRCode", zPOS_AFTER );
+			AcceptSubobject(mStudenC, "TESTEntity");
+			CancelSubobject( mStudenC, "US_Registration");
+			
 		   return 0;
 		}
 
