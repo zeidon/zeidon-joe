@@ -1473,7 +1473,10 @@ class EntityCursorImpl implements EntityCursor
         // to the old version so that the GC doesn't hold onto the new ones.
         for ( EntityCursorImpl child : getChildCursors() )
         {
-            // If the child cursor is pointing to something, reset it.
+            // If the child cursor is pointing to something, reset it.zr\]
+        	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        	// child is TestTRCode... we need to set it's .nextHier().setPrevHier() = ei.setPrevHier() // which is US_CollegeTerm or we 
+        	// need to set it to ei (because now we are on the previous subobject version???
             if ( child.entityInstance != null )
                 child.getEntityInstance();
         }

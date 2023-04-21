@@ -1593,6 +1593,7 @@ class EntityInstanceImpl implements EntityInstance
                 		                           "has an unaccepted temporal root as a child." )
                           .appendMessage( "Temporal root: %s", ei.toString() );
 
+            /*
             // See if any linked instances are already versioned.
             Optional<EntityInstanceImpl> versioned = linkedInstances2.stream()
                                 .filter( linked -> linked.versionNumber != this.versionNumber ) // If it's part of the current version its' ok.
@@ -1606,6 +1607,7 @@ class EntityInstanceImpl implements EntityInstance
                     .appendMessage( "Temporal root: %s", ei.toString() )
                     .appendMessage( "Linked instance: %s", versioned.get().toString() );
             }
+            */
         }
 
         TemporalVersionCreator creator = new TemporalVersionCreator( getTask(), this );
@@ -2127,6 +2129,10 @@ class EntityInstanceImpl implements EntityInstance
             ei.cancelSubobjectEntity( true );
 
         getObjectInstance().decrementVersionedCount();
+        // KJS 04/21/23 - Added because the pointer chains aren't correct. I don't think ths is right...
+        // I think we need to get the lastchild hier and set it's nextHier.setPrevHier?? Or should we be
+        // doing something in the ei.cancelSubobjectEntity above. Not sure yet...
+        this.prevVersion.getNextHier().setPrevHier(this.prevVersion);
         return this.prevVersion;
     }
 
