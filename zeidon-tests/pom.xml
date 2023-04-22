@@ -123,26 +123,11 @@
             <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
-<!-- KJS Taking out because I can't get TestZencas to compile with this in. 
-        <dependency>
-            <groupId>com.quinsoft.zeidon</groupId>
-            <artifactId>javascript</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
-        </dependency>
--->
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
             <artifactId>http</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-<!-- KJS Taking out because I can't get TestZencas to compile with this in. 
-        <dependency>
-            <groupId>com.quinsoft.zeidon</groupId>
-            <artifactId>javascript</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
--->
         <dependency>
             <groupId>com.quinsoft.zeidon</groupId>
             <artifactId>object-browser</artifactId>
