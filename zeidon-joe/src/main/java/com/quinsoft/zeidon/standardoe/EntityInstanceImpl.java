@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -164,10 +165,6 @@ class EntityInstanceImpl implements EntityInstance
          * This was a temporal entity but it was canceled.
          */
         CANCELED,
-        /**
-         * This was a temporal entity that was canceled but should now not be part of anything.
-         */
-        DROPPED,
 
         /**
          * This entity has been superseded by a newer temporal entity that was accepted.
@@ -389,9 +386,7 @@ class EntityInstanceImpl implements EntityInstance
             ei = ei.nextVersion;
         }
 
-        // KJS - On the cancel subobject, we were passing back a null when we were trying
-        // to get lastChild etc in removeEntityFromChains. Which made the chain incorrect.
-        if ( ei.versionStatus == VersionStatus.DROPPED )
+        if ( ei.versionStatus == VersionStatus.CANCELED )
             return null;
 
         return ei;
@@ -1593,7 +1588,6 @@ class EntityInstanceImpl implements EntityInstance
                 		                           "has an unaccepted temporal root as a child." )
                           .appendMessage( "Temporal root: %s", ei.toString() );
 
-            /*
             // See if any linked instances are already versioned.
             Optional<EntityInstanceImpl> versioned = linkedInstances2.stream()
                                 .filter( linked -> linked.versionNumber != this.versionNumber ) // If it's part of the current version its' ok.
@@ -1607,7 +1601,6 @@ class EntityInstanceImpl implements EntityInstance
                     .appendMessage( "Temporal root: %s", ei.toString() )
                     .appendMessage( "Linked instance: %s", versioned.get().toString() );
             }
-            */
         }
 
         TemporalVersionCreator creator = new TemporalVersionCreator( getTask(), this );
@@ -2129,10 +2122,6 @@ class EntityInstanceImpl implements EntityInstance
             ei.cancelSubobjectEntity( true );
 
         getObjectInstance().decrementVersionedCount();
-        // KJS 04/21/23 - Added because the pointer chains aren't correct. I don't think ths is right...
-        // I think we need to get the lastchild hier and set it's nextHier.setPrevHier?? Or should we be
-        // doing something in the ei.cancelSubobjectEntity above. Not sure yet...
-        this.prevVersion.getNextHier().setPrevHier(this.prevVersion);
         return this.prevVersion;
     }
 
@@ -2206,7 +2195,15 @@ class EntityInstanceImpl implements EntityInstance
         if ( versionStatus != VersionStatus.UNACCEPTED_ENTITY )
             throw new TemporalEntityException(this, "Entity is not the root of a temporal entity" );
 
-        for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
+        // Copy the child entities into a temporary list so that we can change their statuses after we
+        // remove the suboject from the OI.  We have to store them because after we remove the subobject
+        // we can't use getChildrenHier any more.
+        List<EntityInstanceImpl> entities = new ArrayList<>();
+        getChildrenHier( true, false, false ).forEach( ei -> entities.add( ei ) );
+
+        dropVersionedEntity();
+
+        for ( EntityInstanceImpl ei : entities )
         {
             if ( ei.versionStatus != VersionStatus.CANCELED )
             {
@@ -2220,8 +2217,6 @@ class EntityInstanceImpl implements EntityInstance
             }
         }
 
-        dropEntity();
-
         return CursorResult.UNCHANGED;
     }
 
@@ -2231,11 +2226,18 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public CursorResult dropEntity()
     {
-        // DGC 2011.10.12  - We're allowing versioned instances to be dropped.  Shouldn't be a problem.
-        // DGC 2012.02.16  - See comment in dropIfDead().
         if ( isVersioned() )
             throw new ZeidonException( "Invalid operation: can't drop a temporal entity." );
 
+        return dropVersionedEntity();
+    }
+
+    /**
+     * Drops the entity and children; allows the entity to be versioned.
+     * @return
+     */
+    private CursorResult dropVersionedEntity()
+    {
         dropped = true;
 
         // If we're dropping this entity without first having deleted/excluded it then
@@ -2257,25 +2259,7 @@ class EntityInstanceImpl implements EntityInstance
             setHidden( true );
 
         EntityInstanceImpl lastChild = removeEntityFromChains();
-        
-        if ( this.versionStatus == VersionStatus.CANCELED && this.prevVersion == null)
-        {
-            for ( EntityInstanceImpl ei : getChildrenHier( true, false, false ) )
-            {
-                if ( ei.versionStatus != VersionStatus.DROPPED )
-                {
-                    ei.setVersionStatus( VersionStatus.DROPPED );
 
-                    // For all linked instances, copy the persistentAttributes if they have
-                    // the same versionNumber.
-                    ei.linkedInstances2.stream( ei ).forEach( linked -> {
-                        linked.setVersionStatus( VersionStatus.DROPPED );
-                    } );
-                }
-            }
-        	setNextHier(null);
-        }
-        else
         // We reset the next hier pointer so when we're looping through the EIs in hier
         // order we skip past the ones we just removed.
         setNextHier( lastChild.getNextHier() );
