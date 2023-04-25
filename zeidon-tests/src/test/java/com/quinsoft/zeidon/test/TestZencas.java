@@ -5267,6 +5267,8 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             
             // In GNECSIS with JOE 2.1 - we create a Registration but then when we commit, the registration doesn't 
             // get updated to the database. Can't figure out why.
+            // The issue was because of a chain link issue with the entity mStudenC.EnrollmentModification, when we
+            // createdTemporalEntity, included a sub entity, then canceledSubobject.
 
             View mUser = new QualificationBuilder( zencas ).setLodDef( "mUser" ).addAttribQual( "ID", 490 ).activate();
             SetNameForView( mUser, "mUser", null, zLEVEL_TASK );
@@ -5314,44 +5316,13 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             String szCourseNumber = lClsLstC.cursor("Course").getAttribute("Number").getString();
             
             RESULT = m_mStudenC_Object.omStudenC_UpdateScheduleEntries( mStudenC );
-            //RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationCourseCollege", lClsLstC, "College", zPOS_AFTER );
-            //RESULT = IncludeSubobjectFromSubobject( mStudenC, "Person", lClsLstC, "Person", zPOS_AFTER );
-            m_mStudenC_Object.omStudenC_SaveStudentSchedule( mStudenC, ViewToWindow );
-           
-            /*
-            RESULT = CreateEntity( mStudenC, "Registration", zPOS_AFTER );
-            SetMatchingAttributesByName( mStudenC, "Registration", mStudenC, "US_Registration", zSET_NOTNULL );
-            //:INCLUDE mStudenC.RegistrationClass FROM mStudenC.US_Class 
-            RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationClass", mStudenC, "US_Class", zPOS_AFTER );
-            RESULT = IncludeSubobjectFromSubobject( mStudenC, "RegistrationCourseCollege", lClsLstC, "College", zPOS_AFTER );
-            RESULT = IncludeSubobjectFromSubobject( mStudenC, "Person", lClsLstC, "Person", zPOS_AFTER );
-            //:mStudenC.Registration.wCourseNumber = mStudenC.RegistrationCourse.Number 
-            SetAttributeFromAttribute( mStudenC, "Registration", "wCourseNumber", mStudenC, "RegistrationCourse", "Number" );
-            CreateTemporalEntity( mStudenC, "EnrollmentModification", zPOS_AFTER );
-            SetAttributeFromAttribute( mStudenC, "EnrollmentModification", "CourseNumber", lClsLstC, "Course", "Number" );
-            RESULT = IncludeSubobjectFromSubobject( mStudenC, "User", mUser, "User", zPOS_AFTER );
-            AcceptSubobject( mStudenC, "EnrollmentModification" );
-            */
-            
-            //AcceptSubobject( mStudenC, "UpdateSchedule" );
-            //m_mStudenC_Object.omStudenC_SaveAcademicObject( mStudenC );            
-            
-            // I am trying to re-create another issue we are having, but for some reason the include of lClsLstC.Class is not pulling
-            // InstructorPerson into mStudenC.Person
-            //mStudenC.commit();
-            DropView( mStudenC );
-            o_fnLocalBuildmStudenC( ViewToWindow, vTempViewVar_0, 16406 );
-            RESULT = ActivateObjectInstance( mStudenC, "mStudenC", ViewToWindow, vTempViewVar_0, zSINGLE );
-            DropView( vTempViewVar_0 );
-            SetNameForView( mStudenC, "mStudenC", null, zLEVEL_TASK );
-            if ( mStudenC.cursor("RegistrationCourse").setFirst("Number", szCourseNumber, "Student").isSet() )
-            {
-            	mStudenC.cursor("Registration").deleteEntity();
-            	mStudenC.commit();
-            }
-            else
-            	Assert.assertEquals("Registration does not exist but it should...", 0, -1);
-            
+            // Check out that the cursor positions between EnrollmentModifications are correct. Should be within the first couple that
+            // there was an issue.
+            assert mStudenC.cursor( "EnrollmentModification" ).setFirst( ).isSet() : "Something is wrong with the chain pointers";            
+            assert mStudenC.cursor( "EnrollmentModification" ).setNext( ).isSet() : "Something is wrong with the chain pointers";            
+            assert mStudenC.cursor( "EnrollmentModification" ).setNext( ).isSet() : "Something is wrong with the chain pointers";            
+            assert mStudenC.cursor( "EnrollmentModification" ).setNext( ).isSet() : "Something is wrong with the chain pointers";            
+                        
             DropView( mStudenC );
             DropView( lTermLST );
             DropView( wXferO );
