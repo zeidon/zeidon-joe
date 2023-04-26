@@ -298,6 +298,12 @@ class EntitySpawner
                 // If we get here we have found an instance which has a child entity type for spawning.
                 // Make sure this include has not already been spawned.
                 EntityInstanceImpl searchChild = null;
+                // KJS 04/26/23 - In the test TestMMCRM.TEST_Error, we have two IncludeSubobjectFromSubobjects.
+                // The first both views are normal. The second, mOrganization is a temporalSubobject.
+                // When we get here where startParentSearchInstance is mOrganization.Organization for normal
+                // we get a linked instance.
+                // For the mOrganization.Organization we do no get a linked instance, even though when you look at linkedInstances2
+                // has linked values. I can't figure out why it returns nothing.
                 for ( EntityInstanceImpl linked : startParentSearchInstance.getLinkedInstances() )
                 {
                     if ( linked.getParent() != searchInstance )
