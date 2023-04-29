@@ -276,6 +276,8 @@ class EntitySpawner
             if ( ! searchInstance.temporalVersionMatch( startSearchInstance ) )
                 continue;
 
+            searchInstance = searchInstance.getLatestVersion();
+
             EntityDef searchEntityDef = searchInstance.getEntityDef();
 
             // See if the linked entity instance has a child entity type

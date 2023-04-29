@@ -1067,13 +1067,6 @@ class EntityInstanceImpl implements EntityInstance
             // Simplest case is if new instance has a next twin.
 
             lastChildHier.setNextHier( nextTwin );
-
-            // KJS - 02/04/2011 For some reason when I execute the following line from lTrnscpt_Object:
-            // OrderEntityForView( lTrnscpt, "TranscriptGroup", "wCollegeYear A Semester A wLegacyTerm A wSortOrder A" );
-            // after executing the following line, if I try to go to the object browser everything is hung.  I could have
-            // sworn earlier that I got this issue when executing "this.getPrevHier().setNextHier( this );" so I changed it just to
-            // see what would happen and now I get it on "this.setPrevHier( nextSibling.getPrevHier() );".  I am confused, it doesn't
-            // seem incorrect and I am wondering could it have anything to do with the fact that for TranscriptGroup the IDs are all NULL???
             this.setPrevHier( nextTwin.getPrevHier() );
             if ( this.getPrevHier() != null )
             {
