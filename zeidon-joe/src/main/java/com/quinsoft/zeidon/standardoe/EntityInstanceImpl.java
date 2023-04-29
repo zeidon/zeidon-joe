@@ -1588,37 +1588,19 @@ class EntityInstanceImpl implements EntityInstance
                 		                           "has an unaccepted temporal root as a child." )
                           .appendMessage( "Temporal root: %s", ei.toString() );
 
-            // KJS 04/25/23 - In the test TestZencas.mFAProfTemporalIssue4, we fail on the versioned.isPresent when I createTemporalSubobjectVersion on a
-            // parent entity (US_Registration) and then createTemporalSubobjectVersion again on a child entity (TESTEntity). These two entities were
-            // just created.
-            // I do the same thing earlier in mFAProfTemporalIssue4 but the entities are from the database, not created. 
-			// CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
-			// CreateTemporalSubobjectVersion( mFAProf, "FinAidAwardDisbursement" );
+            // See if any linked instances are already versioned.
+            Optional<EntityInstanceImpl> versioned = linkedInstances2.stream()
+                                .filter( linked -> linked.versionNumber != this.versionNumber  // If it's part of the current version its' ok.
+                                        && linked.isVersioned()
+                                        && linked.nextVersion == null )
+                                .findFirst();
 
-            // I don't understand why that is different. Why the below filter is different between the two.
-            // I don't think this below "if" is correct but it does eliminate the error and allow me to look at the next error we were getting in the test.
-            if ( !this.equals(ei))
+            if ( versioned.isPresent() )
             {
-	            linkedInstances2.stream( this ).forEach( linked -> {
-	            	if ( linked.versionNumber != this.versionNumber )
-	            		System.out.println("yes, not equal");
-	            	else
-	            		System.out.println("no, they are equal");
-	            } );
-	
-	            // See if any linked instances are already versioned.
-	            Optional<EntityInstanceImpl> versioned = linkedInstances2.stream()
-	                                .filter( linked -> linked.versionNumber != this.versionNumber ) // If it's part of the current version its' ok.
-	                                .filter(  linked -> linked.isVersioned() )
-	                                .findFirst();
-	
-	            if ( versioned.isPresent() )
-	            {
-	                throw new TemporalEntityException( this, "Attempting to create a temporal subobject for an entity that " +
-	                        "has a child entity linked to another temporal entity.")
-	                    .appendMessage( "Temporal root: %s", ei.toString() )
-	                    .appendMessage( "Linked instance: %s", versioned.get().toString() );
-	            }
+                throw new TemporalEntityException( this, "Attempting to create a temporal subobject for an entity that " +
+                        "has a child entity linked to another temporal entity.")
+                    .appendMessage( "Temporal root: %s", ei.toString() )
+                    .appendMessage( "Linked instance: %s", versioned.get().toString() );
             }
         }
 
@@ -2087,9 +2069,7 @@ class EntityInstanceImpl implements EntityInstance
         else
         {
             assert isCreated() || isIncluded();
-            // KJS 04/25/23 - If we are here... doesn't it mean that the created or included entity is now going away...
-            // We need to set the nextHier.prev
-            this.getNextHier().setPrevHier(this.getPrevHier());
+            getNextHier().setPrevHier( getPrevHier() );
         }
 
         if ( setLinked )
