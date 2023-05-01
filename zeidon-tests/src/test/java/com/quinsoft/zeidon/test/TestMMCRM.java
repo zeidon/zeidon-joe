@@ -118,7 +118,7 @@ public class TestMMCRM
 		   //:ACTIVATE mPayroll2 EMPTY
 		   RESULT = ActivateEmptyObjectInstance( mPayroll2, "mPayroll", ViewToWindow, zSINGLE );
 		   RESULT = CreateEntity( mPayroll2, "Payroll", zPOS_AFTER );
-		   SetNameForView( mPayroll2, "mPayroll", null, zLEVEL_TASK );
+		   SetNameForView( mPayroll2, "mPayroll2", null, zLEVEL_TASK );
 
 		   RESULT = IncludeSubobjectFromSubobject( mPayroll2, "Organization", mOrganization2, "Organization", zPOS_AFTER );
 		   return( 0 );

@@ -2438,6 +2438,24 @@ class EntityInstanceImpl implements EntityInstance
         if ( includeDropped )
             throw new ZeidonException("Why are we asking for dropped instances?" );
 
+        // KJS 05/01/23 - I don't think the below stream.filter is correct. Although... when it comes to versioned and Payroll... looks to me
+        // like there is more than one link... but I donly get to System.out one time. for YES EQUAL.
+        // When we come in here for mOrganization.Payroll, when mOrganization is NOT temporal, for linkedInstances2
+        //{mmcrm.mOrganization.Payroll Keys: PayrollID=NULL; =true, mmcrm.mPayroll.Payroll Keys: PayrollID=NULL; =true}
+        // We get to both NO EQUAL and YES EQUAL.
+        // When mOrganization.Organization is temporal
+        // What to me looks like the same linkedInstances2... only gets to YES EQUAL, which is why we do not return any links.
+        // WHY?????
+        linkedInstances2.stream( this ).forEach( linked -> {
+        	if ( linked != this )
+        		System.out.println("NO EQUAL");
+        	else
+        		System.out.println("YES EQUAL");
+        } );
+        
+        //&& linked.isVersioned()
+        //&& linked.nextVersion == null )
+
         if ( excludeSource )
             stream = stream.filter( ei -> ei != this );
 

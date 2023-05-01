@@ -264,8 +264,8 @@ class EntitySpawner
                                    EntityInstanceImpl startParentSearchInstance,
                                    boolean            matchingRelLinks )
     {
+    	String xx = "here";
         // Spawning pass 1, for every visible linked instance of the entity
-        // instance, see if the structure is inverted anywhere and needs
         // to be spawned.
         for ( EntityInstanceImpl searchInstance : startSearchInstance.getLinkedInstances() )
         {
@@ -276,6 +276,9 @@ class EntitySpawner
             if ( ! searchInstance.temporalVersionMatch( startSearchInstance ) )
                 continue;
 
+            // KJS 05/01/23 - I think you have to do this because in getLinkedInstances(), we have returned the original
+            // version... not the latest version... can you change getLinkedInstances() to return the correct one? Or do you
+            // not think it matters?
             searchInstance = searchInstance.getLatestVersion();
 
             EntityDef searchEntityDef = searchInstance.getEntityDef();
