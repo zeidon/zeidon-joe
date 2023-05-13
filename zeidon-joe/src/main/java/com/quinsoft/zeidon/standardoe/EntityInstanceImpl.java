@@ -2363,7 +2363,7 @@ class EntityInstanceImpl implements EntityInstance
      */
     Collection<EntityInstanceImpl> getAllLinkedInstances()
     {
-        return getLinkedInstances( false, false );
+        return getLinkedInstances( false );
     }
 
     /**
@@ -2376,7 +2376,7 @@ class EntityInstanceImpl implements EntityInstance
     @Override
     public Collection<EntityInstanceImpl> getLinkedInstances()
     {
-        return getLinkedInstances( false, true );
+        return getLinkedInstances( true );
     }
 
     /**
@@ -2407,36 +2407,31 @@ class EntityInstanceImpl implements EntityInstance
     }
 
     /**
-     * Returns the linked instances if there are any. If 'excludeSource' is true
-     * then 'source' will be ignored when building the return list. This allows
+     * Returns the linked instances if there are any. If 'excludeThis' is true
+     * then 'this' will be ignored when building the return list. This allows
      * the caller to get a list of all other linked instances.
      *
      * Note that entities that have been dropped but not reclaimed by the GC
      * will still show up in this list. We can skip most of those by ignoring
      * ones flagged as dropped.
      *
-     * @param source
+     * @param excludeThis
      *            Ignore this EI when creating the list.
      *
      * @return List of linked instances. If there are none, an empty list is
      *         returned.
      */
-    private Collection<EntityInstanceImpl> getLinkedInstances( boolean includeDropped, boolean excludeSource )
+    private Collection<EntityInstanceImpl> getLinkedInstances( boolean excludeThis )
     {
-        assert ! includeDropped : "Why are we asking for dropped instances?";
-
         if ( linkedInstances2 == NOT_LINKED )
         {
-            if ( excludeSource )
+            if ( excludeThis )
                 return Collections.emptyList();
             else
                 return Arrays.asList( this );
         }
 
         Stream<EntityInstanceImpl> stream = linkedInstances2.stream( this );
-
-        if ( includeDropped )
-            throw new ZeidonException("Why are we asking for dropped instances?" );
 
         // KJS 05/01/23 - I don't think the below stream.filter is correct. Although... when it comes to versioned and Payroll... looks to me
         // like there is more than one link... but I donly get to System.out one time. for YES EQUAL.
@@ -2452,11 +2447,11 @@ class EntityInstanceImpl implements EntityInstance
         	else
         		System.out.println("YES EQUAL");
         } );
-        
+
         //&& linked.isVersioned()
         //&& linked.nextVersion == null )
 
-        if ( excludeSource )
+        if ( excludeThis )
             stream = stream.filter( ei -> ei != this );
 
         return stream.collect( Collectors.toList() );
