@@ -632,6 +632,7 @@ class ViewImpl extends AbstractTaskQualification implements InternalView, Compar
 
         view.getObjectInstance().setUpdated( srcView.getObjectInstance().isUpdated() );
         view.getObjectInstance().setUpdatedFile( srcView.getObjectInstance().isUpdatedFile() );
+        view.setTotalRootCount( view.cursor( lodDef.getRoot() ).getEntityCount() );
 
         return view;
     }
