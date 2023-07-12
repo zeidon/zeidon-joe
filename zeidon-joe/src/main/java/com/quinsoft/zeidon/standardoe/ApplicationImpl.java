@@ -278,4 +278,9 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
     {
         return objectEngine;
     }
+
+    boolean configurationIsEqual( ApplicationImpl app )
+    {
+        return attributes.equals( app.attributes );
+    }
 }

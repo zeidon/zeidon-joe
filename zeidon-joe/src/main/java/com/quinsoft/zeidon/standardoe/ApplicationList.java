@@ -156,10 +156,16 @@ class ApplicationList
             // Check to see if we've already loaded the zeidon.app for this app.  We don't mind multiple
             // ZeidonSystem apps because the attribute values are hard-coded and can't change so overwriting
             // an existing value in the map doesn't harm anything.
-            if ( appMap.containsKey( appKey ) && ! ObjectEngine.ZEIDON_SYSTEM_APP_NAME.equals( app.getName() ) )
-                throw new ZeidonException( "Application '%s' is defined multiple times", app.getName() );
-
-            appMap.put( appKey, app );
+            if ( appMap.containsKey( appKey )
+                    && !ObjectEngine.ZEIDON_SYSTEM_APP_NAME.equals( app.getName() ) )
+            {
+                if ( appMap.get( appKey ).configurationIsEqual( app ) )
+                    reader.getLogger().warn( "Application '%s' is defined multiple times but they are equal.", app.getName() );
+                else
+                    throw new ZeidonException( "Application '%s' is defined multiple times", app.getName() );
+            }
+            else
+                appMap.put( appKey, app );
         }
     }
 }
