@@ -21,6 +21,7 @@ package com.quinsoft.zeidon.scala
 import scala.collection.Iterable
 import scala.language.dynamics
 import scala.util.control.Breaks._
+import com.quinsoft.zeidon.scala.Nexts._
 import com.quinsoft.zeidon.objectdefinition._
 import com.quinsoft.zeidon.CursorPosition
 import com.quinsoft.zeidon.ZeidonException
@@ -180,20 +181,22 @@ class EntityCursor( private[this]  val view: View,
      *
      * Example:  This will deleted all Staff entities with a Status = "A"
      * {{{
-     *      mUser.Staff.deleteAll( _.Status == "A" )
+     *      mUser.Staff.deleteWhere( _.Status == "A" )
      * }}}
      * or
      * {{{
-     *      mUser.Staff.deleteAll( ei => { ei.Status == "A" || ei.Status == "B" } )
+     *      mUser.Staff.deleteWhere( ei => { ei.Status == "A" || ei.Status == "B" } )
      * }}}
      * Note: the cursor should be considered undefined after this call.
      *
      * @param predicate a boolean predicate used to determine which entities will be deleted.
      * @return the number of entities deleted.
      */
-    def deleteAll( predicate : (AbstractEntity) => Boolean = null ): Int = {
+    def deleteWhere( predicate : (AbstractEntity) => Boolean = null ): Int = {
         var count = 0
+        var looper = 0
         this.each {
+            looper += 1
             if ( predicate == null || predicate( this ) ) {
                 count += 1
                 delete( CursorPosition.NONE )
@@ -209,14 +212,14 @@ class EntityCursor( private[this]  val view: View,
      *
      * Example:  This will deleted all Staff entities with a Status = "A"
      *
-     *      mUser.Staff.deleteAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+     *      mUser.Staff.deleteWhere( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
      *
      * Note: the cursor should be considered undefined after this call.
      *
      * @param predicate a boolean predicate used to determine which entities will be deleted.
      * @return the number of entities deleted.
      */
-    def deleteAll( predicate : => Boolean ): Int = {
+    def deleteWhere( predicate : => Boolean ): Int = {
         var count = 0
         this.each {
             if ( predicate ) {
@@ -239,7 +242,7 @@ class EntityCursor( private[this]  val view: View,
      *
      * Example:  This will exclude all Staff entities with a Status = "A"
      *
-     *      mUser.Staff.deleteAll( _.Status == "A" )
+     *      mUser.Staff.deleteWhere( _.Status == "A" )
      *
      * Note: the cursor should be considered undefined after this call.
      *
@@ -264,7 +267,7 @@ class EntityCursor( private[this]  val view: View,
      *
      * Example:  This will exclude all Staff entities with a Status = "A" and Type = "B"
      *
-     *      mUser.Staff.deleteAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+     *      mUser.Staff.deleteWhere( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
      *
      * Note: the cursor should be considered undefined after this call.
      *
@@ -575,6 +578,12 @@ class EntityCursor( private[this]  val view: View,
     def each[T]( looper: => T ): T = {
         val iter = new EntityInstanceIterator( jentityCursor.eachEntity ).setCursor( this )
         iter.each( looper )
+    }
+
+    override def foreach[U](f: EntityInstance => U): Unit = {
+        breakable {
+            super.foreach( (ei: EntityInstance) => nextable{ f(ei) } )
+        }
     }
 
     /**

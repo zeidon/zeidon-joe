@@ -3,7 +3,8 @@ package com.quinsoft.northwind.scala
 import org.junit.Assert._
 import org.junit.Before
 import org.junit.Test
-import org.scalatest.junit.AssertionsForJUnit
+import org.scalatestplus.junit.JUnitRunner
+import org.scalatestplus.junit.AssertionsForJUnit
 
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine

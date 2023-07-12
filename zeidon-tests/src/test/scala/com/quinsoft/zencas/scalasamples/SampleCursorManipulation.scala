@@ -18,29 +18,40 @@
  */
 package com.quinsoft.zencas.scalasamples
 
-import com.quinsoft.zeidon.scala.ZeidonOperations
-import com.quinsoft.zeidon.scala.View
-import com.quinsoft.zeidon.scala.VmlCursorResult
-import com.quinsoft.zeidon.scala.basedOn
+import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.scala.AbstractEntity
 import com.quinsoft.zeidon.scala.EntityCursor
 import com.quinsoft.zeidon.scala.EntityInstance
-import com.quinsoft.zeidon.ObjectEngine
+import com.quinsoft.zeidon.scala.Implicits._
+import com.quinsoft.zeidon.scala.Nexts
 import com.quinsoft.zeidon.scala.Task
+import com.quinsoft.zeidon.scala.View
+import com.quinsoft.zeidon.scala.VmlCursorResult
+import com.quinsoft.zeidon.scala.ZeidonOperations
+import com.quinsoft.zeidon.scala.basedOn
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
+import org.junit.runner.RunWith
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.junit.JUnitRunner
 
 /**
  *  This gives examples of how to manipulate cursors.  Usually there are two
  *  ways to manipulate cursors in Scala, the "VML" way and the "Scala" way.
  *  When appropriate both ways will be shown.
  */
-class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
+@RunWith(classOf[JUnitRunner])
+class SampleCursorManipulation extends AnyFunSuite with ZeidonOperations {
 
-    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
+    val oe = JavaObjectEngine.getInstance()
+    var task = oe.createTask("ZENCAs")
+    val mUser = task.deserializeOi().setLodDef( "mUser" ).fromFile("testdata/ZENCAs/data/mUser-SampleData.json").unpickle
 
     /**
      * Simple SET CURSOR FIRST
      */
+    test( "setCursorFirst" ) { setCursorFirst( mUser ) }
+
     def setCursorFirst( mUser: View @basedOn( "mUser") ) = {
         /* VML:
          *          SET CURSOR FIRST mUser.User
@@ -69,6 +80,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
     /**
      * Set cursor with a WHERE predicate
      */
+    test( "setCursorFirstWhere" ) { setCursorFirstWhere( mUser ) }
     def setCursorFirstWhere( mUser: View @basedOn( "mUser") ) = {
         /* VML:
          *          SET CURSOR FIRST mUser.User WHERE mUser.User.ID = 490
@@ -91,6 +103,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
     /**
      * Set cursor with a multipart WHERE predicate
      */
+    test( "setCursorFirstCompoundWhere" ) { setCursorFirstCompoundWhere( mUser ) }
     def setCursorFirstCompoundWhere( mUser: View @basedOn( "mUser") ) = {
         /* VML:
          *          SET CURSOR FIRST mUser.User WHERE mUser.User.ID = 490 OR mUser.User.ID = 491
@@ -113,6 +126,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
     /**
      * Set cursor with a multipart WHERE predicate
      */
+    test( "setCursorFirstWithScoping" ) { setCursorFirstWithScoping( mUser ) }
     def setCursorFirstWithScoping( mUser: View @basedOn( "mUser") ) = {
         /* VML:
          *          SET CURSOR FIRST mUser.User WHERE mUser.User.ID = 490 OR mUser.User.ID = 491
@@ -142,11 +156,15 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
      * keeps a backing hashmap of the values that allow SET FIRST processing to set the
      * cursor with a single lookup instead of looping through all the entities.
      */
+    test( "setCursorFirstUsingHashKey" ) { setCursorFirstUsingHashkey( mUser ) }
     def setCursorFirstUsingHashkey( mUser: View @basedOn( "mUser") ) = {
-        if ( mUser.User.set( _.ID = 409 ) )
-            println( "Cursor is set" )
+        val colleges = new View( task ) basedOn "mCollege-withHash"
+        colleges.buildQual().activate()
+        assert( colleges.College.set( _.ID = 4 ) )
+        assert( colleges.College.ID == 4 )
     }
 
+    test( "forEachCursor" ) { forEachCursor( mUser ) }
     def forEachCursor( mUser: View @basedOn( "mUser") ) = {
 
         /* VML:
@@ -157,14 +175,11 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
 
         // VML way
         FOREACH( mUser.User ) WHERE ( mUser.User.ID == 490 || mUser.User.ID == 491 ) DO {
-
-            println( "User ID = " + mUser.User.ID )
-
             if ( mUser.User.ID == 490 ) {
                 next() // This skips the following processing and continues with the next mUser.User
             }
 
-            if ( mUser.Report.ID == 491 ) {
+            if ( mUser.User.ID == 491 ) {
                 break() // This breaks the FOREACH loop.
             }
         }
@@ -172,13 +187,11 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         // Scala way #1.  Note that this does not have an explicit WHERE clause.
         mUser.User.each {
             if ( mUser.User.ID == 490 || mUser.User.ID == 491 ) {
-                println( "User ID = " + mUser.User.ID )
-
                 if ( mUser.User.ID == 490 ) {
                     next() // This skips the following processing and continues with the next mUser.User
                 }
 
-                if ( mUser.Report.ID == 491 ) {
+                if ( mUser.User.ID == 491 ) {
                     break() // This breaks the FOREACH loop.
                 }
             }
@@ -189,30 +202,34 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         // The difference is that using foreach must specify the object that is being returned
         // for each iterator (which is an EntityInstance for cursors).
         // Note that this does not have an explicit WHERE clause.
-        mUser.User.foreach { ei => {
+        var found491 = false
+        mUser.User.foreach { ei =>
             // You can use either the full cursor or 'ei'.
             if ( mUser.User.ID == 490 || ei.ID == 491 ) {
-                println( "User ID = " + mUser.User.ID )
-
                 if ( mUser.User.ID == 490 ) {
                     next() // This skips the following processing and continues with the next mUser.User
                 }
 
                 if ( ei.ID == 491 ) {
+                    found491 = true
                     break() // This breaks the FOREACH loop.
                 }
-            } }
+            }
         }
+
+        if ( ! found491 )
+            throw new ZeidonException( "Problem with foreach; didn't find ID 491" )
 
         // Scala way #3
         // The 'for' comprehension can be used to run through all entities.  It can be used
         // to generate a list of attributes.
-        val ids = ( for ( e <- mUser.Report ) yield e.ID ).mkString( "," )
+        val ids = ( for ( e <- mUser.User ) yield e.ID ).mkString( "," )
         println( "ID list = " + ids )
     }
 
+    test( "forEachCursorWithScoping" ) { forEachCursorWithScoping( mUser ) }
     def forEachCursorWithScoping( mUser: View @basedOn( "mUser") ) = {
-
+        val mUser = task.mUser.activateWith( _.where( _.Report.exists ).limit( 10 ) )
         // VML way
         FOREACH( mUser.Report ) UNDER( mUser.UserGroup ) WHERE( mUser.Report.ID == 589 ) DO {
             if ( mUser.Report.ID == 594 ) {
@@ -229,7 +246,6 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         }
 
         println( "Final ID = " + mUser.Report.ID )
-        println( "==================================================" )
 
         // Scala way
         mUser.Report.under( mUser.UserGroup ).each {
@@ -249,6 +265,7 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         println( "Final ID = " + mUser.Report.ID )
     }
 
+    test( "sortEntities" ) { sortEntities( mUser ) }
     def sortEntities( mUser: View @basedOn( "mUser") ) = {
 
         // Sort Report entities by Name in ascending order.
@@ -281,59 +298,36 @@ class SampleCursorManipulation( var task: Task ) extends ZeidonOperations {
         mUser.Report.each( println( mUser.Report.Name ) )
     }
 
-    def deleteEntities( mUser: View @basedOn( "mUser") ) = {
-        // To delete a single entity
-        mUser.Staff.delete()
+    test( "deleteEntities" ) {
+        // Activate 10 users with a faculty
+        val mUser = task.mUser.activateWith( _.where( _.Faculty.exists ).limit( 10 ) )
+        assert( mUser.Faculty.all.size == 10 )
 
-        // To delete all entities that match a predicate
-        mUser.Staff.deleteAll( _.Status == "A" )
+        // To delete a single entity
+        mUser.Faculty.delete()
+        assert( mUser.Faculty.all.size == 9 )
+
+        // To delete all entities UNDER THE PARENT that match a predicate
+        mUser.Faculty.filter( _.ID == 242 ).foreach( _.delete )
+        val c1 =  mUser.Faculty.all.size
 
         // For a more complex predicate use the view in the predicate.
-        mUser.Staff.deleteAll( mUser.Staff.Status == "A" && mUser.Staff.Type == "B" )
+        mUser.Faculty.deleteWhere( mUser.Faculty.Status == "A" && mUser.Faculty.ID == 100 )
+        val c2 =  mUser.Faculty.all.size
 
         // To delete all
-        mUser.Staff.deleteAll()
+        mUser.Faculty.all.foreach( _.delete )
+        assert( mUser.Faculty.all.size == 0 )
     }
 
-    def usingFilter( mUser: View ) = {
-        val list = mUser.Report.filter { _.ID > 0 }.foreach( e => println( e ) )
+    test( "usingFilter" ) {
+        mUser.Report.filter { _.ID > 0 }.foreach( e => println( e ) )
     }
 
-    def countEntities( mUser: View ) = {
+    test( "countEntities" ) {
         val count = mUser.Report.count
         val count2 = mUser.Report.count( _.ID >< (338, 400) )
         val count3 = mUser.Report.count( ei => { print( ei.ID + " " ); ei.ID < 10 } )
         print( count3 )
     }
-
-    def runAll( mUser : View ) = {
-        countEntities(mUser)
-        setCursorFirst(mUser)
-        setCursorFirstWhere(mUser)
-        setCursorFirstWithScoping(mUser)
-
-        forEachCursor(mUser)
-        sortEntities(mUser)
-        deleteEntities(mUser.cloneRoot)
-        usingFilter( mUser )
-//        mUser.logObjectInstance
-    }
-}
-
-object SampleCursorManipulation {
-
-   def main(args: Array[String]): Unit = {
-
-        // Load the object engine and create a task.
-        val oe = JavaObjectEngine.getInstance()
-        val task = oe.createTask("ZENCAs")
-
-        val activator = new SampleActivates( task )
-        var mUser = activator.activateSimple
-
-//        oe.startBrowser
-        val sampler = new SampleCursorManipulation( task )
-        sampler.runAll(mUser)
-    }
-
 }

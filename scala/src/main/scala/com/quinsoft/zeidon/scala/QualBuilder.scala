@@ -18,14 +18,19 @@
  */
 package com.quinsoft.zeidon.scala
 
-import scala.language.dynamics
-import collection.JavaConversions._
-
-import com.quinsoft.zeidon._
+import com.quinsoft.zeidon.ActivateFlags
+import com.quinsoft.zeidon.HiddenAttributeException
+import com.quinsoft.zeidon.Pagination
+import com.quinsoft.zeidon.SelectSet
+import com.quinsoft.zeidon.ZeidonException
 import com.quinsoft.zeidon.objectdefinition.EntityDef
 import com.quinsoft.zeidon.objectdefinition.LodDef
 import com.quinsoft.zeidon.utils.QualificationBuilder
 import org.apache.commons.lang3.StringUtils
+
+import scala.collection.JavaConverters._
+import scala.language.dynamics
+
 import collection.mutable.ArrayBuffer
 import collection.immutable.List
 
@@ -852,14 +857,14 @@ class AttributeQualBuilder( val qualBuilder: QualBuilder,
 
     def usingSql( customizedSql: String, attributeList: String, customValue: String ): QualificationTerminator = {
         qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
-        qualBuilder.jqual.setCustomQueryValues( ArrayBuffer( customValue ) )
+        qualBuilder.jqual.setCustomQueryValues( ArrayBuffer( customValue ).asJava )
 
         return QualBuilder.TERMINATOR
     }
 
     def usingSql( customizedSql: String, attributeList: String, customValues: List[String] ): QualificationTerminator = {
         qualBuilder.jqual.setCustomQuery( customizedSql, attributeList )
-        qualBuilder.jqual.setCustomQueryValues( customValues )
+        qualBuilder.jqual.setCustomQueryValues( customValues.asJava )
 
         return QualBuilder.TERMINATOR
     }
@@ -1171,7 +1176,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
 
         // Get the list of attribute values.  Note that we use the attr NAME.
         // This allows the user to use a different target entity.
-        val attrs = for ( e <- selectSet.iterator() ) yield e.getAttribute( jattributeDef.getName() )
+        val attrs = for ( e <- selectSet.iterator().asScala ) yield e.getAttribute( jattributeDef.getName() )
 
         return in( attrs )
     }
@@ -1224,7 +1229,7 @@ class AttributeQualOperators private[scala] ( val attrQualBuilder: AttributeQual
 
         // Get the list of attribute values.  Note that we use the attr NAME.
         // This allows the user to use a different target entity.
-        val attrs = for ( e <- selectSet.iterator() ) yield e.getAttribute( jattributeDef.getName() )
+        val attrs = for ( e <- selectSet.iterator().asScala ) yield e.getAttribute( jattributeDef.getName() )
         return notIn( attrs )
     }
 

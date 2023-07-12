@@ -32,7 +32,7 @@ class AttributeIterator( val jentityInstance: com.quinsoft.zeidon.EntityInstance
             var idx = 0
 
             def hasNext = attribList.size() > idx
-            def next = {
+            def next() = {
                 val nextAttr = attribList.get(idx)
                 idx += 1
                 entityInstance.getAttribute(nextAttr)

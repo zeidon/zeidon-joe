@@ -35,7 +35,7 @@ class Nexts {
      * A block from which one can process the next entity in a cursor by
      * using next().
      */
-    def nextable( op: => Unit ) {
+    def nextable[T]( op: => T ): Unit = {
         try {
             op
         } catch {
@@ -44,7 +44,9 @@ class Nexts {
         }
     }
 
-    def next(): Nothing = { throw nextException }
+    def next(): Nothing = {
+        throw nextException
+    }
 }
 
 object Nexts extends Nexts

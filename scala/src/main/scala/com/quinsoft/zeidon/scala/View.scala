@@ -27,9 +27,8 @@ import com.quinsoft.zeidon.SelectSet
 import com.quinsoft.zeidon.SubobjectValidationException
 import scala.collection.concurrent.TrieMap
 import org.apache.commons.lang3.StringUtils
-import collection.JavaConversions._
-import scala.collection.JavaConverters._
 import com.quinsoft.zeidon.standardoe.IteratorBuilder
+import scala.collection.JavaConverters._
 
 /**
  * A Scala wrapper for the JOE View.  This object uses dynamic methods that allows
@@ -461,7 +460,7 @@ class View( val jtask: com.quinsoft.zeidon.Task ) extends Dynamic {
         if ( variables == null )
             return jview.interpolate( string )
         else
-            return jview.interpolate( string, variables )
+            return jview.interpolate( string, variables.asJava )
     }
 
     /**

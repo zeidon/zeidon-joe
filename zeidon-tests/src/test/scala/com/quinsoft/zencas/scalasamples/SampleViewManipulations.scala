@@ -18,26 +18,32 @@
  */
 package com.quinsoft.zencas.scalasamples
 
-import scala.collection.JavaConversions._
-
 import com.quinsoft.zeidon.ObjectEngine
-import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.scala.EntityInstance
-import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.Implicits._
+import com.quinsoft.zeidon.scala.Task
+import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.View.jview2view
 import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
+import org.junit.runner.RunWith
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.junit.JUnitRunner
+
+import scala.collection.JavaConverters._
 
 /**
  * Examples of how to make miscellaneous View calls. For sample Cursor manipulations
  * see SampleCursorManipulation.
  */
-class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
+@RunWith(classOf[JUnitRunner])
+class SampleViewManipulations extends AnyFunSuite with ZeidonOperations {
 
-    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
+    val oe = JavaObjectEngine.getInstance()
+    var task = oe.createTask("ZENCAs")
+    val mUser = task.deserializeOi().setLodDef( "mUser" ).fromFile("testdata/ZENCAs/data/mUser-SampleData.json").unpickle
 
-    def creatingViews = {
+    test( "creatingViews" ) {
         /*
          * Creating a new view.
          *
@@ -54,52 +60,35 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
         println( mUser.isNull ) // Prints "true"
 
         // Instantiate an empty OI.
-        mUser activateEmpty()
+        mUser.activateEmpty()
         println( mUser.isNull )  // Prints "false"
         println( mUser.isEmpty ) // Prints "true"
 
-        mUser.User create()
+        mUser.User.create()
         println( mUser.isEmpty ) // Prints "false"
     }
 
-    def gettingViewsByName = {
+    test( "gettingViewsByName" )  {
         /*
          * Creating a new view.
          *
          * VML: VIEW mUser REGISTERED AS mUser
          */
 
+        mUser.setName( "mUser" )
         // VML-like syntax:
-        val mUser = REGISTERED AS "mUser"
+        val mUser1 = REGISTERED AS "mUser"
+        assert( ! mUser1.isEmpty() )
 
         // Scala syntax
         val mUser2 = task.getView( "mUser" )
-
-    }
-
-    /**
-     * Serialize an OI to a temporary file.  This writes the incremental values
-     * to preserve the OI's meta information.
-     *
-     * Returns the filename.
-     */
-    def serializeSingleOiToJsonFile( view: View ) : String = {
-        view.serializeOi.asJson.withIncremental.toTempFile()
-    }
-
-    /**
-     * Deserialize an OI from a JSON file.  This assumes that the JSON file was written
-     * with incremental flags and thus the LOD name does not need to be specified.
-     */
-    def deserializeOiFromFile( filename: String ) : View = {
-        task.deserializeOi.fromFile( filename ).asJson().activateFirst()
+        assert( ! mUser2.isEmpty() )
     }
 
     /**
      * Examples of using SelectSets.
      */
-    def selectSets( mUser: View ) = {
-
+    test( "selectSets" ) {
         // Create a named SelectSet.
         val set = mUser.getSelectSet( "MySelectSet")
 
@@ -160,7 +149,7 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
         // hierarchical order, which may be slow.  A faster iteration is to use the
         // underlying Set iterator directly.  However this does not preserve ordering.
         // This also uses the Java EntityInstance instead of the Scala EntityInstance.
-        set.iterator().foreach { ei => println( ei.getAttribute( "Name" ) ) }
+        set.iterator().asScala.foreach { ei => println( ei.getAttribute( "Name" ) ) }
 
         // Another way is to loop through the cursor explicitly and check to see if
         // the EI is selected.  This preserves OI ordering and is faster than looping
@@ -180,30 +169,4 @@ class SampleViewManipulations( var task: Task ) extends ZeidonOperations  {
         set.deselectSubobject( mUser.ReportGroup )
         assert( ! set.isSelected( mUser.Report ), "Report is still selected!" )
     }
-
-    def runAll( view: View ) = {
-        creatingViews
-        val filename = serializeSingleOiToJsonFile( view )
-        deserializeOiFromFile( filename )
-        selectSets( view )
-    }
-
-}
-
-object SampleViewManipulations {
-
-    def main(args: Array[String]): Unit = {
-
-        // Load the object engine and create a task.
-        val oe = JavaObjectEngine.getInstance()
-        val task = oe.createTask("ZENCAs")
-
-        // Activate an mUser that we can use for samples.
-        val sampleActivates = new SampleActivates( task )
-        val mUser = sampleActivates.activateSimple
-
-        val sample = new SampleViewManipulations( task )
-        sample.runAll( mUser )
-    }
-
 }

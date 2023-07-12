@@ -38,7 +38,7 @@ class EntityInstanceIterator( val jiterator: EntityIterator[_]) extends Iterable
     def iterator = {
         new Iterator[EntityInstance] {
             def hasNext = jiterator.hasNext()
-            def next = {
+            def next() = {
                 val ei = new EntityInstance( jiterator.next().asInstanceOf[com.quinsoft.zeidon.EntityInstance] )
                 if ( entityCursor != null )
                     entityCursor.jentityCursor.setCursor( ei )

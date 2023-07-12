@@ -4,29 +4,34 @@ import com.quinsoft.zeidon.scala.ZeidonOperations
 import com.quinsoft.zeidon.ObjectEngine
 import com.quinsoft.zeidon.scala.Task
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
+import org.junit.runner.RunWith
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.junit.JUnitRunner
 
 /**
  * Examples of how to execute Zeidon activates using Scala.
  */
-class SampleActivates( var task: Task ) extends ZeidonOperations {
+@RunWith(classOf[JUnitRunner])
+class SampleActivates extends AnyFunSuite with ZeidonOperations {
 
-    def this( task: com.quinsoft.zeidon.Task ) = this( new Task( task ) )
+    val oe = JavaObjectEngine.getInstance()
+    var task = oe.createTask("Northwind")
 
     /**
      * This method shows how to execute a simple activate.  The activate uses the
      * "activateWhere" method for activating on a single attribute.
      */
-    def activateSimple = {
+    test( "activateSimple" ) {
 
         /* VML:
 
-        VIEW mUser BASED ON muser
-        ACTIVATE mUser WHERE mUser.User.ID = 490
+        VIEW order BASED ON Order
+        ACTIVATE order WHERE Order.OrderId.ID = 11009
 
         */
 
-        val mUser = VIEW basedOn "mUser"
-        mUser.activateWhere( _.User.ID = 490 )
+        val order = VIEW basedOn "Order"
+        order.activateWhere( _.Order.OrderId = 11009 )
 
         /*
          * Comments:
@@ -39,80 +44,64 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
         /**
          * To activate all root entities, use .activateAll.
          */
-        val mFaculty = VIEW basedOn "mFaculty"
-        mFaculty.activateAll
-
-        mUser
-    }
-
-    /**
-     * Qualification can be done with operators besides "="
-     */
-    def activateSimpleWithOtherComparators = {
-
-        /* VML:
-
-        VIEW mUser BASED ON muser
-        ACTIVATE mUser WHERE mUser.User.ID < 10
-
-        */
-
-        val mUser = VIEW basedOn "mUser"
-        mUser.activateWhere( _.User.ID < 10 )
+        val region = VIEW basedOn "Region"
+        region.activateAll
 
         /*
-         * Comments:
-         *   - <= > >= != are also valid comparitors.
-         */
+        Scala way: you can use the task with the LOD name directly.
+        */
+        val order2 = task.Order.activate( _.Order.OrderId = 11009 )
     }
 
     /**
      * An activate with an OR statement.  This can not use "activateWhere" because
      * there are multiple elements in the qualification.
      */
-    def activateWithOr = {
+    test( "activateWithOr" ) {
         /* VML:
 
-        VIEW mUser BASED ON muser
-        ACTIVATE mUser WHERE mUser.User.ID = 490 OR mUser.User.ID = 491
+        VIEW order BASED ON Order
+        ACTIVATE order WHERE order.Order.OrderId = 11009 OR order.Order.OrderId = 11010
 
+        * Comments:
+        *  - Note that the qualification is built with buildQual and the final activate
+        *    is done with .activate().  The activate will not be executed without it.
         */
 
-        val mUser = VIEW basedOn "mUser"
-        mUser.buildQual( _.User.ID = 490 )
-                    .or( _.User.ID = 491 ).activate
+        val order = VIEW basedOn "Order"
+        order.buildQual( _.Order.OrderId = 11009 )
+                    .or( _.Order.OrderId = 11010 ).activate
+        assert( order.getTotalRootCount() == 2 )
 
         /*
-         * Comments:
-         *  - Note that the qualification is built with buildQual and the final activate
-         *    is done with .activate().  The activate will not be executed without it.
+            Complex qualification requires using the BuildQual:
          */
+        val order2 = task.Order.activateWith(
+                   _.where( _.Order.OrderId = 11009 )
+                    .or( _.Order.OrderId = 11010 ) )
+        assert( order2.getTotalRootCount() == 2 )
     }
 
     /**
      * An activate with logical grouping.  In VML this would use parenthesis.
      */
-    def activateWithGrouping = {
+    test( "activateWithGrouping" ) {
         /* VML:
 
-        VIEW mUser BASED ON muser
-        ACTIVATE mUser WHERE ( mUser.User.ID = 490 AND mUser.User.UserName = "milburnr" )
-                          OR ( mUser.User.ID = 491 AND mUser.User.UserName = "jblow" )
+        VIEW order BASED ON Order
+        ACTIVATE order WHERE ( ... AND ... )
+                          OR ( ... AND ... )
         */
 
-        val mUser = VIEW basedOn "mUser"
-        mUser.buildQual()
-                    .all( _.User.ID = 490, _.User.UserName = "milburnr" )
-                    .orAll( _.User.ID = 491, _.User.UserName = "jblow" )
+        val order = VIEW basedOn "Order"
+        order.buildQual()
+                    .all( _.Order.OrderId = 11009, _.Order.ShipCountry = "Spain" )
+                    .orAll( _.Order.OrderId = 11010, _.Order.ShipCountry = "Italy" )
                     .activate
 
         /*
          * Comments:
          *  - There are no arguments to buildQual
-         *
-         * The generated WHERE clause looks like this:
-         *
-         *  WHERE  ( z_USER.ID = 490 AND z_USER.USERNAME = 'milburnr' )  OR  ( z_USER.ID = 491 AND z_USER.USERNAME = 'jblow' ) ;
          *
          */
     }
@@ -120,143 +109,99 @@ class SampleActivates( var task: Task ) extends ZeidonOperations {
     /**
      * An activate with RESTRICTING clause.
      */
-    def activateWithRestricting = {
+    test( "activateWithRestricting" ) {
         /* VML:
 
-        VIEW mUser BASED ON muser
-        ACTIVATE mUser WHERE mUser.User.ID = 490
-            RESTRICTING mUser.Report TO ( mUser.Report.Name = "Pre-Law" OR
-                                          mUser.Report.Name = "Social Work" )
+        VIEW order BASED ON Order
+        ACTIVATE order WHERE order.Order.OrderId = 11009
+            RESTRICTING order.OrderDetail TO ( order.OrderDetail.Quantity = 0 OR
+                                               order.OrderDetail.Quantity = 1 )
         */
 
-        val mUser = VIEW basedOn "mUser"
-        mUser.buildQual( _.User.ID = 490 )
-                    .restricting( _.Report )
-                        .to( _.Report.Name = "Pre-Law" )
-                        .or( _.Report.Name = "Social Work" )
+        val order = VIEW basedOn "Order"
+        order.buildQual( _.Order.OrderId = 11009 )
+                    .restricting( _.OrderDetail )
+                        .to( _.OrderDetail.Quantity = 0 )
+                        .or( _.OrderDetail.Quantity = 2 )
                     .activate
-
-        /*
-         * Comments:
-         *  -
-         */
     }
 
     /**
      * Executing an activate asynchronously.
      */
-    def asynchronousActivate = {
+    test( "asynchronousActivate" ) {
         /* VML:
          *
          * No equivalent in VML.
          */
 
-        val mUser = VIEW basedOn "mUser"
-        mUser.buildQual( _.User.ID = 490 )
-                    .or( _.User.ID = 491 )
+        val order = VIEW basedOn "Order"
+        order.buildQual( _.Order.OrderId = 11009 )
+                    .or( _.Order.OrderId = 11010 )
                     .asynchronous
                     .activate
 
         // ...do other work here...
 
         // First reference of mUser will block until activate is finished.
-        println( "ID = " + mUser.User.ID )
-
-        mUser
+        println( "ID = " + order.Order.OrderId )
     }
 
     /**
      * Activate an entity by comparing two of its attributes.  This generates SQL that
      * compares two columns.
      */
-    def activateWithColumnQualification = {
+    test( "activateWithColumnQualification" ) {
         /* VML:
          *
          * No equivalent in VML.
          */
 
         /*
-         * Load all Users that have have been LastModified by the same person who
-         * created the mUser.
+         * Load all Orders that have have been OrderDate same as ShippedDate
          *
          * Note: the QualBuilder must be explicitly named ('qual' in example below)
          * because it is used twice.  Using "_" would cause a Scala compile error.
          */
-        val mUser = VIEW basedOn "mUser"
-        mUser.buildQual( qual => qual.User.LastModifiedBy = qual.User.CreatedBy )
+        val order = VIEW basedOn "Order"
+        order.buildQual( qual => qual.Order.OrderDate = qual.Order.ShippedDate )
                     .rootOnlyMultiple()
                     .activate
 
-        println( "Found = " + mUser.User.count )
-
         /*
-         * Children can be qualified on attributes from a parent.  The following will
-         * load all Users that have a Person entity with the same email address as
-         * the User email address.
+         * Children can be qualified on attributes from a parent.
          */
-        mUser.buildQual( qual => qual.User.eMailAddress = qual.Person.eMailAddress )
+        order.buildQual( qual => qual.OrderDetail.UnitPrice = qual.Product.UnitPrice )
             .rootOnlyMultiple()
             .activate
-
-        mUser.logObjectInstance()
-
-        mUser
-
     }
 
-    def miscActivates = {
+    test( "miscActivates" ) {
         /*
          * Activate using LIKE
          */
-        val mUser = VIEW basedOn "mUser"
-        mUser.activateWhere( _.User.UserName like "Jos%" )
+        val order = VIEW basedOn "Order"
+        order.activateWhere( _.Order.ShipCountry like "North%" )
 
         // Conditional qualification--only adds a qualification if a predicate
         // is true.
         val id = 10
 
-        mUser.buildQual( _.User.ID > 0 )
-             .when( id > 0, _.and( _.User.ID < id ),
-                            _.and( _.User.ID > id ) )
+        order.buildQual( _.Order.OrderId > 0 )
+             .when( id > 0, _.and( _.Order.OrderId < id ),
+                            _.and( _.Order.OrderId > id ) )
              .rootOnlyMultiple()
              .activate()
 
-        mUser.buildQual( _.User.ID > 0 )
-             .when( id > 0, _.and( _.User.ID < id ) )
+        order.buildQual( _.Order.OrderId > 0 )
+             .when( id > 0, _.and( _.Order.OrderId < id ) )
              .rootOnlyMultiple()
              .activate()
 
-        mUser.buildQual( _.User.ID in (1,2,3,4) ).rootOnly().activate()
-        mUser.buildQual( _.User.ID not() in (1,2,3,4) ).and( _.User.ID < 10 ).rootOnly().activate()
-        mUser.buildQual( _.User.UserName in ( "ABC", "xyz") ).rootOnly().activate()
+        order.buildQual( _.Order.OrderId in (1,2,3,4) ).rootOnly().activate()
+        order.buildQual( _.Order.OrderId.not() in (1,2,3,4) ).and( _.Order.OrderId < 10 ).rootOnly().activate()
+        order.buildQual( _.Order.ShipCountry in ( "Spain", "Italy") ).rootOnly().activate()
 
-        mUser.activate{ _.fromJson( """{ "ID": 10 } """) }
-    }
-
-    def runAll = {
-        activateSimpleWithOtherComparators
-        activateWithOr
-        activateWithGrouping
-        activateWithRestricting
-        asynchronousActivate
-        activateWithColumnQualification
-        miscActivates
-        var mUser = activateSimple
-//        mUser.logObjectInstance
-
-        mUser
-    }
-}
-
-object SampleActivates {
-
-    def main(args: Array[String]): Unit = {
-
-        // Load the object engine and create a task.
-        val oe = JavaObjectEngine.getInstance()
-        val task = oe.createTask("ZENCAs")
-
-        val sample = new SampleActivates( task )
-        sample.runAll
+        order.activate{ _.fromJson( """{ "OrderId": 11009 } """) }
     }
 }

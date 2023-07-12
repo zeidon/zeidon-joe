@@ -1,6 +1,5 @@
 package com.quinsoft.zencas.scala
 
-import org.scalatest.junit.AssertionsForJUnit
 import org.junit.Assert._
 import org.junit.Before
 import org.junit.Test
@@ -9,19 +8,18 @@ import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
 import com.quinsoft.zeidon.scala.Task
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.junit.JUnitRunner
+import org.junit.runner.RunWith
+import com.quinsoft.zeidon.ZeidonException
 
-class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
+@RunWith(classOf[JUnitRunner])
+class TestZencasScala extends AnyFunSuite with ZeidonOperations {
 
     val oe = JavaObjectEngine.getInstance()
     var task = oe.createTask("ZENCAs")
 
-    @Before
-    def initialize() {
-//        oe.startBrowser
-    }
-
-    @Test
-    def testEntityCache() {
+    test( "Entity Cache" ) {
         // First activate mClass without the EntityCache.
         val classes = new View( task ) basedOn "mClass"
         classes.activateWhere( _.Class.ID < 1000 )
@@ -48,8 +46,7 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
         userList.logOi
     }
 
-    @Test
-    def testMultipleWhenNull() {
+    test( "testMultipleWhenNull" ) {
         val userList = new View( task ) basedOn "mAdmDiv"
         val adminId: Integer = 0
         val personId: Integer = 10
@@ -60,8 +57,7 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
                 .activate()
     }
 
-    @Test
-    def testStringInterpolation() {
+    test( "testStringInterpolation" ) {
         val classes = new View( task ) basedOn "mClass"
         classes.activateWhere( _.Class.ID = 118 )
         var x = classes.interpolate( "${Class.ID}" )
@@ -72,8 +68,7 @@ class TestZencasScala extends AssertionsForJUnit with ZeidonOperations {
         assertEquals( "118", x )
     }
 
-    @Test
-    def testTaskImplicits() {
+    test( "testTaskImplicits" ) {
         val dtask = new Task( task )
         val userList = dtask.mAdmDiv.activate( _.AdministrativeDivision.ID < 10 )
     }

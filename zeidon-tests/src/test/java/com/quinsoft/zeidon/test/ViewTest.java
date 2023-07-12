@@ -25,10 +25,6 @@ import com.quinsoft.zeidon.standardoe.JavaObjectEngine;
 import com.quinsoft.zeidon.utils.JoeUtils;
 import com.quinsoft.zeidon.utils.QualificationBuilder;
 import com.quinsoft.zeidon.utils.ZeidonInputStream;
-import com.quinsoft.zencas.scalasamples.SampleActivates;
-import com.quinsoft.zencas.scalasamples.SampleAttributeCode;
-import com.quinsoft.zencas.scalasamples.SampleCursorManipulation;
-import com.quinsoft.zencas.scalasamples.SampleViewManipulations;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.junit.Before;
@@ -134,7 +130,6 @@ public class ViewTest
         JavaObjectEngine oeWithSingleSelect = new JavaObjectEngine( "zeidon.ini" );
         oeWithSingleSelect.getZeidonPreferences( "ZENCAs" ).set( "ZENCAS", "ActivateWithSingleSelect", "Y" );
 
-
         Task cheese = oeWithSingleSelect.createTask( "CheeseWiz" );
         qb = new QualificationBuilder( cheese );
         qb.setLodDef( "Cheese" );
@@ -149,6 +144,18 @@ public class ViewTest
         // qb.setLodDef( "mClass" );
         // qb.loadFromJsonString( "{ \"ID\": { \"<\": 1000 } }" );
         // view = qb.activate();
+    }
+
+    @Test
+    public void testCloneOi()
+    {
+        QualificationBuilder qb = new QualificationBuilder( zencas );
+        qb.setLodDef( "mUser" );
+        qb.loadFromJsonString( "{ \"ID\": [ 490, 491 ] }" );
+        View mUser = qb.activate();
+        mUser.cursor( "User").setLast();
+        View mUser2 = mUser.activateOiFromOi( ActivateFlags.fMULTIPLE );
+        assertEquals( mUser.getTotalRootCount(), mUser2.getTotalRootCount() );
     }
 
     @Test
@@ -953,21 +960,5 @@ public class ViewTest
 
         value = v.cursor( "Student" ).getAttribute( "DynamicAttr" ).getString();
         assertTrue( "Unexpected dynamic attribute value",  "This is a test".equals( value ) );
-    }
-
-    @Test
-    public void testScalaSamples()
-    {
-        SampleActivates sampleActivates = new SampleActivates( zencas );
-        com.quinsoft.zeidon.scala.View mUser = sampleActivates.runAll();
-
-        SampleCursorManipulation sampleCursor = new SampleCursorManipulation( zencas );
-        sampleCursor.runAll( mUser );
-
-        SampleViewManipulations sampleView = new SampleViewManipulations( zencas );
-        sampleView.runAll( mUser );
-
-        SampleAttributeCode sampleCode = new SampleAttributeCode( zencas );
-        sampleCode.runAll( mUser );
     }
 }

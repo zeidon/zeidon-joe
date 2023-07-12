@@ -21,8 +21,11 @@ package com.quinsoft.zeidon.scala
 import scala.language.dynamics
 import scala.collection.Iterable
 import scala.collection.mutable.ListMap
-import com.quinsoft.zeidon._
+import com.quinsoft.zeidon.CopyAttributesBuilder
+import com.quinsoft.zeidon.CompareEntityOptions
 import com.quinsoft.zeidon.objectdefinition._
+import com.quinsoft.zeidon.HiddenAttributeException
+import com.quinsoft.zeidon.ZeidonException
 
 /**
  * This class implements methods that are common to both EntityCursor and EntityInstance.  This
@@ -166,7 +169,7 @@ abstract class AbstractEntity( val jentityDef: EntityDef ) extends Dynamic {
      * {{{
      * tgtView.Entity.copyAttributes( srcView.Entity )
      * }}}
-     * 
+     *
      * Use the CopyAttributesBuilder if you need to specify what/how attributes are copied:
      * {{{
      * tgtView.Entity.copyAttributes.from( srcView.Entity )

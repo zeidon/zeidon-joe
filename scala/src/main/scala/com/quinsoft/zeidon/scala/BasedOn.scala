@@ -33,7 +33,7 @@ case class basedOn( lodName: String,
                     notEmpty: Boolean = true ) extends scala.annotation.StaticAnnotation {
 
     def this( viewDef: ViewDef ) = this( viewDef.lodName , viewDef.applicationName )
-    def macroTransform(annottees: Any*) = macro basedOnMacro.impl
+    def macroTransform(annottees: Any*): Any = macro basedOnMacro.impl
 }
 
 object basedOnMacro {

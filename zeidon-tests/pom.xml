@@ -28,7 +28,6 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>scala-compile-first</id>
@@ -51,18 +50,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
                 <configuration>
                     <systemPropertyVariables>
                         <zeidon.start.browser>N</zeidon.start.browser>
                     </systemPropertyVariables>
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/Sample*.*</include>
+                        <include>**/*Test.java</include>
+                    </includes>
                     <excludes>
-                        <exclude>${exclude.zencas.tests}</exclude>
-                        <exclude>**/*Noa*.class</exclude>
-                        <exclude>**/*Cheetah*.class</exclude>
+                        <exclude>${exclude.zencas.tests}</exclude> <!-- Exclude Zencas if Sqlite DB not found -->
                     </excludes>
                 </configuration>
             </plugin>
+
             <!-- Following plugin causes a .jar file to be created for the test classes. This is necessary
                 for the Test lod-server -->
             <plugin>
@@ -148,7 +150,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -171,8 +172,7 @@
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.12</artifactId>
-            <version>3.0.4</version>
+            <artifactId>scalatest_${scala.base.version}</artifactId>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -184,6 +184,12 @@
                     <artifactId>scala-reflect</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatestplus</groupId>
+            <artifactId>junit-4-13_${scala.base.version}</artifactId>
+            <version>3.2.16.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -279,7 +285,7 @@
     <!-- We can only run Zencas tests if we have the Sqlite test DB on the local system. We'll default
         to excluding them. Later we'll run them if we have the DB. -->
     <properties>
-        <exclude.zencas.tests>%regex[(.*TestZencas.*)|(.*ViewTest.*)|(.*TestSWAU.*)|(.*TestLazyLoad.*)|(.*TestIBOE.*)]</exclude.zencas.tests>
+        <exclude.zencas.tests>%regex[(.*TestZencas.*)|(.*ViewTest.*)|(.*TestSWAU.*)|(.*TestLazyLoad.*)|(.*TestIBOE.*)|(.*SampleCursor.*)|(.*SampleView.*)]</exclude.zencas.tests>
     </properties>
 
     <profiles>
