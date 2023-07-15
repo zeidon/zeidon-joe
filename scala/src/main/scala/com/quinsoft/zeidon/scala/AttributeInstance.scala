@@ -18,10 +18,12 @@
   */
 package com.quinsoft.zeidon.scala
 
-import scala.util.matching.Regex
-
 import com.quinsoft.zeidon.InvalidAttributeValueException
 import com.quinsoft.zeidon.ZeidonException
+import com.quinsoft.zeidon.objectdefinition.InternalType
+
+import scala.util.matching.Regex
+import com.quinsoft.zeidon.InvalidAttributeConversionException
 
 /**
  * Object that represents an attribute value in an entity instance.
@@ -247,7 +249,25 @@ class AttributeInstance( val jattributeInstance: com.quinsoft.zeidon.AttributeIn
      * be intepreted as "true".  E.g. an integer is non-0.  The advantage of this over
      * toBoolean is that it can handle null attributes.
      */
-    def isTruthy: Boolean = { ! isNull && toBoolean }
+    def isTruthy: Boolean = {
+        try {
+            !isNull && toBoolean // First try converting using domain processing.
+        }
+        catch {
+            case e: InvalidAttributeConversionException =>
+                return jattributeInstance.getAttributeDef.getType match {
+                    case InternalType.INTEGER => toInt != 0
+                    case InternalType.DECIMAL => toDouble != 0.0
+                    case InternalType.STRING => {
+                        if ( isBlank )
+                            false
+                        else
+                            toString.toLowerCase != "false"
+                    }
+                    case _ => true // Everything else is true of non-null
+                }
+        }
+    }
 
     /**
      * Converts the attribute value to a boolean using default domain processing.

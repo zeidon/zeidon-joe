@@ -77,7 +77,7 @@ class SampleAttributeCode extends AnyFunSuite with ZeidonOperations {
         if ( order.Order.OrderId > 10 )
             println( "Greater than 10" )
 
-        if ( order.Order.OrderId < "10" )  // Can autoatically convert using domain processing.
+        if ( order.Order.OrderId < "10" )  // Can automatically convert using domain processing.
             println( "Less than 10" )
 
         // Compare an attribute to a value.  This code will convert the attribute
@@ -95,6 +95,24 @@ class SampleAttributeCode extends AnyFunSuite with ZeidonOperations {
             println( "Equal to 01/01/2014." )
         else
             println( "Not '01/01/2014'.  May be null.")
+
+        // isTruthy will attempt to convert the attribute value to a boolean.  E.g. if the
+        // attribute is an integer then != 0 is true.
+        assert( order.OrderDetail.Quantity != 0 )
+        assert( order.OrderDetail.Quantity.isTruthy ) // Non-zero
+        order.OrderDetail.Quantity = 0
+        assert( ! order.OrderDetail.Quantity.isTruthy ) // Non-zero
+
+        assert( ! order.Order.ShipName.isBlank ) // Non-blank
+        assert( order.Order.ShipName.isTruthy ) // Non-blank
+        order.Order.ShipName = ""
+        assert( ! order.Order.ShipName.isTruthy ) // Blank string returns false.
+        order.Order.ShipName = "false"
+        assert( ! order.Order.ShipName.isTruthy ) // String value of "false" returns false.
+
+        assert( order.Order.ShippedDate.isTruthy ) // Non-null
+        order.Order.ShippedDate = null
+        assert( ! order.Order.ShippedDate.isTruthy )
     }
 
     test( "dates" ) {
