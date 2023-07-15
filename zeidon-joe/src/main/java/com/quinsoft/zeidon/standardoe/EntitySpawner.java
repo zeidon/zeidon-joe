@@ -264,7 +264,6 @@ class EntitySpawner
                                    EntityInstanceImpl startParentSearchInstance,
                                    boolean            matchingRelLinks )
     {
-    	String xx = "here";
         // Spawning pass 1, for every visible linked instance of the entity
         // to be spawned.
         for ( EntityInstanceImpl searchInstance : startSearchInstance.getLinkedInstances() )
