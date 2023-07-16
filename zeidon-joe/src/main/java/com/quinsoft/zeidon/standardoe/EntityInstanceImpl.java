@@ -2428,14 +2428,14 @@ class EntityInstanceImpl implements EntityInstance
             if ( excludeThis )
                 return Collections.emptyList();
             else
-                return Arrays.asList( this );
+                return Arrays.asList( this.getLatestVersion() );
         }
 
         Stream<EntityInstanceImpl> stream = linkedInstances2.stream( this );
         if ( excludeThis )
             stream = stream.filter( ei -> ei != this );
 
-        return stream.collect( Collectors.toList() );
+        return stream.map(EntityInstanceImpl::getLatestVersion).collect( Collectors.toSet() );
     }
 
     /**
