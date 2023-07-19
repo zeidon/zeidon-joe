@@ -1929,7 +1929,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
         }
 
         // Add main table.
-        stmt.from.append( " JOIN\n" );
+        stmt.from.append( " LEFT JOIN\n" );
 
         // If the table name for entityDef is not already part of the SELECT
         // statement then add it to the FROM clause.
