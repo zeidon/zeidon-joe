@@ -67,10 +67,11 @@ export class RestCommitter extends Committer {
                 let body = JSON.stringify( oi.toZeidonMeta() );
                 let url = `${this.values.restUrl}/${lodName}`;
 
+                console.log( "dgc: calling post" );
                 return this.http.post( url, body, { 'Content-Type': 'application/json' } )
                     .then( response => newOi = this.parseCommitResponse( oi, response, options ) )
                     .catch( error => {
-                        if ( error.response.body ) {
+                        if ( error.response?.body ) {
                             let errors = JSON.parse( error.response.body );
                             if ( errors.errors ) {
                                 let exception = new CommitError( errors.errors, error.response.statusCode );
