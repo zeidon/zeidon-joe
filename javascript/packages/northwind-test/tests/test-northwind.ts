@@ -28,9 +28,15 @@ const loadJson = function(json: string): string {
     return require( __dirname + "/" + json + ".json" );
 }
 
-before(function() {
+before( () => {
     startJettyServer();
-});
+    return new Promise<void>( ( resolve ) => {
+        setTimeout( () => {
+            console.log( "Done waiting for jetty server to start." );
+            resolve();
+        }, 1500 );
+    } );
+} );
 
 after(function() {
     console.log( "Stopping jetty server..." );
