@@ -4,7 +4,7 @@ import org.junit.Assert._
 import org.junit.Before
 import org.junit.Test
 import org.scalatestplus.junit.JUnitRunner
-import org.scalatestplus.junit.AssertionsForJUnit
+import org.scalatest.funsuite.AnyFunSuite
 
 import com.quinsoft.zeidon.scala.Implicits._
 import com.quinsoft.zeidon.standardoe.JavaObjectEngine
@@ -12,16 +12,15 @@ import com.quinsoft.zeidon.scala.View
 import com.quinsoft.zeidon.objectdefinition.KeyValidator
 import com.quinsoft.zeidon.objectdefinition.KeyValidator.KeyValidationError
 import com.quinsoft.zeidon.ZeidonException
+import org.junit.runner.RunWith
 
-class TestNorthwind extends AssertionsForJUnit {
+@RunWith(classOf[JUnitRunner])
+class TestNorthwind extends AnyFunSuite {
 
     val oe = JavaObjectEngine.getInstance()
     var task = oe.createScalaTask("northwind")
 
-    @Before
-    def initialize() {
-//        oe.startBrowser
-    }
+//    oe.startBrowser
 
     @Test
     def testLoadFromJson() {
@@ -129,5 +128,10 @@ class TestNorthwind extends AssertionsForJUnit {
         assertEquals( 2, order4.OrderDetail.count( false ) )
         assertEquals( 3, order4.OrderDetail.count( true ) )
 */
+    }
+
+    test( "testManyToManyJoins" ) {
+        val customerList = task.Customer.all
+        assert( customerList.getTotalRootCount() == 93 )
     }
 }

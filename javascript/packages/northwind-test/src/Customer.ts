@@ -45,6 +45,14 @@ export class Customer extends zeidon.ObjectInstance {
         return this.Customer$?.Order$?.OrderDetail$;
     }
 
+    get CustomerDemographics(): zeidon.EntityArray<Customer_CustomerDemographics> {
+        return this.Customer$?.CustomerDemographics;
+    }
+
+    get CustomerDemographics$(): Customer_CustomerDemographics {
+        return this.Customer$?.CustomerDemographics$;
+    }
+
     public static activate( qual?: any ): Promise<Customer> {
         return zeidon.ObjectInstance.activateOi( new Customer(), qual );
     }
@@ -94,6 +102,15 @@ export class Customer_Customer extends zeidon.EntityInstance {
 
     get Order$(): Customer_Order {
         return this.getChildEntityArray("Order").selected() as Customer_Order;
+    }
+
+    get CustomerDemographics(): zeidon.EntityArray<Customer_CustomerDemographics> {
+        return this.getChildEntityArray("CustomerDemographics") as zeidon.EntityArray<Customer_CustomerDemographics>;
+    }
+
+
+    get CustomerDemographics$(): Customer_CustomerDemographics {
+        return this.getChildEntityArray("CustomerDemographics").selected() as Customer_CustomerDemographics;
     }
 }
 
@@ -156,10 +173,21 @@ export class Customer_OrderDetail extends zeidon.EntityInstance {
     set Discount(value: number) { this.setAttribute("Discount", value) };
 }
 
+export class Customer_CustomerDemographics extends zeidon.EntityInstance {
+    public get entityName(): string { return "CustomerDemographics" };
+
+    get CustomerTypeId(): string { return this.getAttribute("CustomerTypeId") };
+    set CustomerTypeId(value: string) { this.setAttribute("CustomerTypeId", value) };
+
+    get CustomerDesc(): string { return this.getAttribute("CustomerDesc") };
+    set CustomerDesc(value: string) { this.setAttribute("CustomerDesc", value) };
+}
+
 const CustomerEntityPrototypes = {
     Customer: Customer_Customer.prototype, 
     Order: Customer_Order.prototype, 
     OrderDetail: Customer_OrderDetail.prototype, 
+    CustomerDemographics: Customer_CustomerDemographics.prototype, 
 }
 
 export const Customer_LodDefStructure = {
@@ -182,6 +210,7 @@ export const Customer_LodDefStructure = {
             parentDelete: true,
             childEntities: {
                 Order: {},
+                CustomerDemographics: {},
             },
             keys: [ "CustomerId",  ],
             attributes: {
@@ -529,6 +558,48 @@ export const Customer_LodDefStructure = {
                     key:          true,
                     update:       true,
                     foreignKey:   true,
+                },
+            }
+        },
+
+        CustomerDemographics: {
+            name:        "CustomerDemographics",
+            erToken:     "110000371",
+            isErRelLink: false,
+            relToken:    "110000436",
+            create:      false,
+            cardMax:     999999,
+            hasInit:     false,
+            creatable:   false,
+            includable:  false,
+            deletable:   false,
+            excludable:  false,
+            updatable:   false,
+            derived:     false,
+            parentDelete: false,
+            childEntities: {
+            },
+            keys: [ "CustomerTypeId",  ],
+            attributes: {
+                CustomerTypeId: {
+                    name:         "CustomerTypeId",
+                    hidden:       false,
+                    required:     true,
+                    domainName:   "Text",
+                    persistent:   true,
+                    key:          true,
+                    update:       true,
+                    foreignKey:   false,
+                },
+                CustomerDesc: {
+                    name:         "CustomerDesc",
+                    hidden:       false,
+                    required:     false,
+                    domainName:   "Text",
+                    persistent:   true,
+                    key:          false,
+                    update:       true,
+                    foreignKey:   false,
                 },
             }
         },
