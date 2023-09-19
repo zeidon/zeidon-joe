@@ -187,6 +187,30 @@ public class TestZencas
         tst2.resetSubobjectTop();
         Assert.assertEquals( tst2.cursor( "FinancialApprovalRole" ).getAttribute( "ID" ).getInteger(), (Integer) 76 );
     }
+    
+
+    @Test
+    public void testObjectUpdatedFunction()
+    {
+    	// KJS 09/19/23
+    	// After the view is updated and committed, isUpdated should now be false (or so I think).
+        View tst = new QualificationBuilder( zencas )
+                            .setLodDef( "mPerson" )
+                            .addAttribQual( "ID", 18808 )
+                            .activate();
+
+        if ( tst.cursor( "Address" ).getAttribute( "Line1" ).getString().equals("1 Main Street") )
+        	tst.cursor( "Address" ).getAttribute( "Line1" ).setValue("2 Main Street");
+        else
+        	tst.cursor( "Address" ).getAttribute( "Line1" ).setValue("1 Main Street");
+        
+        Assert.assertEquals( "mPerson.isUpdated should be true.", true, tst.isUpdated() );
+        
+        tst.commit();
+        
+        Assert.assertEquals( "mPerson.isUpdated should be false.", false, tst.isUpdated() );
+    }
+    
 
     @Test
     public void testActivateWithDate()
