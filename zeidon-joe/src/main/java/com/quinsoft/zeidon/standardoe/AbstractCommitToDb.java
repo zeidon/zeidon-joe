@@ -95,9 +95,7 @@ abstract class AbstractCommitToDb implements Committer
     protected void cleanupOI(ObjectInstance oi)
     {
         // We can't use an iterator because we are potentially removing entities.
-        for ( EntityInstanceImpl ei = oi.getRootEntityInstance();
-              ei != null;
-              ei = ei.getNextHier() )
+        for ( EntityInstanceImpl ei = oi.getRootEntityInstance(); ei != null; ei = ei.getNextHier() )
         {
             Collection<EntityInstanceImpl> linkedInstances = ei.getAllLinkedInstances();
             for ( EntityInstanceImpl linked : linkedInstances )
@@ -116,7 +114,7 @@ abstract class AbstractCommitToDb implements Committer
                     if ( linked == ei )
                         ei = ei.getLastChildHier();
 
-                    linked.dropEntity();  // Remove the ei from the chain.
+                    linked.dropEntity(); // Remove the ei from the chain.
                     continue;
                 }
 
@@ -143,5 +141,8 @@ abstract class AbstractCommitToDb implements Committer
                 }
             }
         }
+
+        oi.setUpdated( false );
+        oi.setUpdatedFile( false );
     }
 }
