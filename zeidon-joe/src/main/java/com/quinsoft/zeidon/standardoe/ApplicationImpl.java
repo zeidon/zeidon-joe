@@ -116,10 +116,18 @@ class ApplicationImpl implements Application, PortableFileAttributeHandler
             return;
 
         String value = reader.getAttributeValue();
+        if ( value.startsWith( "." ) )
+            value = zeidonRootDir + value.substring( 1 );
+        
+        /*
+         * 
+        String value = reader.getAttributeValue();
         if ( attName.equalsIgnoreCase("APP_ADOBIN") && StringUtils.isNotBlank(zeidonRootDir) )
         {
             value = FileSystems.getDefault().getPath( zeidonRootDir + "/" + value ).normalize().toAbsolutePath().toString();
         }
+
+         */
         attributes.put( attName, value );
     }
 
