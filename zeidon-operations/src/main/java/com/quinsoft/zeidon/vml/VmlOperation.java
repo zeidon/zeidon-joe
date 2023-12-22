@@ -6099,6 +6099,35 @@ public abstract class VmlOperation
       return 0;
    }
 
+   /* zGetAttributeDomainDataType
+    * This will return one of the following:
+    * INTEGER
+    * STRING
+    * DATE
+    * DECIMAL
+    * BLOB
+    */
+   protected int zGetAttributeDomainDataType( View view, String entityName, String attributeName, StringBuilder sbDomainType )
+   {
+      EntityDef entityDef = view.getLodDef().getEntityDef( entityName );
+      // If this entity has no attributes return.
+      if ( entityDef.getAttributeCount() == 0 )
+    	  return -1;
+
+      sbDomainType.setLength( 0 ); // Use sb.setLength( 0 ); to clear a string buffer.
+      
+      AttributeDef AttributeDef = entityDef.getAttribute( attributeName );
+
+      if ( AttributeDef == null )
+          return -1;
+
+      if ( AttributeDef.isHidden() )
+     	  return  -1;
+      
+      sbDomainType.append( AttributeDef.getDomain().getDataType() );
+      return 0;
+   }
+
    //./ ADD NAME=ObjectInstanceUpdatedFromFile
    // Source Module=kzoeoiaa.c
    /////////////////////////////////////////////////////////////////////////////
