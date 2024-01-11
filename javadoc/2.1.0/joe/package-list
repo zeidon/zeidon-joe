@@ -1,0 +1,8 @@
+com.quinsoft.zeidon
+com.quinsoft.zeidon.config
+com.quinsoft.zeidon.dbhandler
+com.quinsoft.zeidon.domains
+com.quinsoft.zeidon.jmx
+com.quinsoft.zeidon.objectdefinition
+com.quinsoft.zeidon.standardoe
+com.quinsoft.zeidon.utils
