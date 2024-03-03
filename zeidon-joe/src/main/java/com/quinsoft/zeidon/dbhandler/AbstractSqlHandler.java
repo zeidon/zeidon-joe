@@ -2054,7 +2054,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( !added )
                 return true; // The table was already added so we don't need to add it again.
 
-            stmt.useOuterJoin = true; // Indicate that the next table being joined to the MM should use outer.
+            if ( selectAllInstances( entityDef ) )
+                stmt.useOuterJoin = true; // Indicate that the next table being joined to the MM should use outer.
+
             stmt.fromConjunctionNeeded = false;
 
             // Look for the rel fields that have a parent entity as the source and add them
