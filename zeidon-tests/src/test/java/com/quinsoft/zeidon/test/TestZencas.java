@@ -47,6 +47,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -5541,7 +5543,19 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             zVIEW    vTempViewVar_0 = new zVIEW( );
             int RESULT=0;
             String szDate = "";
-
+            //////////////////////////////////////////////////////////////////////
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy");
+            //java.time.format.DateTimeParseException: Text '2021' could not be parsed: Unable to obtain LocalDate from TemporalAccessor: {Year=2021},ISO of type java.time.format.Parsed
+        	//at java.time.format.DateTimeFormatter.createError(Unknown Source)
+        	//at java.time.format.DateTimeFormatter.parse(Unknown Source)
+        	//at java.time.LocalDate.parse(Unknown Source)
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy");
+            String inputString = "2021";
+            LocalDate date = LocalDate.parse(inputString, inputFormatter);
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String outputString = date.format(outputFormatter);
+            
+            /////////////////////////////////////////////////////////////////////
              o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
              RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
              DropView( vTempViewVar_0 );
