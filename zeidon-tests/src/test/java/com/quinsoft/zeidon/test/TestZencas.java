@@ -5544,6 +5544,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             int RESULT=0;
             String szDate = "";
             //////////////////////////////////////////////////////////////////////
+            /* this was for testing... not an actual test that needs to run...
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy");
             //java.time.format.DateTimeParseException: Text '2021' could not be parsed: Unable to obtain LocalDate from TemporalAccessor: {Year=2021},ISO of type java.time.format.Parsed
         	//at java.time.format.DateTimeFormatter.createError(Unknown Source)
@@ -5554,7 +5555,7 @@ o_fnLocalBuildQuallFANdProLST( View     vSubtask,
             LocalDate date = LocalDate.parse(inputString, inputFormatter);
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String outputString = date.format(outputFormatter);
-            
+            */
             /////////////////////////////////////////////////////////////////////
              o_fnLocalBuildmUser( ViewToWindow, vTempViewVar_0, "halll" );
              RESULT = ActivateObjectInstance( mUser, "mUser", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
