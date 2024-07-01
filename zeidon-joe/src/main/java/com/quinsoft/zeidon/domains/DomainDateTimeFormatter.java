@@ -103,9 +103,9 @@ public class DomainDateTimeFormatter
                                                            ZonedDateTime::from,
                                                            LocalDateTime::from,
                                                            LocalDate::from,
-       													   LocalTime::from, 
-       													   YearMonth::from,
-       													   Year::from);
+       													   LocalTime::from,
+       	                                                   YearMonth::from,
+       	                                                   Year::from);
 
         if ( ta instanceof ZonedDateTime) {
             return (ZonedDateTime) ta;
