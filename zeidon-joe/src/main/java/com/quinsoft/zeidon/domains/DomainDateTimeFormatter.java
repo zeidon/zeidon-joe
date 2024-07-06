@@ -24,6 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -101,7 +103,9 @@ public class DomainDateTimeFormatter
                                                            ZonedDateTime::from,
                                                            LocalDateTime::from,
                                                            LocalDate::from,
-                                                           LocalTime::from );
+       													   LocalTime::from,
+       	                                                   YearMonth::from,
+       	                                                   Year::from);
 
         if ( ta instanceof ZonedDateTime) {
             return (ZonedDateTime) ta;
@@ -122,6 +126,18 @@ public class DomainDateTimeFormatter
         if ( ta instanceof LocalTime ) {
             LocalTime lt = (LocalTime) ta;
             ZonedDateTime dt = ZonedDateTime.of(LocalDate.of(1970, 1, 1).atTime(lt), ZoneId.systemDefault());
+            return dt;
+        }
+
+        if ( ta instanceof YearMonth ) {
+            YearMonth lt = (YearMonth) ta;
+            ZonedDateTime dt = ZonedDateTime.of(LocalDate.of(lt.getYear(),lt.getMonth(), 1).atStartOfDay(), ZoneId.systemDefault());
+            return dt;
+        }
+
+        if ( ta instanceof Year ) {
+            Year lt = (Year) ta;
+            ZonedDateTime dt = ZonedDateTime.of(LocalDate.of(lt.getValue(), 1, 1).atStartOfDay(), ZoneId.systemDefault());
             return dt;
         }
 

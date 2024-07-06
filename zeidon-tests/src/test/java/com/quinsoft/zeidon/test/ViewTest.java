@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.util.EnumSet;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -631,6 +632,11 @@ public class ViewTest
         mFASrc.cursor( "EmailPerson" ).createEntity().getAttribute( "eMailAddress").setValue( email ) ;
         String email2 = mFASrc.cursor( "EmailPerson" ).getAttribute( "eMailAddress" ).getString();
         assertEquals( email, email2 );
+
+        // DateTimeDomain
+        assertThrows(ZeidonException.class, () ->
+            mFASrc.cursor( "FinAidSource" ).getAttribute( "CreatedDateTime").setValue( "2024" )) ;
+        mFASrc.cursor( "FinAidSource" ).getAttribute( "CreatedDateTime").setValue( "2024", "YYYY" ) ;
 
         // DoubleDomain
         mFASrc.cursor( "FinAidSource" ).getAttribute( "wTotalNotAcceptedActiveStudents").setValue( "12.0" ) ;

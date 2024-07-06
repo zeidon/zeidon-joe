@@ -1,5 +1,5 @@
 
-// Generated from ./testdata/northwind/zeidon.xdm
+// Generated from testdata/northwind/zeidon.xdm
 import { Domain } from '@zeidon/core';
 
 export const Northwind_DomainList = {
