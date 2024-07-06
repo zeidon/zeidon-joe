@@ -2054,6 +2054,9 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             if ( !added )
                 return true; // The table was already added so we don't need to add it again.
 
+            if ( selectAllInstances( entityDef ) )
+                stmt.useOuterJoin = true; // Indicate that the next table being joined to the MM should use outer.
+
             stmt.fromConjunctionNeeded = false;
 
             // Look for the rel fields that have a parent entity as the source and add them
@@ -2666,6 +2669,7 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
 
         SqlStatement parent;    // If current SqlStatement is a sub-select, this points to parent select.
         private String assembledCommand;
+        private boolean useOuterJoin = false; // If true, then next JOIN should use outer join instead of LEFT JOIN.
 
         SqlStatement( SqlCommand commandType, View view, EntityDef selectRoot )
         {
@@ -2944,7 +2948,13 @@ public abstract class AbstractSqlHandler implements DbHandler, GenKeyHandler
             {
             	if ( activatingWithJoins() )
             	{
-                    from.append( " LEFT JOIN\n" );
+                    if ( useOuterJoin )
+                    {
+                        from.append( " JOIN\n" );
+                        useOuterJoin = false; // We only use this flag for one join.
+                    }
+                    else
+                        from.append( " LEFT JOIN\n" );
             	}
             	else
                     from.append( ",");
