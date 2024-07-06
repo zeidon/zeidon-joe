@@ -9,6 +9,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "lib": [ "dom", "ESNext" ], // ESNext is needed for WeakRef; someday should be ES2021
   },
   "paths": {
