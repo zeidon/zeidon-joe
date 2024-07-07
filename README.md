@@ -16,7 +16,7 @@ Object engine:
     <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-joe</artifactId>
-      <version>2.0.1</version>
+      <version>2.1.0</version>
     </dependency>
 ```
 
@@ -26,7 +26,7 @@ Scala DSL:
     <dependency>
       <groupId>com.quinsoft.zeidon</groupId>
       <artifactId>zeidon-scala</artifactId>
-      <version>2.0.1</version>
+      <version>2.1.0</version>
     </dependency>
 ```
 
@@ -34,8 +34,8 @@ Scala DSL:
 
 ```
 dependencies {
-    compile 'com.quinsoft.zeidon:zeidon-joe:2.0.1'
-    compile 'com.quinsoft.zeidon:zeidon-scala:2.0.1'
+    compile 'com.quinsoft.zeidon:zeidon-joe:2.1.0'
+    compile 'com.quinsoft.zeidon:zeidon-scala:2.1.0'
 }
 ```
 
