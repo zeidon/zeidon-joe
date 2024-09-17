@@ -5634,14 +5634,14 @@ public abstract class VmlOperation
    }
 
    //  RETURNS:    0 or greater  - Number of unhidden Entities.
-   //              zCALL_ERROR   - Error in call
+   //              
    protected int CountEntitiesForView( View view, String entityName )
    {
       int nRC;
       EntityCursor cursor = view.cursor( entityName );
       if ( cursor.hasAny() == false )
       {
-         nRC = zCALL_ERROR;
+         nRC = 0;
       }
       else
       {
