@@ -1,4 +1,4 @@
-z1000-Zeidon    TZWDLGSO TZZOXODO 07/18/24   18:08:28 1.0a2    
+z1000-Zeidon    TZWDLGSO TZZOXODO 10/21/24   14:37:11 1.0a2    
 eOBJECT    1
 aNAME      TZWDLGSO
 aZKey      1325104
@@ -452,8 +452,8 @@ aXVAATT_TOK 39
 eATTRIB    3
 aNAME      wClassNameConvertType
 aERATT_TOK 1448506
-aAPDM_TOK  1158762
-aDOMAIN    MapTypeGeneral
+aAPDM_TOK  90000032
+aDOMAIN    Text
 aTYPE      S
 aLTH       32
 aSEQ_AD    Y
