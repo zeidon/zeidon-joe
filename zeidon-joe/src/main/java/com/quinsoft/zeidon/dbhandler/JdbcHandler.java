@@ -660,7 +660,15 @@ public class JdbcHandler extends AbstractSqlHandler
                     {
                         while ( rs2.next() )
                         {
-                            Object i = rs2.getObject( entityDef.getGenKey().getName() );
+                        	Object i = null;
+                        	try 
+                        	{
+                             i = rs2.getObject( entityDef.getGenKey().getName() );
+                        	}
+                        	catch( Exception e )
+                        	{
+                                i = rs2.getObject( 1 );                        		
+                        	}
                             generatedKeys.add( i );
                         }
                     }
