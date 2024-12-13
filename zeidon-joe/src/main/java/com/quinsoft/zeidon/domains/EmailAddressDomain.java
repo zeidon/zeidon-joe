@@ -57,7 +57,8 @@ public class EmailAddressDomain extends StringDomain
         for(int i =0; i < temp.length ; i++)
         {
             if ( ! EmailValidator.getInstance().isValid( temp[i] ) )
-                throw new InvalidAttributeValueException( attributeDef, string, "Value must be a valid email address" );
+            	internalValue = "";  // KJS 12/13/24 - changing this for the moment so that we don't crash...
+                //throw new InvalidAttributeValueException( attributeDef, string, "Value must be a valid email address" );
         }
 
         super.validateInternalValue( task, attributeDef, internalValue );
