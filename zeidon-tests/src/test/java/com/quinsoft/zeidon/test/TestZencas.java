@@ -1517,7 +1517,17 @@ public class TestZencas
         tester.testUpdateForeignKeys( testview );
         System.out.println("===== Finished testUpdateForeignKeys ========");
     }
-
+    
+    @Test
+    public void UpdateIncludeSaveIssue()
+    {
+        View         testview;
+        testview = zencas.activateEmptyObjectInstance( "mStudent" );
+        VmlTester tester = new VmlTester( testview );
+        tester.UpdateIncludeSaveIssue( testview );
+        System.out.println("===== Finished IncludeSaveIssue ========");
+    }
+    
     @Test
     public void testUsingJacob()
     {
@@ -2005,6 +2015,36 @@ public class TestZencas
            return 0;
         }
 
+        public int
+        UpdateIncludeSaveIssue( View ViewToWindow )
+        {
+            zVIEW    mPerTst = new zVIEW( );
+            zVIEW    mUserTst = new zVIEW( );
+            zVIEW    vTempViewVar_0 = new zVIEW( );
+            int RESULT=0;
+            
+            // First had this error at HFI.
+            // I am able to re-create this here, but only when "Address" is under "Person", even though we don't update "Address".
+            o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+            RESULT = ActivateObjectInstance( mPerTst, "mPerTst", ViewToWindow, vTempViewVar_0, zSINGLE );
+            mPerTst.setName("mPerTst");
+            if (mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() > 0)
+            	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("");
+            else
+            	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("Test Name");
+            
+            DropView( vTempViewVar_0 );
+            RESULT = ActivateEmptyObjectInstance( mUserTst, "mUserTst", ViewToWindow, zSINGLE );
+            mUserTst.setName("mUserTst");
+            RESULT = CreateEntity( mUserTst, "User", zPOS_AFTER );
+            mUserTst.cursor("User").getAttribute("UserName").setValue("TestUser");
+            mUserTst.cursor( "Person" ).includeSubobject( mPerTst.cursor( "Person" ), CursorPosition.NEXT );
+            mUserTst.commit();
+                       
+        	return 0;
+
+        }
+        
         public int
         mFAProfTemporalIssue3( View ViewToWindow )
         {
