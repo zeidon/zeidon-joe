@@ -2020,6 +2020,8 @@ public class TestZencas
         {
             zVIEW    mPerTst = new zVIEW( );
             zVIEW    mUserTst = new zVIEW( );
+            zVIEW    mUserTst2 = new zVIEW( );
+            zVIEW    mUserTst3 = new zVIEW( );
             zVIEW    vTempViewVar_0 = new zVIEW( );
             int RESULT=0;
             
@@ -2034,6 +2036,36 @@ public class TestZencas
             	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("Test Name");
             
             DropView( vTempViewVar_0 );
+            /*
+
+            // mUserTst3 has "Address" under "Person", but "Address" has no permissions. No problem on commit.
+            RESULT = ActivateEmptyObjectInstance( mUserTst3, "mUserTst3", ViewToWindow, zSINGLE );
+            mUserTst3.setName("mUserTst3");
+            RESULT = CreateEntity( mUserTst3, "User", zPOS_AFTER );
+            mUserTst3.cursor("User").getAttribute("UserName").setValue("TestUser");
+            mUserTst3.cursor( "Person" ).includeSubobject( mPerTst.cursor( "Person" ), CursorPosition.NEXT );
+            mUserTst3.commit();
+            
+            if (mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() > 0)
+            	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("");
+            else
+            	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("Test Name");
+
+            // mUserTst2 does not have "Address" under "Person" And there is no problem on commit.
+            RESULT = ActivateEmptyObjectInstance( mUserTst2, "mUserTst2", ViewToWindow, zSINGLE );
+            mUserTst2.setName("mUserTst2");
+            RESULT = CreateEntity( mUserTst2, "User", zPOS_AFTER );
+            mUserTst2.cursor("User").getAttribute("UserName").setValue("TestUser");
+            mUserTst2.cursor( "Person" ).includeSubobject( mPerTst.cursor( "Person" ), CursorPosition.NEXT );
+            mUserTst2.commit();
+            
+            if (mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() > 0)
+            	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("");
+            else
+            	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("Test Name");
+            */
+
+            // mUserTst has "Address" under "Person". Error on commit.
             RESULT = ActivateEmptyObjectInstance( mUserTst, "mUserTst", ViewToWindow, zSINGLE );
             mUserTst.setName("mUserTst");
             RESULT = CreateEntity( mUserTst, "User", zPOS_AFTER );
