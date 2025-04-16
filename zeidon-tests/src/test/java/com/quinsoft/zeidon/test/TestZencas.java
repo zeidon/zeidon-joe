@@ -1898,6 +1898,27 @@ public class TestZencas
             mFAProf.cursor("FinAidAward").getAttribute("Amount").setValue("1000");
                RESULT = CommitObjectInstance( mFAProf );
 
+               // KJS 04/16/25 - Added this section. When we create FinAidAward as Temporal. And then create FinAidAwardDisbursement (either
+               // CreateEntity or CreateTemporalEntity... and include the PerProfileFinAidAwardPeriod, I can't get the disbursement to
+               // show under PerProfileFinAidAwardPeriod, even after trying a bunch of relinks.
+               CreateTemporalSubobjectVersion( mFAProf, "FinAidAward" );
+               RESULT = CreateTemporalEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+               RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+               AcceptSubobject( mFAProf, "FinAidAwardDisbursement" );
+               AcceptSubobject( mFAProf, "FinAidAward" );
+               //RelinkInstanceToInstance( mFAProf, "PerPeriodFinAidAwardDisbursement", mFAProf, "FinAidAwardDisbursement" );
+               //RelinkInstanceToInstance( mFAProf, "FinAidAwardDisbursement", mFAProf, "PerPeriodFinAidAwardDisbursement" );
+               //RelinkInstanceToInstance( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod" );
+               RelinkInstanceToInstance( mFAProf, "PerProfileFinAidAwardPeriod", mFAProf, "FinAidAwardPeriod" );
+               RelinkInstanceToInstance( mFAProf, "DisbFinAidAwardAssigned", mFAProf, "FinAidAward" );
+               RelinkInstanceToInstance( mFAProf, "FinAidAward", mFAProf, "DisbFinAidAwardAssigned" );
+               Assert.assertTrue( "Error linked entities FinAidAwardDisbursement/PerPeriodFinAidAwardDisbursement ", mFAProf.cursor("FinAidAwardDisbursement").isLinked( mFAProf.cursor("PerPeriodFinAidAwardDisbursement")) );
+               
+               //RESULT = CreateEntity( mFAProf, "FinAidAwardDisbursement", zPOS_AFTER );
+               //mFAProf.cursor("FinAidAwardDisbursement").getAttribute("AmountExpected").setValue(1000);
+               //RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidAwardPeriod", mFAProf, "PerProfileFinAidAwardPeriod", zPOS_AFTER );
+               //AcceptSubobject( mFAProf, "FinAidAward" );
+
            return 0;
         }
 
