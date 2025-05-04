@@ -4,7 +4,7 @@
     <parent>
         <artifactId>zeidon</artifactId>
         <groupId>com.quinsoft.zeidon</groupId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>2.3.0</version>
     </parent>
 
     <artifactId>zeidon-tests</artifactId>
