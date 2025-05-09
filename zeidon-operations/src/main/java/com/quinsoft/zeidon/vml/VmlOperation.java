@@ -7711,7 +7711,7 @@ public abstract class VmlOperation
                break;
 
             case zSET_INCR_TEMPORAL_ENTITY:
-            // nRC = cursor.isTemporal() ? 1 : 0;  // TODO: DKS???
+               nRC = cursor.isVersioned() ? 1 : 0;
                break;
 
             case zSET_INCR_DELETED:
