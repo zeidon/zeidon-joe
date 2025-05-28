@@ -2045,6 +2045,7 @@ public class TestZencas
             zVIEW    mUserTst3 = new zVIEW( );
             zVIEW    vTempViewVar_0 = new zVIEW( );
             int RESULT=0;
+            boolean bBlank = true;
             
             // First had this error at HFI.
             // I am able to re-create this here, but only when "Address" is under "Person", even though we don't update "Address".
@@ -2054,10 +2055,38 @@ public class TestZencas
             if (mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() > 0)
             	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("");
             else
+            {
+            	bBlank = false;
             	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("Test Name");
+            }
             
             DropView( vTempViewVar_0 );
-            /*
+            
+            //mPerTst
+            //Person (CDU)
+            //Address (IE)
+            
+            // KJS 05/28/25 - I see that the reason this is failing is because Address can not have ANY permissions.
+            // When Address has no permissions (mUserTst3) we can commit.
+            // I suppose that is correct. Although, is there any chance we would want to have both as include/exclude? Not
+            // as update. And they both should update the foreign keys?
+            
+            // ISSUE *** when we commit mUserTst successfully, it removes the UP mark on the original object mPerTst.Person. So, if
+            // I commit mPerTst after mUserTst, it doesn't save the change to EmergencyContactName.
+            //mUserTst
+            //User   (CDU)
+            //Person (IE)
+            //Address (IE)
+            
+            //mUserTst2 (has no Address)
+            //User   (CDU)
+            //Person (IE)
+            
+            //mUserTst3
+            //User   (CDU)
+            //Person (IE)
+            //Address ()
+            
 
             // mUserTst3 has "Address" under "Person", but "Address" has no permissions. No problem on commit.
             RESULT = ActivateEmptyObjectInstance( mUserTst3, "mUserTst3", ViewToWindow, zSINGLE );
@@ -2066,12 +2095,36 @@ public class TestZencas
             mUserTst3.cursor("User").getAttribute("UserName").setValue("TestUser");
             mUserTst3.cursor( "Person" ).includeSubobject( mPerTst.cursor( "Person" ), CursorPosition.NEXT );
             mUserTst3.commit();
+            mPerTst.commit();
+            mPerTst.drop();
+            
+            // Even though mUserTst3 has Person as only IE (no U), after the commit mPerTst.Person, is no longer marked with UP.
+            // mPerTst.commit does not commit our change.
+            RESULT = ActivateObjectInstance( mPerTst, "mPerTst", ViewToWindow, vTempViewVar_0, zSINGLE );
+            mPerTst.setName("mPerTst");
+            if ( bBlank )
+            {
+            	//assert mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() == 0 : "Name value set but should have been canceled";
+               Assert.assertTrue( "mPerTst.Person.EmergencyContactName did not save. Should be blank but has a value. ",  mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() == 0 );           	
+            }
+            else
+            {
+                Assert.assertTrue( "mPerTst.Person.EmergencyContactName did not save. Should be 'Test Name' but is blank.",  mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() > 0 );           	
+            }
+            
             
             if (mPerTst.cursor("Person").getAttribute("EmergencyContactName").getString().length() > 0)
+            {
+            	bBlank = true;
             	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("");
+            }
             else
+            {
+            	bBlank = false;
             	mPerTst.cursor("Person").getAttribute("EmergencyContactName").setValue("Test Name");
-
+            }
+            
+            /*
             // mUserTst2 does not have "Address" under "Person" And there is no problem on commit.
             RESULT = ActivateEmptyObjectInstance( mUserTst2, "mUserTst2", ViewToWindow, zSINGLE );
             mUserTst2.setName("mUserTst2");
