@@ -374,6 +374,7 @@ class CommitMultipleOIs
     private void validatePermissions( Set<ObjectInstance> oiSet )
     {
         boolean missingPermission = false;
+        String errorMessage = "";
         accumulatePermissionMaps();
 
         for ( ViewImpl view : viewList )
@@ -409,6 +410,7 @@ class CommitMultipleOIs
                     if ( ! entityDef.isInclude() && validatePermissionForEi( ei, oiSet, hasIncludePermission, includableRelationships ) == null )
                     {
                         missingPermission = true;
+                        errorMessage = String.format("Entity instance in view: %s  entity: %s  does not have include authority:", view, entityDef.getName());
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have include authority:", view, entityDef.getName() );
                         ei.logEntity();
                     }
@@ -421,6 +423,7 @@ class CommitMultipleOIs
                     if ( ! entityDef.isExclude() && validatePermissionForEi( ei, oiSet, hasExcludePermission, excludableRelationships ) == null )
                     {
                         missingPermission = true;
+                        errorMessage = String.format("Entity instance in view: %s  entity: %s  does not have exclude authority:", view, entityDef.getName() );
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have exclude authority:", view, entityDef.getName() );
                         ei.logEntity();
                     }
@@ -433,6 +436,7 @@ class CommitMultipleOIs
                     if ( ! entityDef.isCreate() && validatePermissionForEi( ei, oiSet, hasCreatePermission, null ) == null )
                     {
                         missingPermission = true;
+                        errorMessage = String.format("Entity instance in view: %s  entity: %s  does not have create authority:", view, entityDef.getName() );
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have create authority:", view, entityDef.getName() );
                         ei.logEntity();
                     }
@@ -445,6 +449,7 @@ class CommitMultipleOIs
                     if ( ! entityDef.isDelete() && validatePermissionForEi( ei, oiSet, hasDeletePermission, null ) == null )
                     {
                         missingPermission = true;
+                        errorMessage = String.format("Entity instance in view: %s  entity: %s  does not have delete authority:", view, entityDef.getName() );
                         getTask().log().error( "Entity instance in view: %s  entity: %s  does not have delete authority:", view, entityDef.getName() );
                         ei.logEntity();
                     }
@@ -477,6 +482,7 @@ class CommitMultipleOIs
                             else
                             {
                                 missingPermission = true;
+                                errorMessage = String.format("Entity instance in view: %s  entity: %s  does not have update authority and at least one of it's sub entities is marked 'update':", view, entityDef.getName());
                                 getTask().log().error( "Entity instance in view: %s  entity: %s  does not have update authority:", view, entityDef.getName() );
                                 ei.logEntity();
                             }
@@ -490,6 +496,7 @@ class CommitMultipleOIs
                 // we won't check the permissions of the children (nor will we attempt to commit them).
                 if ( entityDef.isReadOnlySubobjectRoot() ) {
                     ei = ei.getLastChildHier();
+                    errorMessage = String.format("Skipping commit of children under %s because it is flagged as readOnlyRelationshipRoot", entityDef.getName());
                     getTask().log().debug(  "Skipping commit of children under %s because it is flagged as readOnlyRelationshipRoot", entityDef.getName() );
                 }
 
@@ -497,7 +504,7 @@ class CommitMultipleOIs
         } // each view
 
         if ( missingPermission )
-            throw new ZeidonException( "Commit has an entity instance that doesn't have permission.  See log for more." );
+            throw new ZeidonException( "Commit has an entity instance that doesn't have permission. " + errorMessage );
     }
 
     /**
