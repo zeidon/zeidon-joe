@@ -777,6 +777,16 @@ public class TestZencas
     }
 
     @Test
+    public void mPersonProspectCreateSaveAddress()
+    {
+        View         testview;
+        testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+        VmlTester tester = new VmlTester( testview );
+        tester.mPersonProspectCreateSaveAddress( testview );
+        System.out.println("===== Finished mPersonProspectSaveAttribute ========");
+    }
+
+    @Test
     public void IncludeExcludeMaxCardinalityIssue()
     {
         View         testview;
@@ -1457,6 +1467,16 @@ public class TestZencas
         System.out.println("===== Finished mFAProfTemporalIssue4 ========");
 	}
 
+	@Test
+	public void mFAProfCreateTemporalEntityIssue()
+	{
+	    View         testview;
+		testview = zencas.activateEmptyObjectInstance( "mFASrc" );
+		VmlTester tester = new VmlTester( testview );
+		tester.mFAProfCreateTemporalEntityIssue( testview );
+        System.out.println("===== Finished mFAProfCreateTemporalEntityIssue ========");
+	}
+	
     @Test
     public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest()
     {
@@ -1675,6 +1695,74 @@ public class TestZencas
 
            return 0;
         }
+
+
+        public int
+        mPersonProspectCreateSaveAddress( View ViewToWindow )
+        {
+           zVIEW    mPerson = new zVIEW( );
+           zVIEW    mProspct = new zVIEW( );
+           zVIEW    mAddress = new zVIEW( );
+           zVIEW    mFASrc = new zVIEW( );
+           zVIEW    lTermLST = new zVIEW( );
+           zVIEW    wXferO = new zVIEW( );
+           zVIEW    vTempViewVar_0 = new zVIEW( );
+           int      ViewCluster = 0;
+           int RESULT=0;
+
+           // KJS 06/04/25 - We have two objects Prospect and Person, I create mProspct.Prospect and
+
+           /* KJS 11/24/25 - I'm not sure about what I was doing. Not getting an error so I am commenting out
+           RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+           RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+           SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+           fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+
+           //RESULT = ActivateObjectInstance( mProspct, "mProspct", ViewToWindow, 0, zMULTIPLE );  //ID	2806	//personID	3534	
+           
+           mProspct.setView(new QualificationBuilder( zencas )
+                   .setLodDef( "mProspTst" )
+                   .addAttribQual( "ID", 2904 )
+                   .activate());
+           mProspct.setName("mProspct");
+           o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 3691 );
+           RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+           mPerson.setName("mPerson");
+           DropView( vTempViewVar_0 );
+           RelinkInstanceToInstance( mProspct, "Person", mPerson, "Person" );
+           CreateTemporalEntity( mPerson, "Address", zPOS_AFTER );
+           mPerson.cursor("Address").getAttribute("Line1").setValue("200 Main Street");           
+           mPerson.cursor("Address").getAttribute("City").setValue("Quincy");           
+           mPerson.cursor("Address").getAttribute("StateProvince").setValue("MA");           
+           AcceptSubobject( mPerson, "Address" );
+           
+           {MutableInt mi_ViewCluster = new MutableInt( ViewCluster );
+           CreateViewCluster( ViewToWindow, mi_ViewCluster );
+           ViewCluster = mi_ViewCluster.intValue( );}
+           AddToViewCluster( ViewCluster, mProspct, 0 );
+           AddToViewCluster( ViewCluster, mPerson, 0 );
+           {MutableInt mi_Ignore = new MutableInt( 0 );
+           RESULT = CommitMultipleObjectInstances( ViewCluster, mi_Ignore );}
+           int iAddressID = mPerson.cursor("Address").getAttribute("ID").getInteger();
+           mProspct.drop();
+           //mPerson.drop();
+           mProspct.setView(new QualificationBuilder( zencas )
+                   .setLodDef( "mProspTst" )
+                   .addAttribQual( "ID", 2904 )
+                   .activate());
+           mProspct.setName("mProspct");
+           mAddress.setView(new QualificationBuilder( zencas )
+                   .setLodDef( "mAddress" )
+                   .addAttribQual( "ID", iAddressID )
+                   .activate());
+           // After the save of first mPerson, then mProspct, we have lost the AcceptanceStatus and
+           // ProspectPriority because they are hidden in mPerson.Prospect.
+           if ( !mAddress.cursor("Person").checkExistenceOfEntity().isSet() )
+                  Assert.assertTrue( "Error when saving mPerson before mProspct, some attributes are null when they should have values!! ", false );
+		   */
+           return 0;
+        }
+
         public void
         IncludeExcludeMaxCardinalityIssue( View ViewToWindow )
         {
@@ -1863,13 +1951,31 @@ public class TestZencas
            DropView( vTempViewVar_0 );
            SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
            //xxxx
-
+           // KJS 11/21/2025 Adding this test, but needs to be put elsewhere?
+           o_fnLocalBuildmFAProf2( ViewToWindow, vTempViewVar_0, 23496 );            
+           ActivateObjectInstance( mFAProf, "mFAProf", ViewToWindow, vTempViewVar_0, zSINGLE );
+           SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+           int iProfile = mFAProf.cursor("FinAidProfile").getAttribute("ID").getInteger();
+           RESULT = CreateTemporalEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+           mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+           mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+           RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+           RESULT = ExcludeEntity( mFAProf, "FinAidSource", zPOS_AFTER );
+           AcceptSubobject( mFAProf, "FinAidAward" );
+           RESULT = CommitObjectInstance( mFAProf );
+           
+           o_fnLocalBuildmFAProf2( ViewToWindow, vTempViewVar_0, iProfile ); //348  23496
+           ActivateObjectInstance( mFAProf, "mFAProf", ViewToWindow, vTempViewVar_0, zSINGLE );
+           //xxxxxxxxxxxxxxxxxxx
+           // END OF KELLY 11/21/2025 test
 
             RESULT = ActivateEmptyObjectInstance( mFAProf, "mFAProf", ViewToWindow, zSINGLE );
             SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+            
             RESULT = CreateEntity( mFAProf, "FinAidProfile", zPOS_AFTER );
             RESULT = IncludeSubobjectFromSubobject( mFAProf, "Person", mPerson, "Person", zPOS_AFTER );
-
+            
+            
             CreateEntity( mFAProf, "FinAidAward", zPOS_AFTER );
             mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
             mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
@@ -2036,6 +2142,81 @@ public class TestZencas
            return 0;
         }
 
+        
+
+        public int
+        mFAProfCreateTemporalEntityIssue( View ViewToWindow )
+        {
+           zVIEW    mPerson = new zVIEW( );
+           zVIEW    mFAProf = new zVIEW( );
+           zVIEW    mFASrc = new zVIEW( );
+           zVIEW    lTermLST = new zVIEW( );
+           zVIEW    wXferO = new zVIEW( );
+           zVIEW    vTempViewVar_0 = new zVIEW( );
+           int RESULT=0;
+
+           // KJS 11/21/2025 - This test uses CreateTemporalEntity (for entity "FinAidAward". 
+           // Then we INCLUDE/EXCLUDE a subentity ("FinAidSource").
+           // When we commit and re-activate, the excluded subentity is there.
+           // If this is done with normal CreateEntity, this is not a problem. It's also not a problem if
+           // we were using CreateTemporalSubobject.
+
+           RESULT = ActivateEmptyObjectInstance( wXferO, "wXferO", ViewToWindow, zSINGLE );
+            RESULT = CreateEntity( wXferO, "Root", zPOS_AFTER );
+            SetNameForView( wXferO, "wXferO", null, zLEVEL_TASK );
+            fnLocalBuildlTermLST( ViewToWindow, vTempViewVar_0 );
+            RESULT = ActivateObjectInstance( lTermLST, "lTermLST", ViewToWindow, vTempViewVar_0, zMULTIPLE );
+            DropView( vTempViewVar_0 );
+            SetNameForView( lTermLST, "lTermLST", null, zLEVEL_TASK );
+            OrderEntityForView( lTermLST, "CollegeTerm", "CollegeYear.Year D CollegeTerm.Semester D" );
+
+           o_fnLocalBuildQualmPerson( ViewToWindow, vTempViewVar_0, 18808 );
+           RESULT = ActivateObjectInstance( mPerson, "mPerson", ViewToWindow, vTempViewVar_0, zSINGLE );
+           DropView( vTempViewVar_0 );
+
+
+            //ActivateOI_FromFile( mFASrc, "mFASrc", ViewToWindow, "target/test-classes/testdata//ZENCAs/mFASrc.json", zSINGLE );//src/test/resources/testdata/ZENCAs
+           o_fnLocalBuildQualmFASrc( ViewToWindow, vTempViewVar_0, 348 );
+           RESULT = ActivateObjectInstance( mFASrc, "mFASrc", ViewToWindow, vTempViewVar_0, zACTIVATE_ROOTONLY );
+           DropView( vTempViewVar_0 );
+           SetNameForView( mFASrc, "mFASrc", null, zLEVEL_TASK );
+           //xxxx
+           // KJS 11/21/2025 Adding this test, but needs to be put elsewhere?
+           o_fnLocalBuildmFAProf2( ViewToWindow, vTempViewVar_0, 23496 );            
+           ActivateObjectInstance( mFAProf, "mFATest", ViewToWindow, vTempViewVar_0, zSINGLE );
+           SetNameForView( mFAProf, "mFAProf", null, zLEVEL_TASK );
+           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+           RESULT = SetCursorFirstEntity( mFAProf, "FinAidAward", "" );
+           while ( RESULT > zCURSOR_UNCHANGED )
+           {
+        	  if (mFAProf.cursor("FinAidAward").getAttribute("Note").getString().equals("TestmFAProfCreateTemporalEntityIssue"))
+        		  DeleteEntity( mFAProf, "FinAidAward", zPOS_NONE );
+              RESULT = SetCursorNextEntity( mFAProf, "FinAidAward", "" );
+           }
+           RESULT = CommitObjectInstance( mFAProf );
+           int iProfile = mFAProf.cursor("FinAidProfile").getAttribute("ID").getInteger();
+           RESULT = CreateTemporalEntity( mFAProf, "FinAidAward", zPOS_AFTER );
+           mFAProf.cursor("FinAidAward").getAttribute("AwardType").setValue("G");
+           mFAProf.cursor("FinAidAward").getAttribute("AwardStatus").setValue("A");
+           mFAProf.cursor("FinAidAward").getAttribute("Note").setValue("TestmFAProfCreateTemporalEntityIssue");
+           RESULT = IncludeSubobjectFromSubobject( mFAProf, "FinAidSource", mFASrc, "FinAidSource", zPOS_AFTER );
+           RESULT = ExcludeEntity( mFAProf, "FinAidSource", zPOS_AFTER );
+           AcceptSubobject( mFAProf, "FinAidAward" );
+           RESULT = CommitObjectInstance( mFAProf );
+           
+           o_fnLocalBuildmFAProf2( ViewToWindow, vTempViewVar_0, iProfile ); //348  23496
+           ActivateObjectInstance( mFAProf, "mFATest", ViewToWindow, vTempViewVar_0, zSINGLE );
+           
+           int rc = mFAProf.cursor( "FinAidAward" ).setFirst( "Note", "TestmFAProfCreateTemporalEntityIssue" ).toInt();
+                     
+           // Check if this FinAidAward has a FinAidSource, it should not. 
+           // FinAidSrc should not exist because we excluded it.
+           rc = CheckExistenceOfEntity( mFAProf, "FinAidSource" );
+           //Assert.assertEquals("FinAidSource should not exist, it was EXCLUDED ", 0, CheckExistenceOfEntity( mFAProf, "FinAidSource" )); 
+           Assert.assertTrue( "FinAidSource should not exist, it was EXCLUDED ",  rc != 0 );           	
+          return 0;
+        }        
+        
         public int
         UpdateIncludeSaveIssue( View ViewToWindow )
         {

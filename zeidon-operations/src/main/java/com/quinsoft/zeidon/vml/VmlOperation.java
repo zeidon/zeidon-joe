@@ -5194,6 +5194,7 @@ public abstract class VmlOperation
   	// There can be more than one view but we are assuming there is only one.
   	List<View> viewList = new DeserializeOi( qualView )
       //.asJson()
+	  .setLodDef( sbLodDefName.toString() )
       .fromString( strTmp )
       .activate();
 
