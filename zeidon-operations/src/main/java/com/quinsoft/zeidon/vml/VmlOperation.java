@@ -4966,21 +4966,21 @@ public abstract class VmlOperation
                            .setLodDef( lodDefName )
                            .activateFirst();
         }
-        catch ( UnknownLodDefException e )
+        catch ( Exception e )
         {
             // Try with ZeidonTools
+        	try {
             view = qualView.deserializeOi()
                             .fromFile( fileName )
                             .setFlags( control )
                             .setApplication( task.getApplication( "ZeidonTools" ) )
                             .setLodDef( lodDefName )
                             .activateFirst();
+        	} catch ( Exception e2 ) {
+        		return -1;
+        	}
         }
-        catch (Exception e)
-        {
-        	// file not found
-        	return -1;
-        }
+
 
         returnView.setView( view );
         return 0;
