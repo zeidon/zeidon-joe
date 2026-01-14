@@ -1480,7 +1480,7 @@ public class TestZencas
     @Test
     public void mFAProfTemporalPerProfileFinAidAwardPeriodPathTest()
     {
-        assumeThat( "Run all failing tests", JoeUtils.getEnvProperty( "runAllTests" ), is( "true" ) );
+        //assumeThat( "Run all failing tests", JoeUtils.getEnvProperty( "runAllTests" ), is( "true" ) );
         View         testview;
         testview = zencas.activateEmptyObjectInstance( "mFASrc" );
         VmlTester tester = new VmlTester( testview );
