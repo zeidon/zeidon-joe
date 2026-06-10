@@ -42,7 +42,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
@@ -913,6 +913,7 @@ public abstract class VmlOperation
    }
 
    public static void SetZeidonSessionAttribute( HttpSession session, TaskQualification qual, String strCallingJSP, String strActionToProcess )
+   //public static void SetZeidonSessionAttribute( HttpSession session, Task task, String strCallingJSP, String strActionToProcess )
    {
       Task task = qual.getTask();
       if ( session != null )
