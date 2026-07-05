@@ -678,12 +678,18 @@ class ActivateOisFromJsonStream implements StreamReader
             }
         }
 
-        if ( odName == null )
+        LodDef optionsOdOverride = this.options.getLodDef();
+
+        if ( odName == null && optionsOdOverride == null )
             throw new ZeidonException( "LodDef not specified in JSON .oimeta" );
 
         // We don't load the LodDef until now because it's valid JSON to reorder
         // the values in the .oimeta object.
-        lodDef = application.getLodDef( task, odName );
+        if ( optionsOdOverride != null )
+            lodDef = optionsOdOverride;
+        else
+            lodDef = application.getLodDef( task, odName );
+
         view = task.activateEmptyObjectInstance( lodDef );
         returnList.add( view );
         JsonToken token = jp.nextToken();
