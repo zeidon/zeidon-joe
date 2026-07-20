@@ -39,16 +39,15 @@
         </developer>
     </developers>
 
-    <!-- Set up distributionManagement to deploy to OSSRH central repo -->
+    <!-- Set up distributionManagement to deploy to Maven Central via the Central Publisher Portal.
+         OSSRH (oss.sonatype.org) was shut down 2025-06-30; releases now publish through the
+         central-publishing-maven-plugin below (see publishingServerId), which needs no <repository>
+         entry here. Only SNAPSHOT deploys still go through a plain distributionManagement repo. -->
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>central</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
     </distributionManagement>
 
     <dependencyManagement>
@@ -177,16 +176,15 @@
                 <version>3.0.0</version>
             </plugin>
 
-            <!-- For deploying to OSSRH repo -->
+            <!-- For deploying to Maven Central via the Central Publisher Portal -->
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.11.0</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
         </plugins>
