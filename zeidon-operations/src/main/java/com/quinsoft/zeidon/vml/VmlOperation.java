@@ -42,7 +42,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableDouble;
@@ -913,6 +913,7 @@ public abstract class VmlOperation
    }
 
    public static void SetZeidonSessionAttribute( HttpSession session, TaskQualification qual, String strCallingJSP, String strActionToProcess )
+   //public static void SetZeidonSessionAttribute( HttpSession session, Task task, String strCallingJSP, String strActionToProcess )
    {
       Task task = qual.getTask();
       if ( session != null )
@@ -5192,20 +5193,21 @@ public abstract class VmlOperation
       }
 
   	// There can be more than one view but we are assuming there is only one.
-  	List<View> viewList = null;
-  	if (sbLodDefName.length() > 0)
-  	{
-  		viewList = new DeserializeOi( qualView )
-  				.setLodDef( sbLodDefName.toString() )
-  				.fromString( strTmp )
-  				.activate();
-  	}
-  	else
-  	{
-  		viewList = new DeserializeOi( qualView )
-  	      .fromString( strTmp )
-  	      .activate();
-  	}
+    	// There can be more than one view but we are assuming there is only one.
+    	List<View> viewList = null;
+    	if (sbLodDefName.length() > 0)
+    	{
+    		viewList = new DeserializeOi( qualView )
+    				.setLodDef( sbLodDefName.toString() )
+    				.fromString( strTmp )
+    				.activate();
+    	}
+    	else
+    	{
+    		viewList = new DeserializeOi( qualView )
+    	      .fromString( strTmp )
+    	      .activate();
+    	}
 
       for ( View v : viewList )
       {
