@@ -1151,6 +1151,13 @@ public class JdbcHandler extends AbstractSqlHandler
             try
             {
                 BasicDataSource pool = getPool( url, task, handler, application );
+                // KJS 09/15/26 - At NTS our tomcat frequently crashes. There is a log that indicates
+                // it might be due to the synchronized in "protected synchronized View loadDomainView" in our dynamictabledomain...
+                // The following sets are the recommendation from ChatGPT.
+                pool.setMaxWait(10000);
+                pool.setRemoveAbandonedTimeout(60);
+                pool.setRemoveAbandoned(true);
+                pool.setLogAbandoned(true);
                 connection = pool.getConnection();
                 connection.setAutoCommit( false );
             }
