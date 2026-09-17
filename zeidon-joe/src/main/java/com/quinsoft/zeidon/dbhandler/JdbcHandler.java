@@ -1154,10 +1154,29 @@ public class JdbcHandler extends AbstractSqlHandler
                 // KJS 09/15/26 - At NTS our tomcat frequently crashes. There is a log that indicates
                 // it might be due to the synchronized in "protected synchronized View loadDomainView" in our dynamictabledomain...
                 // The following sets are the recommendation from ChatGPT.
-                pool.setMaxWait(10000);
-                pool.setRemoveAbandonedTimeout(60);
-                pool.setRemoveAbandoned(true);
-                pool.setLogAbandoned(true);
+                String maxWait = handler.getConfigValue("maxWait");
+                if (maxWait != null && maxWait.length() > 0)
+                {
+	                pool.setMaxWait(Integer.valueOf(maxWait)); 
+                }
+                String removeAbandonedTimeout = handler.getConfigValue("removeAbandonedTimeout");
+                if ( removeAbandonedTimeout != null && removeAbandonedTimeout.length() > 0 )
+                {
+	                pool.setRemoveAbandonedTimeout(Integer.valueOf(removeAbandonedTimeout));
+	                pool.setRemoveAbandoned(true);
+	                pool.setLogAbandoned(true);
+                }
+                String maxActive = handler.getConfigValue("maxActive");
+                if (maxActive != null && maxActive.length() > 0)
+                {
+                	pool.setMaxActive(Integer.valueOf(maxActive));
+                }
+                String maxIdle = handler.getConfigValue("maxIdle");
+                if (maxIdle != null && maxIdle.length() > 0)
+                {
+                	pool.setMaxIdle(Integer.valueOf(maxIdle));
+                }
+                
                 connection = pool.getConnection();
                 connection.setAutoCommit( false );
             }
